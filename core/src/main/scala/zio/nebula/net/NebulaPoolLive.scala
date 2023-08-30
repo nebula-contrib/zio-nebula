@@ -1,0 +1,52 @@
+package zio.nebula.net
+
+import scala.jdk.CollectionConverters.*
+
+import zio.*
+import zio.nebula.*
+import zio.nebula.net.NebulaSession
+
+import com.vesoft.nebula.client.graph.NebulaPoolConfig
+import com.vesoft.nebula.client.graph.data.HostAddress
+import com.vesoft.nebula.client.graph.net.NebulaPool as NebulaPl
+
+/**
+ * @author
+ *   梦境迷离
+ * @version 1.0,2023/8/29
+ */
+final class NebulaPoolLive(underlying: NebulaPl) extends NebulaPool {
+
+  def init(config: NebulaPoolConfig): ZIO[NebulaConfig, Throwable, Boolean] =
+    ZIO.serviceWithZIO[NebulaConfig](sessionConfig =>
+      ZIO.attemptBlocking(
+        underlying.init(sessionConfig.address.map(d => new HostAddress(d.host, d.port)).asJava, config)
+      )
+    )
+
+  def close(): Task[Unit] = ZIO.attempt(underlying.close())
+
+  def getSession: ZIO[Scope & NebulaConfig, Throwable, NebulaSession] =
+    for {
+      sessionConfig <- ZIO.service[NebulaConfig]
+      session       <-
+        ZIO.acquireRelease(
+          ZIO.attempt(
+            new NebulaSession(
+              underlying.getSession(
+                sessionConfig.auth.username,
+                sessionConfig.auth.password,
+                sessionConfig.auth.reconnect
+              )
+            )
+          )
+        )(_.close().onError(e => ZIO.logErrorCause(e)).ignoreLogged)
+    } yield session
+
+  def getActiveConnNum: Task[Int] = ZIO.attempt(underlying.getActiveConnNum)
+
+  def getIdleConnNum: Task[Int] = ZIO.attempt(underlying.getIdleConnNum)
+
+  def getWaitersNum: Task[Int] = ZIO.attempt(underlying.getWaitersNum)
+
+}
