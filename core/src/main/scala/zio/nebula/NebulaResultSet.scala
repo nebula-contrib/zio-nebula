@@ -53,9 +53,8 @@ final class NebulaResultSet(resultSet: ResultSet) {
 
 object NebulaResultSet {
 
-  final val decodeType = "utf-8"
-
   final class NebulaRecord(record: Record) extends Iterable[ValueWrapper] {
+
     override def iterator: Iterator[ValueWrapper] = record.iterator().asScala
 
     override def foreach[U](f: ValueWrapper => U): Unit = record.forEach((t: ValueWrapper) => f.apply(t))
@@ -69,7 +68,8 @@ object NebulaResultSet {
     def get(columnName: String): ValueWrapper = record.get(columnName)
 
     def values: util.List[ValueWrapper] = record.values()
-    override def size: Int              = record.size()
+
+    override def size: Int = record.size()
 
     def contains(columnName: String): Boolean = record.contains(columnName)
   }
