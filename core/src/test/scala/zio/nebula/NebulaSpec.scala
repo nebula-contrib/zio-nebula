@@ -1,10 +1,11 @@
 package zio.nebula
 
-import com.vesoft.nebula.client.graph.NebulaPoolConfig
-import zio.nebula.net.NebulaPool
-import zio.test.TestAspect.*
-import zio.test.*
 import zio.*
+import zio.nebula.net.NebulaPool
+import zio.test.*
+import zio.test.TestAspect.*
+
+import com.vesoft.nebula.client.graph.NebulaPoolConfig
 
 trait NebulaSpec extends ZIOSpecDefault {
 
