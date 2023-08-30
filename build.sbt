@@ -2,7 +2,6 @@ val zioVersion          = "2.0.13"
 val scala3Version       = "3.2.2"
 val zioConfigVersion    = "4.0.0-RC16"
 val nebulaClientVersion = "3.6.0"
-val scalaLoggingVersion = "3.9.5"
 val logbackVersion      = "1.4.5"
 
 inThisBuild(
@@ -32,7 +31,6 @@ lazy val core = project
     name           := "zio-nebula",
     libraryDependencies ++= Seq(
       "com.vesoft"                  % "client"              % nebulaClientVersion,
-      "com.typesafe.scala-logging" %% "scala-logging"       % scalaLoggingVersion,
       "dev.zio"                    %% "zio-config-typesafe" % zioConfigVersion,
       "dev.zio"                    %% "zio-config-magnolia" % zioConfigVersion,
       "dev.zio"                    %% "zio"                 % zioVersion,

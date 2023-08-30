@@ -27,9 +27,9 @@ libraryDependencies +=
   ("io.github.jxnu-liguobin" %% "zio-nebula" % <latest version>).cross(CrossVersion.for2_13Use3)
 ```
 
-These dependencies are required in the project classpath:
-```scala
-libraryDependencies ++= Seq(
-  "dev.zio" %% "zio"         % zioVersion
-)
-```
+## Environment
+
+- scala 3.2.2
+- zio 2
+- zio-config 4.0.0-RC16
+- nebula-java 3.6.0

@@ -3,7 +3,6 @@ package zio.nebula
 import zio.*
 import zio.nebula.*
 
-import com.typesafe.scalalogging.LazyLogging
 import com.vesoft.nebula.client.graph.*
 
 /**
@@ -11,10 +10,10 @@ import com.vesoft.nebula.client.graph.*
  *   梦境迷离
  * @version 1.0,2023/8/29
  */
-final class NebulaSessionPoolLive(underlying: SessionPool) extends NebulaSessionPool with LazyLogging {
+final class NebulaSessionPoolLive(underlying: SessionPool) extends NebulaSessionPool {
 
   if (!underlying.init) {
-    logger.error("session pool init failed.")
+    java.lang.System.err.print("session pool init failed.")
   }
 
   override def execute(stmt: String): Task[NebulaResultSet] =
