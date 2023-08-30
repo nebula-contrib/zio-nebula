@@ -29,8 +29,8 @@ addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck"
 lazy val core = project
   .in(file("core"))
   .settings(
-    name           := "zio-nebula",
-    crossScalaVersions := Seq(scala3Version,scala2Version),
+    name               := "zio-nebula",
+    crossScalaVersions := Seq(scala3Version, scala2Version),
     libraryDependencies ++= Seq(
       "com.vesoft"     % "client"              % nebulaClientVersion,
       "dev.zio"       %% "zio-config-typesafe" % zioConfigVersion,
@@ -39,7 +39,7 @@ lazy val core = project
       "dev.zio"       %% "zio-test"            % zioVersion     % Test,
       "ch.qos.logback" % "logback-classic"     % logbackVersion % Test
     ),
-    testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
+    testFrameworks     := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
   )
 
 lazy val examples = project
