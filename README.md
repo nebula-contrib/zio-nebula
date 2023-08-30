@@ -10,6 +10,8 @@ ZIO NebulaGraph
 [Link-Release]: https://oss.sonatype.org/content/repositories/public/io/github/jxnu-liguobin/zio-nebula_3/
 [Badge-Release]: https://img.shields.io/nexus/r/io.github.jxnu-liguobin/zio-nebula_3?server=https%3A%2F%2Foss.sonatype.org
 
+[zio-nebula](https://github.com/hjfruit/zio-nebula) is a simple wrapper around [nebula-java](https://github.com/vesoft-inc/nebula-java/) for easier integration into Scala, ZIO applications.
+
 [NebulaGraph](https://github.com/vesoft-inc/nebula) is a popular open-source graph database that can handle large volumes of data with milliseconds of latency, scale up quickly, and have the ability to perform fast graph analytics. NebulaGraph has been widely used for social media, recommendation systems, knowledge graphs, security, capital flows, AI, etc.
 
 ## Dependency
