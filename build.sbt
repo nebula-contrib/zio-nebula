@@ -31,8 +31,8 @@ lazy val core = project
     name           := "zio-nebula",
     libraryDependencies ++= Seq(
       "com.vesoft"                  % "client"              % nebulaClientVersion,
-      "dev.zio"                    %% "zio-config-typesafe" % zioConfigVersion,
-      "dev.zio"                    %% "zio-config-magnolia" % zioConfigVersion,
+      "dev.zio"                    %% "zio-config-typesafe"  % zioConfigVersion,
+      "dev.zio"                    %% "zio-config-magnolia"  % zioConfigVersion,
       "dev.zio"                    %% "zio"                 % zioVersion,
       "dev.zio"                    %% "zio-test"            % zioVersion     % Test,
       "ch.qos.logback"              % "logback-classic"     % logbackVersion % Test
