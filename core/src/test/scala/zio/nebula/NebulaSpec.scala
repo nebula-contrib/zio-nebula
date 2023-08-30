@@ -1,17 +1,10 @@
 package zio.nebula
 
-import java.util.Properties
-
-import zio.*
-import zio.{ Scope, ZLayer }
-import zio.nebula.{ NebulaConfig, NebulaSessionPool }
-import zio.nebula.meta.{ NebulaMetaConfig, NebulaMetaManager }
-import zio.nebula.net.NebulaPool
-import zio.test.*
-import zio.test.TestAspect.*
-import zio.test.ZIOSpecDefault
-
 import com.vesoft.nebula.client.graph.NebulaPoolConfig
+import zio.nebula.net.NebulaPool
+import zio.test.TestAspect.*
+import zio.test.*
+import zio.*
 
 trait NebulaSpec extends ZIOSpecDefault {
 

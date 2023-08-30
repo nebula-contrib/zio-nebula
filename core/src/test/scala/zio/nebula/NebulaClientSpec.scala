@@ -1,11 +1,6 @@
 package zio.nebula
 
-import java.util.Collections
-
-import scala.jdk.CollectionConverters.*
-
 import zio.ZIO
-import zio.nebula.NebulaSessionPool
 import zio.test.*
 
 /**

@@ -1,5 +1,9 @@
-val zioVersion    = "2.0.13"
-val scala3Version = "3.2.2"
+val zioVersion          = "2.0.13"
+val scala3Version       = "3.3.1-RC4"
+val zioConfigVersion    = "4.0.0-RC16"
+val nebulaClientVersion = "3.6.0"
+val scalaLoggingVersion = "3.9.5"
+val logbackVersion      = "1.4.5"
 
 inThisBuild(
   List(
@@ -27,13 +31,13 @@ lazy val core = project
   .settings(
     name           := "zio-nebula",
     libraryDependencies ++= Seq(
-      "com.vesoft"                  % "client"              % "3.6.0",
-      "com.typesafe.scala-logging" %% "scala-logging"       % "3.9.5",
-      "dev.zio"                    %% "zio-config-typesafe" % "4.0.0-RC16",
-      "dev.zio"                    %% "zio-config-magnolia" % "4.0.0-RC16",
+      "com.vesoft"                  % "client"              % nebulaClientVersion,
+      "com.typesafe.scala-logging" %% "scala-logging"       % scalaLoggingVersion,
+      "dev.zio"                    %% "zio-config-typesafe" % zioConfigVersion,
+      "dev.zio"                    %% "zio-config-magnolia" % zioConfigVersion,
       "dev.zio"                    %% "zio"                 % zioVersion,
-      "dev.zio"                    %% "zio-test"            % zioVersion % Test,
-      "ch.qos.logback"              % "logback-classic"     % "1.4.5"    % Test
+      "dev.zio"                    %% "zio-test"            % zioVersion     % Test,
+      "ch.qos.logback"              % "logback-classic"     % logbackVersion % Test
     ),
     testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
   )
@@ -43,7 +47,7 @@ lazy val examples = project
   .settings(
     publish / skip := true,
     libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % "1.4.5"
+      "ch.qos.logback" % "logback-classic" % logbackVersion
     )
   )
   .dependsOn(core % "compile->compile;test->test")
@@ -51,8 +55,7 @@ lazy val examples = project
 lazy val `zio-nebula` = project
   .in(file("."))
   .settings(
-    publish / skip := true,
-    testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
+    publish / skip := true
   )
   .aggregate(
     core,
