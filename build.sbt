@@ -30,12 +30,12 @@ lazy val core = project
   .settings(
     name           := "zio-nebula",
     libraryDependencies ++= Seq(
-      "com.vesoft"                  % "client"              % nebulaClientVersion,
-      "dev.zio"                    %% "zio-config-typesafe"  % zioConfigVersion,
-      "dev.zio"                    %% "zio-config-magnolia"  % zioConfigVersion,
-      "dev.zio"                    %% "zio"                 % zioVersion,
-      "dev.zio"                    %% "zio-test"            % zioVersion     % Test,
-      "ch.qos.logback"              % "logback-classic"     % logbackVersion % Test
+      "com.vesoft"     % "client"              % nebulaClientVersion,
+      "dev.zio"       %% "zio-config-typesafe" % zioConfigVersion,
+      "dev.zio"       %% "zio-config-magnolia" % zioConfigVersion,
+      "dev.zio"       %% "zio"                 % zioVersion,
+      "dev.zio"       %% "zio-test"            % zioVersion     % Test,
+      "ch.qos.logback" % "logback-classic"     % logbackVersion % Test
     ),
     testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
   )
