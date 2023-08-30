@@ -1,4 +1,4 @@
-package zio.neo4j
+package zio.nebula
 
 import java.util.Collections
 

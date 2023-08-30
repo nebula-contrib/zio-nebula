@@ -22,7 +22,7 @@ libraryDependencies += "io.github.jxnu-liguobin" %% "zio-nebula" % <latest versi
 Scala 2.13.6+ (sbt 1.5.x)
 ```scala
 libraryDependencies += 
-  ("io.github.jxnu-liguobin" %% "zio-nebula" % NewVersion).cross(CrossVersion.for2_13Use3)
+  ("io.github.jxnu-liguobin" %% "zio-nebula" % <latest version>).cross(CrossVersion.for2_13Use3)
 ```
 
 These dependencies are required in the project classpath:

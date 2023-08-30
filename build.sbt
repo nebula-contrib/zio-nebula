@@ -1,6 +1,5 @@
 val zioVersion    = "2.0.13"
-val scala3Version = "3.3.0"
-val scala2Version = "2.13.10"
+val scala3Version = "3.2.2"
 
 inThisBuild(
   List(
@@ -32,7 +31,7 @@ lazy val core = project
       "com.typesafe.scala-logging" %% "scala-logging"       % "3.9.5",
       "dev.zio"                    %% "zio-config-typesafe" % "4.0.0-RC16",
       "dev.zio"                    %% "zio-config-magnolia" % "4.0.0-RC16",
-      "dev.zio"                    %% "zio"                 % zioVersion % Provided,
+      "dev.zio"                    %% "zio"                 % zioVersion,
       "dev.zio"                    %% "zio-test"            % zioVersion % Test,
       "ch.qos.logback"              % "logback-classic"     % "1.4.5"    % Test
     ),
@@ -44,7 +43,6 @@ lazy val examples = project
   .settings(
     publish / skip := true,
     libraryDependencies ++= Seq(
-      "dev.zio"       %% "zio"             % zioVersion,
       "ch.qos.logback" % "logback-classic" % "1.4.5"
     )
   )
@@ -53,7 +51,8 @@ lazy val examples = project
 lazy val `zio-nebula` = project
   .in(file("."))
   .settings(
-    publish / skip := true
+    publish / skip := true,
+    testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
   )
   .aggregate(
     core,
