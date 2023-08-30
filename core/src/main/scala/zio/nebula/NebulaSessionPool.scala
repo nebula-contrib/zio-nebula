@@ -1,11 +1,10 @@
 package zio.nebula
 
-import scala.jdk.CollectionConverters.*
+import scala.jdk.CollectionConverters._
 
-import zio.*
-import zio.nebula.NebulaResultSet
+import zio._
 
-import com.vesoft.nebula.client.graph.*
+import com.vesoft.nebula.client.graph._
 import com.vesoft.nebula.client.graph.data.HostAddress
 
 /**

@@ -1,15 +1,7 @@
 package zio.nebula.meta
 
-import zio.config._
-
 import com.vesoft.nebula.client.graph.data
-import com.vesoft.nebula.client.graph.data.CASignedSSLParam
-import com.vesoft.nebula.client.graph.data.SelfSignedSSLParam
-import com.vesoft.nebula.client.graph.data.SSLParam
-import com.vesoft.nebula.client.graph.data.SSLParam.SignMode
-
-import magnolia._
-import typesafe._
+import com.vesoft.nebula.client.graph.data.{ CASignedSSLParam, SelfSignedSSLParam }
 
 /**
  * @author
@@ -20,11 +12,12 @@ sealed trait SSLParam {
   self =>
 
   def toJava: data.SSLParam =
-    self match
+    self match {
       case SSLParam.CASignedSSL(caCrtFilePath, crtFilePath, keyFilePath) =>
         new CASignedSSLParam(caCrtFilePath, crtFilePath, keyFilePath)
       case SSLParam.SelfSignedSSL(crtFilePath, keyFilePath, password)    =>
         new SelfSignedSSLParam(crtFilePath, keyFilePath, password)
+    }
 
 }
 

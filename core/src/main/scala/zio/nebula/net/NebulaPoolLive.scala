@@ -1,14 +1,13 @@
 package zio.nebula.net
 
-import scala.jdk.CollectionConverters.*
+import scala.jdk.CollectionConverters._
 
-import zio.*
-import zio.nebula.*
-import zio.nebula.net.NebulaSession
+import zio._
+import zio.nebula._
 
 import com.vesoft.nebula.client.graph.NebulaPoolConfig
 import com.vesoft.nebula.client.graph.data.HostAddress
-import com.vesoft.nebula.client.graph.net.NebulaPool as NebulaPl
+import com.vesoft.nebula.client.graph.net.{ NebulaPool => NebulaPl }
 
 /**
  * @author

@@ -1,11 +1,11 @@
 package zio.nebula
 
-import zio.*
-import zio.config.*
+import zio._
+import zio.config._
 import zio.config.magnolia.deriveConfig
 import zio.config.typesafe.TypesafeConfigProvider
 
-import com.typesafe.config.{ Config as TConfig, ConfigFactory }
+import com.typesafe.config.{ Config => TConfig, ConfigFactory }
 
 final case class NebulaConfig(address: List[NebulaHostAddress], auth: NebulaAuth)
 

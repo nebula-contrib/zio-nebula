@@ -16,20 +16,14 @@ ZIO NebulaGraph
 
 ## Dependency
 
-Scala 3
+Scala 2 or Scala 3
 ```scala
 libraryDependencies += "io.github.jxnu-liguobin" %% "zio-nebula" % <latest version>
 ```
 
-Scala 2.13.6+ (sbt 1.5.x)
-```scala
-libraryDependencies += 
-  ("io.github.jxnu-liguobin" %% "zio-nebula" % <latest version>).cross(CrossVersion.for2_13Use3)
-```
-
 ## Environment
 
-- scala 3.2.2
+- scala 2.13.10, 3.2.2
 - zio 2
 - zio-config 4.0.0-RC16
 - nebula-java 3.6.0

@@ -1,5 +1,6 @@
 val zioVersion          = "2.0.13"
 val scala3Version       = "3.2.2"
+val scala2Version       = "2.13.10"
 val zioConfigVersion    = "4.0.0-RC16"
 val nebulaClientVersion = "3.6.0"
 val logbackVersion      = "1.4.5"
@@ -29,6 +30,7 @@ lazy val core = project
   .in(file("core"))
   .settings(
     name           := "zio-nebula",
+    crossScalaVersions := Seq(scala3Version,scala2Version),
     libraryDependencies ++= Seq(
       "com.vesoft"     % "client"              % nebulaClientVersion,
       "dev.zio"       %% "zio-config-typesafe" % zioConfigVersion,

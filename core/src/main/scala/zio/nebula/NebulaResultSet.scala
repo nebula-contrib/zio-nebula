@@ -2,12 +2,11 @@ package zio.nebula
 
 import java.util
 import java.util.Spliterator
-import java.util.function.Consumer
 
-import scala.jdk.CollectionConverters.*
+import scala.jdk.CollectionConverters._
 
 import com.vesoft.nebula.Row
-import com.vesoft.nebula.client.graph.data.*
+import com.vesoft.nebula.client.graph.data._
 import com.vesoft.nebula.client.graph.data.ResultSet.Record
 import com.vesoft.nebula.graph.PlanDescription
 
@@ -18,7 +17,7 @@ import com.vesoft.nebula.graph.PlanDescription
  */
 final class NebulaResultSet(resultSet: ResultSet) {
 
-  import NebulaResultSet.*
+  import NebulaResultSet._
 
   def isSucceeded: Boolean = resultSet.isSucceeded
 

@@ -1,9 +1,9 @@
 package zio.nebula
 
-import zio.*
+import zio._
 import zio.nebula.net.NebulaPool
-import zio.test.*
-import zio.test.TestAspect.*
+import zio.test._
+import zio.test.TestAspect._
 
 import com.vesoft.nebula.client.graph.NebulaPoolConfig
 

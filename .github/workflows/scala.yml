@@ -21,6 +21,9 @@ jobs:
       with:
         java-version: '11'
         distribution: 'adopt'
+    - name: Build
+      run: sbt +compile
+      
     - name: Checking Code style
       run: sbt check
       

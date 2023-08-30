@@ -1,7 +1,7 @@
 package zio.nebula
 
 import zio.ZIO
-import zio.test.*
+import zio.test._
 
 /**
  * @author

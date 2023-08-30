@@ -1,9 +1,8 @@
 package zio.nebula
 
-import zio.*
-import zio.nebula.*
+import zio._
 
-import com.vesoft.nebula.client.graph.*
+import com.vesoft.nebula.client.graph._
 
 /**
  * @author
@@ -25,7 +24,7 @@ final class NebulaSessionPoolLive(underlying: SessionPool) extends NebulaSession
 
   override def isActive: Task[Boolean] = ZIO.attempt(underlying.isActive)
 
-  override def isClosed: Task[Boolean] = ZIO.attempt(underlying.isClosed)
+  override def isClosed: Task[Boolean] = ZIO.attempt(underlying.isClosed())
 
   override def close(): Task[Unit] = ZIO.attempt(underlying.close())
 

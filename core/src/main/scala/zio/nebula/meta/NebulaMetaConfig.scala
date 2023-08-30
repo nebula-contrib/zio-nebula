@@ -2,17 +2,13 @@ package zio.nebula.meta
 
 import java.time.Duration
 
-import zio.*
-import zio.config.*
+import zio._
 import zio.config._
 import zio.config.magnolia.deriveConfig
 import zio.config.typesafe.TypesafeConfigProvider
 import zio.nebula.NebulaHostAddress
 
-import com.typesafe.config.{ Config as TConfig, ConfigFactory }
-
-import magnolia._
-import typesafe._
+import com.typesafe.config.{ Config => TConfig, ConfigFactory }
 
 final case class NebulaMetaConfig(
   address: List[NebulaHostAddress],

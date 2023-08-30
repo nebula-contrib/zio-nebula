@@ -1,11 +1,10 @@
 package zio.nebula.net
 
-import zio.*
-import zio.nebula.*
-import zio.nebula.net.NebulaSession
+import zio._
+import zio.nebula._
 
 import com.vesoft.nebula.client.graph.NebulaPoolConfig
-import com.vesoft.nebula.client.graph.net.NebulaPool as Pool
+import com.vesoft.nebula.client.graph.net.{ NebulaPool => Pool }
 
 /**
  * @author
@@ -35,5 +34,5 @@ object NebulaPool {
   )
 
   lazy val layer: ZLayer[Scope, Nothing, NebulaPool] =
-    ZLayer.fromZIO(makePool.map(pool => NebulaPoolLive(pool)))
+    ZLayer.fromZIO(makePool.map(pool => new NebulaPoolLive(pool)))
 }
