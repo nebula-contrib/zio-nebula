@@ -2,8 +2,9 @@ package zio.nebula.net
 
 import zio._
 import zio.nebula._
+import zio.nebula.NebulaPoolConfig
 
-import com.vesoft.nebula.client.graph.NebulaPoolConfig
+import com.vesoft.nebula.client.graph.{ NebulaPoolConfig => _ }
 import com.vesoft.nebula.client.graph.net.{ NebulaPool => Pool }
 
 /**
@@ -13,11 +14,11 @@ import com.vesoft.nebula.client.graph.net.{ NebulaPool => Pool }
  */
 trait NebulaPool {
 
-  def init(config: NebulaPoolConfig): ZIO[NebulaConfig, Throwable, Boolean]
+  def init(): ZIO[NebulaSessionConfig & NebulaPoolConfig, Throwable, Boolean]
 
   def close(): Task[Unit]
 
-  def getSession: ZIO[Scope & NebulaConfig, Throwable, NebulaSession]
+  def getSession: ZIO[Scope & NebulaSessionConfig, Throwable, NebulaSession]
 
   def getActiveConnNum: Task[Int]
 

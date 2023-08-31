@@ -1,9 +1,7 @@
 package zio.nebula.example
 
-import zio.*
-import zio.nebula.*
-
-import com.vesoft.nebula.Row
+import zio._
+import zio.nebula._
 
 final class NebulaSessionPoolService(nebulaSessionPool: NebulaSessionPool) {
 
@@ -18,6 +16,8 @@ object NebulaSessionPoolService {
 object NebulaSessionPoolExampleMain extends ZIOAppDefault {
 
   override def run = (for {
+    _ <- ZIO
+      .serviceWithZIO[NebulaSessionPool](_.init())
     _ <- ZIO
            .serviceWithZIO[NebulaSessionPoolService](
              _.execute("""

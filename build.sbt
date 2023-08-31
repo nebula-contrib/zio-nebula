@@ -46,11 +46,12 @@ lazy val examples = project
   .in(file("examples"))
   .settings(
     publish / skip := true,
+    crossScalaVersions := Seq(scala3Version, scala2Version),
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % logbackVersion
     )
   )
-  .dependsOn(core % "compile->compile;test->test")
+  .dependsOn(core)
 
 lazy val `zio-nebula` = project
   .in(file("."))

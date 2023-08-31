@@ -1,15 +1,14 @@
 package zio.nebula.example
 
-import zio.*
-import zio.nebula.*
+import zio._
+import zio.nebula._
 import zio.nebula.net.NebulaPool
 
 import com.vesoft.nebula.Row
-import com.vesoft.nebula.client.graph.NebulaPoolConfig
 
 final class NebulaService(nebulaPool: NebulaPool) {
 
-  def execute(stmt: String): ZIO[Scope & NebulaConfig, Throwable, NebulaResultSet] =
+  def execute(stmt: String): ZIO[Scope with NebulaSessionConfig, Throwable, NebulaResultSet] =
     nebulaPool.getSession.flatMap(_.execute(stmt))
 }
 
@@ -21,7 +20,7 @@ object NebulaExampleMain extends ZIOAppDefault {
 
   override def run =
     (for {
-      status <- ZIO.serviceWithZIO[NebulaPool](_.init(new NebulaPoolConfig))
+      status <- ZIO.serviceWithZIO[NebulaPool](_.init())
       _      <- ZIO.logInfo(status.toString)
       res    <- ZIO
                   .serviceWithZIO[NebulaService](
@@ -37,7 +36,8 @@ object NebulaExampleMain extends ZIOAppDefault {
         Scope.default,
         NebulaPool.layer,
         NebulaService.layer,
-        NebulaConfig.layer
+        NebulaConfig.layer,
+        NebulaConfig.poolLayer
       )
 
 }

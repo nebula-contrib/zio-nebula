@@ -1,8 +1,8 @@
 package zio.nebula.example
 
-import zio.*
-import zio.nebula.*
-import zio.nebula.meta.*
+import zio._
+import zio.nebula._
+import zio.nebula.meta._
 
 import com.vesoft.nebula.meta.SpaceItem
 
@@ -24,7 +24,7 @@ object NebulaMetaServiceMain extends ZIOAppDefault {
       .flatMap(space => ZIO.logInfo(space.toString))
       .provide(
         Scope.default,
-        NebulaMetaConfig.layer,
+        NebulaConfig.metaLayer,
         NebulaMetaService.layer,
         NebulaMetaManager.layer
       )

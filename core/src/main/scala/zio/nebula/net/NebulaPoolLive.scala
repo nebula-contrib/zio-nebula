@@ -4,8 +4,9 @@ import scala.jdk.CollectionConverters._
 
 import zio._
 import zio.nebula._
+import zio.nebula.NebulaPoolConfig
 
-import com.vesoft.nebula.client.graph.NebulaPoolConfig
+import com.vesoft.nebula.client.graph.{ NebulaPoolConfig => _ }
 import com.vesoft.nebula.client.graph.data.HostAddress
 import com.vesoft.nebula.client.graph.net.{ NebulaPool => NebulaPl }
 
@@ -14,20 +15,24 @@ import com.vesoft.nebula.client.graph.net.{ NebulaPool => NebulaPl }
  *   梦境迷离
  * @version 1.0,2023/8/29
  */
-final class NebulaPoolLive(underlying: NebulaPl) extends NebulaPool {
+private[nebula] final class NebulaPoolLive(underlying: NebulaPl) extends NebulaPool {
 
-  def init(config: NebulaPoolConfig): ZIO[NebulaConfig, Throwable, Boolean] =
-    ZIO.serviceWithZIO[NebulaConfig](sessionConfig =>
-      ZIO.attemptBlocking(
-        underlying.init(sessionConfig.address.map(d => new HostAddress(d.host, d.port)).asJava, config)
-      )
-    )
+  def init(): ZIO[NebulaSessionConfig & NebulaPoolConfig, Throwable, Boolean] =
+    for {
+      config <- ZIO.service[NebulaPoolConfig]
+      status <-
+        ZIO.serviceWithZIO[NebulaSessionConfig](sessionConfig =>
+          ZIO.attemptBlocking(
+            underlying.init(sessionConfig.address.map(d => new HostAddress(d.host, d.port)).asJava, config.toJava)
+          )
+        )
+    } yield status
 
   def close(): Task[Unit] = ZIO.attempt(underlying.close())
 
-  def getSession: ZIO[Scope & NebulaConfig, Throwable, NebulaSession] =
+  def getSession: ZIO[Scope & NebulaSessionConfig, Throwable, NebulaSession] =
     for {
-      sessionConfig <- ZIO.service[NebulaConfig]
+      sessionConfig <- ZIO.service[NebulaSessionConfig]
       session       <-
         ZIO.acquireRelease(
           ZIO.attempt(
@@ -35,7 +40,7 @@ final class NebulaPoolLive(underlying: NebulaPl) extends NebulaPool {
               underlying.getSession(
                 sessionConfig.auth.username,
                 sessionConfig.auth.password,
-                sessionConfig.auth.reconnect
+                sessionConfig.reconnect
               )
             )
           )

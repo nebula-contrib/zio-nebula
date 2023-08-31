@@ -9,11 +9,7 @@ import com.vesoft.nebula.client.graph._
  *   梦境迷离
  * @version 1.0,2023/8/29
  */
-final class NebulaSessionPoolLive(underlying: SessionPool) extends NebulaSessionPool {
-
-  if (!underlying.init) {
-    java.lang.System.err.print("session pool init failed.")
-  }
+private[nebula] final class NebulaSessionPoolLive(underlying: SessionPool) extends NebulaSessionPool {
 
   override def execute(stmt: String): Task[NebulaResultSet] =
     ZIO.attempt(new NebulaResultSet(underlying.execute(stmt)))

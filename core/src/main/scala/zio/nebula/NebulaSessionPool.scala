@@ -55,26 +55,36 @@ trait NebulaSessionPool {
 
 object NebulaSessionPool {
 
-  private def makeSession: ZIO[NebulaConfig with Scope, Nothing, SessionPool] =
-    ZIO.serviceWithZIO[NebulaConfig](nebulaSessionConfig =>
-      ZIO.acquireRelease(
-        ZIO.succeed(
-          new SessionPool(
-            new SessionPoolConfig(
-              nebulaSessionConfig.address.map(d => new HostAddress(d.host, d.port)).asJava,
-              nebulaSessionConfig.auth.spaceName,
-              nebulaSessionConfig.auth.username,
-              nebulaSessionConfig.auth.password
+  private def sessionLayer: ZLayer[NebulaSessionConfig with Scope, Throwable, SessionPool] =
+    ZLayer.fromZIO {
+      ZIO.serviceWithZIO[NebulaSessionConfig](nebulaConfig =>
+        ZIO.acquireRelease(
+          ZIO.attempt(
+            new SessionPool(
+              new SessionPoolConfig(
+                nebulaConfig.address.map(d => new HostAddress(d.host, d.port)).asJava,
+                nebulaConfig.spaceName,
+                nebulaConfig.auth.username,
+                nebulaConfig.auth.password
+              ).setMaxSessionSize(nebulaConfig.maxSessionSize)
+                .setMinSessionSize(nebulaConfig.minSessionSize)
+                .setRetryTimes(nebulaConfig.retryTimes)
+                .setWaitTime(nebulaConfig.waitTimeMills)
+                .setIntervalTime(nebulaConfig.intervalTimeMills)
+                .setTimeout(nebulaConfig.timeoutMills)
+                .setCleanTime(nebulaConfig.cleanTimeSeconds)
+                .setReconnect(nebulaConfig.reconnect)
+                .setHealthCheckTime(nebulaConfig.healthCheckTimeSeconds)
             )
           )
-        )
-      )(release => ZIO.attempt(release.close()).onError(e => ZIO.logErrorCause(e)).ignoreLogged)
-    )
-
-  lazy val layer: ZLayer[NebulaConfig with Scope, Nothing, NebulaSessionPool] =
-    ZLayer.fromZIO(
-      ZIO.acquireRelease(makeSession.map(c => new NebulaSessionPoolLive(c)))(release =>
-        release.close().onError(e => ZIO.logErrorCause(e)).ignoreLogged
+        )(release => ZIO.attempt(release.close()).onError(e => ZIO.logErrorCause(e)).ignoreLogged)
       )
+    }
+
+  lazy val layer: ZLayer[NebulaSessionConfig with Scope, Nothing, NebulaSessionPool] = {
+    val pool = ZLayer.fromZIO(
+      ZIO.serviceWith[SessionPool](new NebulaSessionPoolLive(_))
     )
+    (sessionLayer >>> pool).orDie
+  }
 }

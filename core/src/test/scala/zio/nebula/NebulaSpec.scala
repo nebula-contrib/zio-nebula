@@ -1,39 +1,41 @@
 package zio.nebula
 
-import zio._
+import zio.{ ZIO, _ }
+import zio.nebula.meta.NebulaMetaManager
 import zio.nebula.net.NebulaPool
+import zio.nebula.storage.NebulaStorageClient
 import zio.test._
 import zio.test.TestAspect._
 
-import com.vesoft.nebula.client.graph.NebulaPoolConfig
-
 trait NebulaSpec extends ZIOSpecDefault {
 
-  val init =
-    """
-      |CREATE SPACE IF NOT EXISTS test(vid_type=fixed_string(20));
-      |USE test;
-      |CREATE TAG IF NOT EXISTS person(name string, age int);
-      |CREATE EDGE IF NOT EXISTS like(likeness double)
-      |""".stripMargin
+  type Nebula = NebulaSessionPool
+    with NebulaMetaManager
+    with NebulaStorageClient
+    with NebulaPool
+    with NebulaSessionConfig
+    with Scope
 
   override def spec =
-    specLayered
+    (specLayered @@ beforeAll(
+      ZIO.serviceWithZIO[NebulaPool](_.init())
+        *> ZIO.serviceWithZIO[NebulaPool](
+          _.getSession.flatMap(_.execute("CREATE SPACE IF NOT EXISTS test(vid_type=fixed_string(20));"))
+        ) *>
+        ZIO.serviceWithZIO[NebulaSessionPool](_.init())
+    ) @@ sequential)
       .provideShared(
         Scope.default,
+        NebulaPool.layer,
         NebulaSessionPool.layer,
-        NebulaConfig.layer
-      ) @@
-      beforeAll(
-        (for {
-          status <- ZIO.serviceWithZIO[NebulaPool](_.init(new NebulaPoolConfig))
-          _      <- ZIO.logInfo(status.toString)
-          _      <- ZIO.serviceWithZIO[NebulaPool](
-                      _.getSession.flatMap(_.execute(init).flatMap(r => ZIO.logInfo(r.toString)))
-                    )
-        } yield ()).provide(NebulaPool.layer, Scope.default, NebulaConfig.layer)
+        NebulaMetaManager.layer,
+        NebulaStorageClient.layer,
+        NebulaConfig.layer,
+        NebulaConfig.metaLayer,
+        NebulaConfig.storageLayer,
+        NebulaConfig.poolLayer
       )
 
-  def specLayered: Spec[NebulaSessionPool, Throwable]
+  def specLayered: Spec[Nebula, Throwable]
 
 }

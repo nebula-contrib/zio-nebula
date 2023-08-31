@@ -3,7 +3,7 @@ package zio.nebula.meta
 import scala.jdk.CollectionConverters._
 
 import zio._
-import zio.nebula.NebulaHostAddress
+import zio.nebula.{ NebulaHostAddress, NebulaMetaConfig }
 
 import com.vesoft.nebula.client.graph.data.HostAddress
 import com.vesoft.nebula.client.meta.MetaManager
@@ -42,13 +42,13 @@ object NebulaMetaManager {
   lazy val layer: ZLayer[NebulaMetaConfig with Scope, Throwable, NebulaMetaManager] =
     ZLayer.fromZIO {
       for {
-        config <- ZIO.service[NebulaMetaConfig]
+        config <- ZIO.serviceWith[NebulaMetaConfig](_.underlying)
         manger <- ZIO.acquireRelease(
                     ZIO.attempt(
                       new NebulaMetaManagerLive(
                         new MetaManager(
                           config.address.map(a => new HostAddress(a.host, a.port)).asJava,
-                          config.timeout.getSeconds.toInt,
+                          config.timeoutMills,
                           config.connectionRetry,
                           config.executionRetry,
                           config.enableSSL,
