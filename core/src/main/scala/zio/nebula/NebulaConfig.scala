@@ -9,7 +9,7 @@ import zio.nebula.meta.SSLParam
 import com.typesafe.config.{ Config => TConfig, ConfigFactory }
 import com.vesoft.nebula.client.graph.{ NebulaPoolConfig => PoolConfig }
 
-private [nebula] final case class NebulaConfig(
+private[nebula] final case class NebulaConfig(
   address: List[NebulaHostAddress],
   timeoutMills: Int,
   executionRetry: Int,
@@ -19,15 +19,15 @@ private [nebula] final case class NebulaConfig(
   selfSigned: Option[SSLParam] = None
 )
 
-private [nebula] final case class NebulaMetaConfig(
+private[nebula] final case class NebulaMetaConfig(
   underlying: NebulaConfig
 )
 
-private [nebula] final case class NebulaStorageConfig(
+private[nebula] final case class NebulaStorageConfig(
   underlying: NebulaConfig
 )
 
-private [nebula] final case class NebulaPoolConfig(
+private[nebula] final case class NebulaPoolConfig(
   minConnsSize: Int = 0,
   maxConnsSize: Int = 10,
   timeoutMills: Int = 0,
@@ -54,7 +54,7 @@ private [nebula] final case class NebulaPoolConfig(
   }
 }
 
-private [nebula] final case class NebulaSessionPoolConfig(
+private[nebula] final case class NebulaSessionPoolConfig(
   address: List[NebulaHostAddress],
   auth: NebulaAuth,
   spaceName: String,
