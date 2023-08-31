@@ -6,7 +6,7 @@ import zio.nebula.meta._
 
 import com.vesoft.nebula.meta.SpaceItem
 
-final class NebulaMetaService(nebulaMetaManager: NebulaMetaManager) {
+final class NebulaMetaService(nebulaMetaManager: NebulaMetaClient) {
 
   def getSpace(spaceName: String): Task[SpaceItem] =
     nebulaMetaManager.getSpace(spaceName)
@@ -26,7 +26,7 @@ object NebulaMetaServiceMain extends ZIOAppDefault {
         Scope.default,
         NebulaConfig.metaLayer,
         NebulaMetaService.layer,
-        NebulaMetaManager.layer
+        NebulaMetaClient.layer
       )
 
 }

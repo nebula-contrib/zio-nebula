@@ -1,8 +1,8 @@
 package zio.nebula
 
 import zio.ZIO
-import zio.nebula.meta.NebulaMetaManager
-import zio.nebula.net.NebulaPool
+import zio.nebula.meta.NebulaMetaClient
+import zio.nebula.net.NebulaClient
 import zio.nebula.storage.{ NebulaStorageClient, ScanEdgeInput }
 import zio.test._
 
@@ -49,11 +49,11 @@ object NebulaClientSpec extends NebulaSpec {
       suite("nebula session pool")(
         test("create and query") {
           for {
-            res1 <- ZIO.serviceWithZIO[NebulaSessionPool](_.execute(insertVertexes))
+            res1 <- ZIO.serviceWithZIO[NebulaSessionClient](_.execute(insertVertexes))
             _    <- ZIO.logInfo(s"exec insert vertex: ${res1.getErrorMessage}")
-            res2 <- ZIO.serviceWithZIO[NebulaSessionPool](_.execute(insertEdges))
+            res2 <- ZIO.serviceWithZIO[NebulaSessionClient](_.execute(insertEdges))
             _    <- ZIO.logInfo(s"exec insert edge: ${res2.getErrorMessage}")
-            res3 <- ZIO.serviceWithZIO[NebulaSessionPool](_.execute(query))
+            res3 <- ZIO.serviceWithZIO[NebulaSessionClient](_.execute(query))
             _    <- ZIO.logInfo(s"exec query ${res3.getErrorMessage}")
           } yield assertTrue(res3.getRows.size == 4)
         }
@@ -61,11 +61,11 @@ object NebulaClientSpec extends NebulaSpec {
       suite("nebula meta manager")(
         test("query") {
           for {
-            initStatus <- ZIO.serviceWithZIO[NebulaPool](_.getSession.flatMap(_.execute(init("test_meta"))))
+            initStatus <- ZIO.serviceWithZIO[NebulaClient](_.getSession.flatMap(_.execute(init("test_meta"))))
             _          <- ZIO.logInfo(s"init stmt: ${initStatus.getErrorMessage}")
-            spaceItem  <- ZIO.serviceWithZIO[NebulaMetaManager](_.getSpace("test_meta"))
+            spaceItem  <- ZIO.serviceWithZIO[NebulaMetaClient](_.getSpace("test_meta"))
             _          <- ZIO.logInfo(s"get space: ${spaceItem.toString}")
-            spaceId    <- ZIO.serviceWithZIO[NebulaMetaManager](_.getSpaceId("test_meta"))
+            spaceId    <- ZIO.serviceWithZIO[NebulaMetaClient](_.getSpaceId("test_meta"))
             _          <- ZIO.logInfo(s"get space id: ${spaceId.toString}")
           } yield assertTrue(spaceItem != null && spaceId > 0)
         }
@@ -73,7 +73,7 @@ object NebulaClientSpec extends NebulaSpec {
       suite("nebula storage client")(
         test("query") {
           for {
-            initStatus <- ZIO.serviceWithZIO[NebulaPool](_.getSession.flatMap(_.execute(init("test_storage"))))
+            initStatus <- ZIO.serviceWithZIO[NebulaClient](_.getSession.flatMap(_.execute(init("test_storage"))))
             _          <- ZIO.logInfo(s"init stmt: ${initStatus.getErrorMessage}")
             status     <- ZIO.serviceWithZIO[NebulaStorageClient](
                             _.connect()

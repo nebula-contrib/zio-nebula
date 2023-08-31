@@ -9,7 +9,7 @@ import com.vesoft.nebula.client.graph._
  *   梦境迷离
  * @version 1.0,2023/8/29
  */
-private[nebula] final class NebulaSessionPoolLive(underlying: SessionPool) extends NebulaSessionPool {
+private[nebula] final class NebulaSessionClientLive(underlying: SessionPool) extends NebulaSessionClient {
 
   override def execute(stmt: String): Task[NebulaResultSet] =
     ZIO.attempt(new NebulaResultSet(underlying.execute(stmt)))

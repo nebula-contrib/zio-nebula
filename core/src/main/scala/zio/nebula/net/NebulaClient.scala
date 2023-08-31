@@ -12,7 +12,7 @@ import com.vesoft.nebula.client.graph.net.{ NebulaPool => Pool }
  *   梦境迷离
  * @version 1.0,2023/8/29
  */
-trait NebulaPool {
+trait NebulaClient {
 
   def init(): ZIO[NebulaSessionConfig & NebulaPoolConfig, Throwable, Boolean]
 
@@ -28,12 +28,12 @@ trait NebulaPool {
 
 }
 
-object NebulaPool {
+object NebulaClient {
 
   private def makePool: ZIO[Scope, Nothing, Pool] = ZIO.acquireRelease(ZIO.succeed(new Pool))(d =>
     ZIO.attempt(d.close()).onError(e => ZIO.logErrorCause(e)).ignoreLogged
   )
 
-  lazy val layer: ZLayer[Scope, Nothing, NebulaPool] =
-    ZLayer.fromZIO(makePool.map(pool => new NebulaPoolLive(pool)))
+  lazy val layer: ZLayer[Scope, Nothing, NebulaClient] =
+    ZLayer.fromZIO(makePool.map(pool => new NebulaClientLive(pool)))
 }

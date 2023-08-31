@@ -13,7 +13,7 @@ import com.vesoft.nebula.meta._
  *   梦境迷离
  * @version 1.0,2023/8/30
  */
-private[nebula] final class NebulaMetaManagerLive(underlying: MetaManager) extends NebulaMetaManager {
+private[nebula] final class NebulaMetaClientLive(underlying: MetaManager) extends NebulaMetaClient {
 
   override def close(): Task[Unit] = ZIO.attempt(underlying.close())
 

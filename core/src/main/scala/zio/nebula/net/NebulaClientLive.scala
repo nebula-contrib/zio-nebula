@@ -15,7 +15,7 @@ import com.vesoft.nebula.client.graph.net.{ NebulaPool => NebulaPl }
  *   梦境迷离
  * @version 1.0,2023/8/29
  */
-private[nebula] final class NebulaPoolLive(underlying: NebulaPl) extends NebulaPool {
+private[nebula] final class NebulaClientLive(underlying: NebulaPl) extends NebulaClient {
 
   def init(): ZIO[NebulaSessionConfig & NebulaPoolConfig, Throwable, Boolean] =
     for {

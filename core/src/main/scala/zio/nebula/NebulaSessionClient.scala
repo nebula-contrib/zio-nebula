@@ -12,7 +12,7 @@ import com.vesoft.nebula.client.graph.data.HostAddress
  *   梦境迷离
  * @version 1.0,2023/8/29
  */
-trait NebulaSessionPool {
+trait NebulaSessionClient {
 
   /**
    * init the SessionPool
@@ -53,7 +53,7 @@ trait NebulaSessionPool {
   def getIdleSessionNums: Task[Int]
 }
 
-object NebulaSessionPool {
+object NebulaSessionClient {
 
   private def sessionLayer: ZLayer[NebulaSessionConfig with Scope, Throwable, SessionPool] =
     ZLayer.fromZIO {
@@ -81,9 +81,9 @@ object NebulaSessionPool {
       )
     }
 
-  lazy val layer: ZLayer[NebulaSessionConfig with Scope, Nothing, NebulaSessionPool] = {
+  lazy val layer: ZLayer[NebulaSessionConfig with Scope, Nothing, NebulaSessionClient] = {
     val pool = ZLayer.fromZIO(
-      ZIO.serviceWith[SessionPool](new NebulaSessionPoolLive(_))
+      ZIO.serviceWith[SessionPool](new NebulaSessionClientLive(_))
     )
     (sessionLayer >>> pool).orDie
   }

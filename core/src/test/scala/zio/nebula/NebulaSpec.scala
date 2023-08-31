@@ -1,34 +1,34 @@
 package zio.nebula
 
-import zio.{ ZIO, _ }
-import zio.nebula.meta.NebulaMetaManager
-import zio.nebula.net.NebulaPool
+import zio._
+import zio.nebula.meta.NebulaMetaClient
+import zio.nebula.net.NebulaClient
 import zio.nebula.storage.NebulaStorageClient
 import zio.test._
 import zio.test.TestAspect._
 
 trait NebulaSpec extends ZIOSpecDefault {
 
-  type Nebula = NebulaSessionPool
-    with NebulaMetaManager
+  type Nebula = NebulaSessionClient
+    with NebulaMetaClient
     with NebulaStorageClient
-    with NebulaPool
+    with NebulaClient
     with NebulaSessionConfig
     with Scope
 
   override def spec =
     (specLayered @@ beforeAll(
-      ZIO.serviceWithZIO[NebulaPool](_.init())
-        *> ZIO.serviceWithZIO[NebulaPool](
+      ZIO.serviceWithZIO[NebulaClient](_.init())
+        *> ZIO.serviceWithZIO[NebulaClient](
           _.getSession.flatMap(_.execute("CREATE SPACE IF NOT EXISTS test(vid_type=fixed_string(20));"))
         ) *>
-        ZIO.serviceWithZIO[NebulaSessionPool](_.init())
+        ZIO.serviceWithZIO[NebulaSessionClient](_.init())
     ) @@ sequential)
       .provideShared(
         Scope.default,
-        NebulaPool.layer,
-        NebulaSessionPool.layer,
-        NebulaMetaManager.layer,
+        NebulaClient.layer,
+        NebulaSessionClient.layer,
+        NebulaMetaClient.layer,
         NebulaStorageClient.layer,
         NebulaConfig.layer,
         NebulaConfig.metaLayer,

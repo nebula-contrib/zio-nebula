@@ -3,7 +3,7 @@ package zio.nebula.example
 import zio._
 import zio.nebula._
 
-final class NebulaSessionPoolService(nebulaSessionPool: NebulaSessionPool) {
+final class NebulaSessionPoolService(nebulaSessionPool: NebulaSessionClient) {
 
   def execute(stmt: String): ZIO[Any, Throwable, NebulaResultSet] =
     nebulaSessionPool.execute(stmt)
@@ -17,7 +17,7 @@ object NebulaSessionPoolExampleMain extends ZIOAppDefault {
 
   override def run = (for {
     _ <- ZIO
-      .serviceWithZIO[NebulaSessionPool](_.init())
+           .serviceWithZIO[NebulaSessionClient](_.init())
     _ <- ZIO
            .serviceWithZIO[NebulaSessionPoolService](
              _.execute("""
@@ -48,7 +48,7 @@ object NebulaSessionPoolExampleMain extends ZIOAppDefault {
   } yield ())
     .provide(
       Scope.default,
-      NebulaSessionPool.layer,
+      NebulaSessionClient.layer,
       NebulaConfig.layer,
       NebulaSessionPoolService.layer
     )

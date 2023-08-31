@@ -14,7 +14,7 @@ import com.vesoft.nebula.meta._
  *   梦境迷离
  * @version 1.0,2023/8/30
  */
-trait NebulaMetaManager {
+trait NebulaMetaClient {
 
   def close(): Task[Unit]
 
@@ -37,15 +37,15 @@ trait NebulaMetaManager {
   def listHosts: Task[Set[NebulaHostAddress]]
 }
 
-object NebulaMetaManager {
+object NebulaMetaClient {
 
-  lazy val layer: ZLayer[NebulaMetaConfig with Scope, Throwable, NebulaMetaManager] =
+  lazy val layer: ZLayer[NebulaMetaConfig with Scope, Throwable, NebulaMetaClient] =
     ZLayer.fromZIO {
       for {
         config <- ZIO.serviceWith[NebulaMetaConfig](_.underlying)
         manger <- ZIO.acquireRelease(
                     ZIO.attempt(
-                      new NebulaMetaManagerLive(
+                      new NebulaMetaClientLive(
                         new MetaManager(
                           config.address.map(a => new HostAddress(a.host, a.port)).asJava,
                           config.timeoutMills,
