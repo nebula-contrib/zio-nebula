@@ -6,26 +6,26 @@ import zio.nebula.meta._
 
 import com.vesoft.nebula.meta.SpaceItem
 
-final class NebulaMetaService(nebulaMetaManager: NebulaMetaClient) {
+final class NebulaMetaClientExample(nebulaMetaManager: NebulaMetaClient) {
 
   def getSpace(spaceName: String): Task[SpaceItem] =
     nebulaMetaManager.getSpace(spaceName)
 }
 
-object NebulaMetaService {
-  lazy val layer = ZLayer.fromFunction(new NebulaMetaService(_))
+object NebulaMetaClientExample {
+  lazy val layer = ZLayer.fromFunction(new NebulaMetaClientExample(_))
 }
 
-object NebulaMetaServiceMain extends ZIOAppDefault {
+object NebulaMetaClientMain extends ZIOAppDefault {
 
   override def run =
     ZIO
-      .serviceWithZIO[NebulaMetaService](_.getSpace("test"))
+      .serviceWithZIO[NebulaMetaClientExample](_.getSpace("test"))
       .flatMap(space => ZIO.logInfo(space.toString))
       .provide(
         Scope.default,
-        NebulaConfig.metaLayer,
-        NebulaMetaService.layer,
+        NebulaConfig.metaConfigLayer,
+        NebulaMetaClientExample.layer,
         NebulaMetaClient.layer
       )
 

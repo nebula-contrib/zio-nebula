@@ -14,11 +14,11 @@ import com.vesoft.nebula.client.graph.net.{ NebulaPool => Pool }
  */
 trait NebulaClient {
 
-  def init(): ZIO[NebulaSessionConfig & NebulaPoolConfig, Throwable, Boolean]
+  def init(): ZIO[NebulaSessionPoolConfig & NebulaPoolConfig, Throwable, Boolean]
 
   def close(): Task[Unit]
 
-  def getSession: ZIO[Scope & NebulaSessionConfig, Throwable, NebulaSession]
+  def getSession: ZIO[Scope & NebulaSessionPoolConfig, Throwable, NebulaSession]
 
   def getActiveConnNum: Task[Int]
 

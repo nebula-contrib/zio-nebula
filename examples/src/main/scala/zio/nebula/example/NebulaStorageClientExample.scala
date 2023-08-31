@@ -4,7 +4,7 @@ import zio._
 import zio.nebula._
 import zio.nebula.storage._
 
-final class NebulaStorageService(nebulaStorageClient: NebulaStorageClient) {
+final class NebulaStorageClientExample(nebulaStorageClient: NebulaStorageClient) {
 
   def connect(): Task[Boolean] =
     nebulaStorageClient.connect()
@@ -13,18 +13,18 @@ final class NebulaStorageService(nebulaStorageClient: NebulaStorageClient) {
     nebulaStorageClient.scan(scanInput)
 }
 
-object NebulaStorageService {
-  lazy val layer = ZLayer.fromFunction(new NebulaStorageService(_))
+object NebulaStorageClientExample {
+  lazy val layer = ZLayer.fromFunction(new NebulaStorageClientExample(_))
 }
 
-object NebulaStorageServiceMain extends ZIOAppDefault {
+object NebulaStorageClientMain extends ZIOAppDefault {
 
   override def run = (for {
     connect <- ZIO
-                 .serviceWithZIO[NebulaStorageService](_.connect())
+                 .serviceWithZIO[NebulaStorageClientExample](_.connect())
     _       <- ZIO.logInfo(s"connect status: ${connect.toString}")
     scan    <- ZIO
-                 .serviceWithZIO[NebulaStorageService](
+                 .serviceWithZIO[NebulaStorageClientExample](
                    _.scan(ScanEdgeInput("test", None, "like", None, None, None, None))
                  )
     _       <- ZIO.logInfo(s"scan result: ${scan.next().toString}")
@@ -32,8 +32,8 @@ object NebulaStorageServiceMain extends ZIOAppDefault {
   } yield ())
     .provide(
       Scope.default,
-      NebulaConfig.storageLayer,
-      NebulaStorageService.layer,
+      NebulaConfig.storageConfigLayer,
+      NebulaStorageClientExample.layer,
       NebulaStorageClient.layer
     )
 

@@ -13,7 +13,7 @@ trait NebulaSpec extends ZIOSpecDefault {
     with NebulaMetaClient
     with NebulaStorageClient
     with NebulaClient
-    with NebulaSessionConfig
+    with NebulaSessionPoolConfig
     with Scope
 
   override def spec =
@@ -30,10 +30,10 @@ trait NebulaSpec extends ZIOSpecDefault {
         NebulaSessionClient.layer,
         NebulaMetaClient.layer,
         NebulaStorageClient.layer,
-        NebulaConfig.layer,
-        NebulaConfig.metaLayer,
-        NebulaConfig.storageLayer,
-        NebulaConfig.poolLayer
+        NebulaConfig.sessionConfigLayer,
+        NebulaConfig.metaConfigLayer,
+        NebulaConfig.storageConfigLayer,
+        NebulaConfig.poolConfigLayer
       )
 
   def specLayered: Spec[Nebula, Throwable]

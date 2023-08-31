@@ -54,7 +54,7 @@ final case class NebulaPoolConfig(
   }
 }
 
-final case class NebulaSessionConfig(
+final case class NebulaSessionPoolConfig(
   address: List[NebulaHostAddress],
   auth: NebulaAuth,
   spaceName: String,
@@ -70,7 +70,7 @@ final case class NebulaSessionConfig(
 )
 
 object NebulaConfig {
-  private lazy val config       = deriveConfig[NebulaSessionConfig]
+  private lazy val config       = deriveConfig[NebulaSessionPoolConfig]
   private lazy val clientConfig = deriveConfig[NebulaConfig]
   private lazy val poolConfig   = deriveConfig[NebulaPoolConfig]
 
@@ -82,20 +82,22 @@ object NebulaConfig {
   def fromClientConfig(c: TConfig): IO[Config.Error, NebulaConfig] =
     read(clientConfig.from(TypesafeConfigProvider.fromTypesafeConfig(c)))
 
-  def fromConfig(c: TConfig): IO[Config.Error, NebulaSessionConfig] =
+  def fromConfig(c: TConfig): IO[Config.Error, NebulaSessionPoolConfig] =
     read(config.from(TypesafeConfigProvider.fromTypesafeConfig(c)))
 
   def fromPoolConfig(c: TConfig): IO[Config.Error, NebulaPoolConfig] =
     read(poolConfig.from(TypesafeConfigProvider.fromTypesafeConfig(c)))
 
-  lazy val layer: ZLayer[Any, Nothing, NebulaSessionConfig] = ZLayer.fromZIO(fromConfig(defaultGraphConfig).orDie)
+  lazy val sessionConfigLayer: ZLayer[Any, Nothing, NebulaSessionPoolConfig] =
+    ZLayer.fromZIO(fromConfig(defaultGraphConfig).orDie)
 
-  lazy val metaLayer: ZLayer[Any, Nothing, NebulaMetaConfig] =
+  lazy val metaConfigLayer: ZLayer[Any, Nothing, NebulaMetaConfig] =
     ZLayer.fromZIO(fromClientConfig(defaultMetaConfig).orDie.map(NebulaMetaConfig.apply))
 
-  lazy val storageLayer: ZLayer[Any, Nothing, NebulaStorageConfig] =
+  lazy val storageConfigLayer: ZLayer[Any, Nothing, NebulaStorageConfig] =
     ZLayer.fromZIO(fromClientConfig(defaultStorageConfig).orDie.map(NebulaStorageConfig.apply))
 
-  lazy val poolLayer: ZLayer[Any, Nothing, NebulaPoolConfig] = ZLayer.fromZIO(fromPoolConfig(defaultPoolConfig).orDie)
+  lazy val poolConfigLayer: ZLayer[Any, Nothing, NebulaPoolConfig] =
+    ZLayer.fromZIO(fromPoolConfig(defaultPoolConfig).orDie)
 
 }

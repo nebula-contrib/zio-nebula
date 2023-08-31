@@ -3,23 +3,23 @@ package zio.nebula.example
 import zio._
 import zio.nebula._
 
-final class NebulaSessionPoolService(nebulaSessionPool: NebulaSessionClient) {
+final class NebulaSessionClientExample(nebulaSessionPool: NebulaSessionClient) {
 
   def execute(stmt: String): ZIO[Any, Throwable, NebulaResultSet] =
     nebulaSessionPool.execute(stmt)
 }
 
-object NebulaSessionPoolService {
-  lazy val layer = ZLayer.fromFunction(new NebulaSessionPoolService(_))
+object NebulaSessionClientExample {
+  lazy val layer = ZLayer.fromFunction(new NebulaSessionClientExample(_))
 }
 
-object NebulaSessionPoolExampleMain extends ZIOAppDefault {
+object NebulaSessionClientMain extends ZIOAppDefault {
 
   override def run = (for {
     _ <- ZIO
            .serviceWithZIO[NebulaSessionClient](_.init())
     _ <- ZIO
-           .serviceWithZIO[NebulaSessionPoolService](
+           .serviceWithZIO[NebulaSessionClientExample](
              _.execute("""
                          |INSERT VERTEX person(name, age) VALUES 
                          |'Bob':('Bob', 10), 
@@ -28,7 +28,7 @@ object NebulaSessionPoolExampleMain extends ZIOAppDefault {
                          |'John':('John', 11);""".stripMargin).flatMap(r => ZIO.logInfo(r.toString))
            )
     _ <- ZIO
-           .serviceWithZIO[NebulaSessionPoolService](
+           .serviceWithZIO[NebulaSessionClientExample](
              _.execute("""
                          |INSERT EDGE like(likeness) VALUES
                          |'Bob'->'Lily':(80.0),
@@ -38,7 +38,7 @@ object NebulaSessionPoolExampleMain extends ZIOAppDefault {
                          |'Bob'->'John':(97.2);""".stripMargin).flatMap(r => ZIO.logInfo(r.toString))
            )
     _ <- ZIO
-           .serviceWithZIO[NebulaSessionPoolService](
+           .serviceWithZIO[NebulaSessionClientExample](
              _.execute("""
                          |USE test;
                          |MATCH (p:person) RETURN p LIMIT 4;
@@ -49,8 +49,8 @@ object NebulaSessionPoolExampleMain extends ZIOAppDefault {
     .provide(
       Scope.default,
       NebulaSessionClient.layer,
-      NebulaConfig.layer,
-      NebulaSessionPoolService.layer
+      NebulaConfig.sessionConfigLayer,
+      NebulaSessionClientExample.layer
     )
 
 }

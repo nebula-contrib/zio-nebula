@@ -17,11 +17,11 @@ import com.vesoft.nebula.client.graph.net.{ NebulaPool => NebulaPl }
  */
 private[nebula] final class NebulaClientLive(underlying: NebulaPl) extends NebulaClient {
 
-  def init(): ZIO[NebulaSessionConfig & NebulaPoolConfig, Throwable, Boolean] =
+  def init(): ZIO[NebulaSessionPoolConfig & NebulaPoolConfig, Throwable, Boolean] =
     for {
       config <- ZIO.service[NebulaPoolConfig]
       status <-
-        ZIO.serviceWithZIO[NebulaSessionConfig](sessionConfig =>
+        ZIO.serviceWithZIO[NebulaSessionPoolConfig](sessionConfig =>
           ZIO.attemptBlocking(
             underlying.init(sessionConfig.address.map(d => new HostAddress(d.host, d.port)).asJava, config.toJava)
           )
@@ -30,9 +30,9 @@ private[nebula] final class NebulaClientLive(underlying: NebulaPl) extends Nebul
 
   def close(): Task[Unit] = ZIO.attempt(underlying.close())
 
-  def getSession: ZIO[Scope & NebulaSessionConfig, Throwable, NebulaSession] =
+  def getSession: ZIO[Scope & NebulaSessionPoolConfig, Throwable, NebulaSession] =
     for {
-      sessionConfig <- ZIO.service[NebulaSessionConfig]
+      sessionConfig <- ZIO.service[NebulaSessionPoolConfig]
       session       <-
         ZIO.acquireRelease(
           ZIO.attempt(

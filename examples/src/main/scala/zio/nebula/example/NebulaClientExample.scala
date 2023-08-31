@@ -4,26 +4,24 @@ import zio._
 import zio.nebula._
 import zio.nebula.net.NebulaClient
 
-import com.vesoft.nebula.Row
+final class NebulaClientExample(nebulaPool: NebulaClient) {
 
-final class NebulaService(nebulaPool: NebulaClient) {
-
-  def execute(stmt: String): ZIO[Scope with NebulaSessionConfig, Throwable, NebulaResultSet] =
+  def execute(stmt: String): ZIO[Scope with NebulaSessionPoolConfig, Throwable, NebulaResultSet] =
     nebulaPool.getSession.flatMap(_.execute(stmt))
 }
 
-object NebulaService {
-  lazy val layer = ZLayer.fromFunction(new NebulaService(_))
+object NebulaClientExample {
+  lazy val layer = ZLayer.fromFunction(new NebulaClientExample(_))
 }
 
-object NebulaExampleMain extends ZIOAppDefault {
+object NebulaClientMain extends ZIOAppDefault {
 
   override def run =
     (for {
       status <- ZIO.serviceWithZIO[NebulaClient](_.init())
       _      <- ZIO.logInfo(status.toString)
       res    <- ZIO
-                  .serviceWithZIO[NebulaService](
+                  .serviceWithZIO[NebulaClientExample](
                     _.execute("""
                              |CREATE SPACE IF NOT EXISTS test(vid_type=fixed_string(20));
                              |USE test;
@@ -35,9 +33,9 @@ object NebulaExampleMain extends ZIOAppDefault {
       .provide(
         Scope.default,
         NebulaClient.layer,
-        NebulaService.layer,
-        NebulaConfig.layer,
-        NebulaConfig.poolLayer
+        NebulaClientExample.layer,
+        NebulaConfig.sessionConfigLayer,
+        NebulaConfig.poolConfigLayer
       )
 
 }
