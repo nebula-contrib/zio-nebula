@@ -8,7 +8,7 @@ import com.vesoft.nebula.client.graph.data.{ CASignedSSLParam, SelfSignedSSLPara
  *   梦境迷离
  * @version 1.0,2023/8/30
  */
-sealed trait SSLParam {
+private [nebula] sealed trait SSLParam {
   self =>
 
   def toJava: data.SSLParam =

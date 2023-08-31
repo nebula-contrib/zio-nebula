@@ -1,3 +1,3 @@
 package zio.nebula
 
-final case class NebulaAuth(username: String, password: String)
+private [nebula] final case class NebulaAuth(username: String, password: String)
