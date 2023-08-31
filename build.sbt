@@ -45,7 +45,7 @@ lazy val core = project
 lazy val examples = project
   .in(file("examples"))
   .settings(
-    publish / skip := true,
+    publish / skip     := true,
     crossScalaVersions := Seq(scala3Version, scala2Version),
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % logbackVersion
