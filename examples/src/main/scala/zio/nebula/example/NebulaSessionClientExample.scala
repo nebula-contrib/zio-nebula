@@ -43,14 +43,13 @@ object NebulaSessionClientMain extends ZIOAppDefault {
                          |USE test;
                          |MATCH (p:person) RETURN p LIMIT 4;
                          |""".stripMargin)
-               .flatMap(r => ZIO.logInfo(r.getRows.toString()))
+               .flatMap(r => ZIO.logInfo(r.rows.toString()))
            )
   } yield ())
     .provide(
       Scope.default,
-      NebulaSessionClient.layer,
-      NebulaConfig.sessionConfigLayer,
-      NebulaSessionClientExample.layer
+      NebulaSessionClientExample.layer,
+      SessionClientEnv
     )
 
 }

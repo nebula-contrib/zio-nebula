@@ -1,6 +1,7 @@
 package zio.nebula
 
 import zio._
+import zio.nebula._
 import zio.nebula.meta.NebulaMetaClient
 import zio.nebula.net.NebulaClient
 import zio.nebula.storage.NebulaStorageClient
@@ -9,12 +10,7 @@ import zio.test.TestAspect._
 
 trait NebulaSpec extends ZIOSpecDefault {
 
-  type Nebula = NebulaSessionClient
-    with NebulaMetaClient
-    with NebulaStorageClient
-    with NebulaClient
-    with NebulaSessionPoolConfig
-    with Scope
+  type Nebula = Client & SessionClient & Storage & Meta
 
   override def spec =
     (specLayered @@ beforeAll(
@@ -26,14 +22,10 @@ trait NebulaSpec extends ZIOSpecDefault {
     ) @@ sequential)
       .provideShared(
         Scope.default,
-        NebulaClient.layer,
-        NebulaSessionClient.layer,
-        NebulaMetaClient.layer,
-        NebulaStorageClient.layer,
-        NebulaConfig.sessionConfigLayer,
-        NebulaConfig.metaConfigLayer,
-        NebulaConfig.storageConfigLayer,
-        NebulaConfig.poolConfigLayer
+        MetaEnv,
+        StorageEnv,
+        SessionClientEnv,
+        ClientEnv
       )
 
   def specLayered: Spec[Nebula, Throwable]

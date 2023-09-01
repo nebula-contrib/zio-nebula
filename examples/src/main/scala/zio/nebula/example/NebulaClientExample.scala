@@ -32,10 +32,8 @@ object NebulaClientMain extends ZIOAppDefault {
     } yield res)
       .provide(
         Scope.default,
-        NebulaClient.layer,
-        NebulaClientExample.layer,
-        NebulaConfig.sessionConfigLayer,
-        NebulaConfig.poolConfigLayer
+        ClientEnv,
+        NebulaClientExample.layer
       )
 
 }

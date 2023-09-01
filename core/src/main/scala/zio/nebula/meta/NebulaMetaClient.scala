@@ -39,7 +39,7 @@ trait NebulaMetaClient {
 
 object NebulaMetaClient {
 
-  lazy val layer: ZLayer[NebulaMetaConfig with Scope, Throwable, NebulaMetaClient] =
+  lazy val layer: ZLayer[NebulaMetaConfig & Scope, Nothing, NebulaMetaClient] =
     ZLayer.fromZIO {
       for {
         config <- ZIO.serviceWith[NebulaMetaConfig](_.underlying)
@@ -59,5 +59,5 @@ object NebulaMetaClient {
                   )(_.close().onError(e => ZIO.logErrorCause(e)).ignoreLogged)
       } yield manger
 
-    }
+    }.orDie
 }

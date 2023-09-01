@@ -12,18 +12,18 @@ import com.vesoft.nebula.client.storage.StorageClient
  * @version 1.0,2023/8/31
  */
 private[nebula] object NebulaStorageClientLive {
-  val DEFAULT_LIMIT               = 1000
-  val DEFAULT_START_TIME          = 0
-  val DEFAULT_END_TIME            = java.lang.Long.MAX_VALUE
-  val DEFAULT_ALLOW_PART_SUCCESS  = false
-  val DEFAULT_ALLOW_READ_FOLLOWER = true
+  private val DEFAULT_LIMIT: Int                   = 1000
+  private val DEFAULT_START_TIME: Long             = 0
+  private val DEFAULT_END_TIME: Long               = java.lang.Long.MAX_VALUE
+  private val DEFAULT_ALLOW_PART_SUCCESS: Boolean  = false
+  private val DEFAULT_ALLOW_READ_FOLLOWER: Boolean = true
 }
 
 private[nebula] final class NebulaStorageClientLive(storageClient: StorageClient) extends NebulaStorageClient {
 
   import NebulaStorageClientLive._
 
-  override def connect(): Task[Boolean] = ZIO.attempt(storageClient.connect())
+  override def connect(): Task[Boolean] = ZIO.attemptBlocking(storageClient.connect())
 
   override def close(): Task[Unit] = ZIO.attempt(storageClient.close())
 

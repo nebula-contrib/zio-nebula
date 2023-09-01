@@ -32,9 +32,8 @@ object NebulaStorageClientMain extends ZIOAppDefault {
   } yield ())
     .provide(
       Scope.default,
-      NebulaConfig.storageConfigLayer,
       NebulaStorageClientExample.layer,
-      NebulaStorageClient.layer
+      StorageEnv
     )
 
 }

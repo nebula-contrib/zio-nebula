@@ -24,9 +24,8 @@ object NebulaMetaClientMain extends ZIOAppDefault {
       .flatMap(space => ZIO.logInfo(space.toString))
       .provide(
         Scope.default,
-        NebulaConfig.metaConfigLayer,
         NebulaMetaClientExample.layer,
-        NebulaMetaClient.layer
+        MetaEnv
       )
 
 }

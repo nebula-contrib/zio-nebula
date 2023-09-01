@@ -23,21 +23,21 @@ final class NebulaResultSet(resultSet: ResultSet) {
 
   def isEmpty: Boolean = resultSet.isEmpty
 
-  def getErrorCode: Int = resultSet.getErrorCode
+  def errorCode: Int = resultSet.getErrorCode
 
-  def getSpaceName: String = resultSet.getSpaceName
+  def spaceName: String = resultSet.getSpaceName
 
-  def getErrorMessage: String = resultSet.getErrorMessage
+  def errorMessage: String = resultSet.getErrorMessage
 
-  def getComment: String = resultSet.getComment
+  def comment: String = resultSet.getComment
 
-  def getLatency: Long = resultSet.getLatency
+  def latency: Long = resultSet.getLatency
 
-  def getPlanDesc: PlanDescription = resultSet.getPlanDesc
+  def planDesc: PlanDescription = resultSet.getPlanDesc
 
   def keys: List[String] = resultSet.getColumnNames.asScala.toList
 
-  def getColumnNames: List[String] = resultSet.getColumnNames.asScala.toList
+  def columnNames: List[String] = resultSet.getColumnNames.asScala.toList
 
   def rowsSize: Int = resultSet.rowsSize()
 
@@ -45,7 +45,7 @@ final class NebulaResultSet(resultSet: ResultSet) {
 
   def colValues(columnName: String): List[ValueWrapper] = resultSet.colValues(columnName).asScala.toList
 
-  def getRows: List[Row] = resultSet.getRows.asScala.toList
+  def rows: List[Row] = resultSet.getRows.asScala.toList
 
   override def toString: String = resultSet.toString
 }

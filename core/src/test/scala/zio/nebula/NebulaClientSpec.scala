@@ -50,19 +50,19 @@ object NebulaClientSpec extends NebulaSpec {
         test("create and query") {
           for {
             res1 <- ZIO.serviceWithZIO[NebulaSessionClient](_.execute(insertVertexes))
-            _    <- ZIO.logInfo(s"exec insert vertex: ${res1.getErrorMessage}")
+            _    <- ZIO.logInfo(s"exec insert vertex: ${res1.errorMessage}")
             res2 <- ZIO.serviceWithZIO[NebulaSessionClient](_.execute(insertEdges))
-            _    <- ZIO.logInfo(s"exec insert edge: ${res2.getErrorMessage}")
+            _    <- ZIO.logInfo(s"exec insert edge: ${res2.errorMessage}")
             res3 <- ZIO.serviceWithZIO[NebulaSessionClient](_.execute(query))
-            _    <- ZIO.logInfo(s"exec query ${res3.getErrorMessage}")
-          } yield assertTrue(res3.getRows.size == 4)
+            _    <- ZIO.logInfo(s"exec query ${res3.errorMessage}")
+          } yield assertTrue(res3.rows.size == 4)
         }
       ),
       suite("nebula meta manager")(
         test("query") {
           for {
             initStatus <- ZIO.serviceWithZIO[NebulaClient](_.getSession.flatMap(_.execute(init("test_meta"))))
-            _          <- ZIO.logInfo(s"init stmt: ${initStatus.getErrorMessage}")
+            _          <- ZIO.logInfo(s"init stmt: ${initStatus.errorMessage}")
             spaceItem  <- ZIO.serviceWithZIO[NebulaMetaClient](_.getSpace("test_meta"))
             _          <- ZIO.logInfo(s"get space: ${spaceItem.toString}")
             spaceId    <- ZIO.serviceWithZIO[NebulaMetaClient](_.getSpaceId("test_meta"))
@@ -74,7 +74,7 @@ object NebulaClientSpec extends NebulaSpec {
         test("query") {
           for {
             initStatus <- ZIO.serviceWithZIO[NebulaClient](_.getSession.flatMap(_.execute(init("test_storage"))))
-            _          <- ZIO.logInfo(s"init stmt: ${initStatus.getErrorMessage}")
+            _          <- ZIO.logInfo(s"init stmt: ${initStatus.errorMessage}")
             status     <- ZIO.serviceWithZIO[NebulaStorageClient](
                             _.connect()
                           )
