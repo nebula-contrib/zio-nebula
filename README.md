@@ -7,8 +7,9 @@ ZIO NebulaGraph
 [Badge-CI]: https://github.com/hjfruit/zio-nebula/actions/workflows/scala.yml/badge.svg
 [Badge-Snapshots]: https://img.shields.io/nexus/s/io.github.jxnu-liguobin/zio-nebula_3?server=https%3A%2F%2Foss.sonatype.org
 [Link-Snapshots]: https://oss.sonatype.org/content/repositories/snapshots/io/github/jxnu-liguobin/zio-nebula_3/
-[Link-Release]: https://oss.sonatype.org/content/repositories/public/io/github/jxnu-liguobin/zio-nebula_3/
-[Badge-Release]: https://img.shields.io/nexus/r/io.github.jxnu-liguobin/zio-nebula_3?server=https%3A%2F%2Foss.sonatype.org
+[Link-Release]: https://index.scala-lang.org/hjfruit/zio-nebula/zio-nebula
+[Badge-Release]: https://index.scala-lang.org/hjfruit/zio-nebula/zio-nebula/latest-by-scala-version.svg?platform=jvm
+
 
 [zio-nebula](https://github.com/hjfruit/zio-nebula) is a simple wrapper around [nebula-java](https://github.com/vesoft-inc/nebula-java/) for easier integration into Scala, ZIO applications.
 
