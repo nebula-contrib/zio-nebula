@@ -1,16 +1,13 @@
 package zio.nebula
 
 import zio._
-import zio.nebula._
-import zio.nebula.meta.NebulaMetaClient
 import zio.nebula.net.NebulaClient
-import zio.nebula.storage.NebulaStorageClient
 import zio.test._
 import zio.test.TestAspect._
 
 trait NebulaSpec extends ZIOSpecDefault {
 
-  type Nebula = Client & SessionClient & Storage & Meta
+  type Nebula = Client with SessionClient with Storage with Meta with Scope
 
   override def spec =
     (specLayered @@ beforeAll(
