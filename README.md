@@ -1,4 +1,6 @@
-ZIO NebulaGraph
+![](logo.png)
+
+ZIO Client for NebulaGraph
 ---
 
 ![CI][Badge-CI] [![Nexus (Snapshots)][Badge-Snapshots]][Link-Snapshots] [![Sonatype Nexus (Releases)][Badge-Release]][Link-Release]
