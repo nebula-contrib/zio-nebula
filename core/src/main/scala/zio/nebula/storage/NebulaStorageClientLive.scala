@@ -29,7 +29,7 @@ private[nebula] final class NebulaStorageClientLive(storageClient: StorageClient
 
   override def scan(scanInput: ScanInput): Task[scanInput.T] = {
     scanInput match {
-      case ScanVertexInput(spaceName, part, tagName, returnCols, _limit, _between, _allowConfig) =>
+      case ScanVertex(spaceName, part, tagName, returnCols, _limit, _between, _allowConfig) =>
         val limit       = _limit.getOrElse(DEFAULT_LIMIT)
         val between     = _between.getOrElse(Between(DEFAULT_START_TIME, DEFAULT_END_TIME))
         val allowConfig =
@@ -86,7 +86,7 @@ private[nebula] final class NebulaStorageClientLive(storageClient: StorageClient
         }
           .map(_.asInstanceOf[scanInput.T])
 
-      case ScanEdgeInput(spaceName, part, edgeName, returnCols, _limit, _between, _allowConfig) =>
+      case ScanEdge(spaceName, part, edgeName, returnCols, _limit, _between, _allowConfig) =>
         val limit       = _limit.getOrElse(DEFAULT_LIMIT)
         val between     = _between.getOrElse(Between(DEFAULT_START_TIME, DEFAULT_END_TIME))
         val allowConfig =

@@ -9,7 +9,7 @@ sealed trait ScanInput {
   type T
 }
 
-final case class ScanVertexInput(
+final case class ScanVertex(
   spaceName: String,
   part: Option[Int],
   tagName: String,
@@ -21,7 +21,7 @@ final case class ScanVertexInput(
   override type T = ScanVertexResultIterator
 }
 
-final case class ScanEdgeInput(
+final case class ScanEdge(
   spaceName: String,
   part: Option[Int],
   edgeName: String,

@@ -15,16 +15,22 @@ import com.vesoft.nebula.client.graph.net.Session
  */
 final class NebulaSession(private val underlying: Session) {
 
-  def execute(stmt: String): Task[NebulaResultSet] = ZIO.attempt(new NebulaResultSet(underlying.execute(stmt)))
-
-  def executeWithParameter(stmt: String, parameterMap: Map[String, AnyRef]): Task[NebulaResultSet] =
-    ZIO.attempt(new NebulaResultSet(underlying.executeWithParameter(stmt, parameterMap.asJava)))
-
-  def executeJson(stmt: String): Task[String] =
-    ZIO.attempt(underlying.executeJson(stmt))
-
-  def executeJsonWithParameter(stmt: String, parameterMap: Map[String, AnyRef]): Task[String] =
-    ZIO.attempt(underlying.executeJsonWithParameter(stmt, parameterMap.asJava))
+  def execute(stmt: Stmt): Task[stmt.T] = ZIO.attempt {
+    stmt match {
+      case StringStmt(_stmt)                       =>
+        new NebulaResultSet(underlying.execute(_stmt)).asInstanceOf[stmt.T]
+      case StringStmtWithMap(_stmt, parameterMap)  =>
+        new NebulaResultSet(underlying.executeWithParameter(_stmt, parameterMap.asJava)).asInstanceOf[stmt.T]
+      case JsonStmt(jsonStmt)                      =>
+        underlying
+          .executeJson(jsonStmt)
+          .asInstanceOf[stmt.T]
+      case JsonStmtWithMap(jsonStmt, parameterMap) =>
+        underlying
+          .executeJsonWithParameter(jsonStmt, parameterMap.asJava)
+          .asInstanceOf[stmt.T]
+    }
+  }
 
   def ping: Task[Boolean] = ZIO.attempt(underlying.ping())
 

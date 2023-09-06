@@ -1,7 +1,7 @@
 package zio.nebula
 
 import zio._
-import zio.nebula.net.NebulaClient
+import zio.nebula.net.{ NebulaClient, Stmt }
 import zio.test._
 import zio.test.TestAspect._
 
@@ -13,7 +13,7 @@ trait NebulaSpec extends ZIOSpecDefault {
     (specLayered @@ beforeAll(
       ZIO.serviceWithZIO[NebulaClient](_.init())
         *> ZIO.serviceWithZIO[NebulaClient](
-          _.getSession.flatMap(_.execute("CREATE SPACE IF NOT EXISTS test(vid_type=fixed_string(20));"))
+          _.getSession.flatMap(_.execute(Stmt.str("CREATE SPACE IF NOT EXISTS test(vid_type=fixed_string(20));")))
         ) *>
         ZIO.serviceWithZIO[NebulaSessionClient](_.init())
     ) @@ sequential)

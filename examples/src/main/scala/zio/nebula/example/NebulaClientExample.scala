@@ -2,12 +2,12 @@ package zio.nebula.example
 
 import zio._
 import zio.nebula._
-import zio.nebula.net.NebulaClient
+import zio.nebula.net.{ NebulaClient, Stmt }
 
 final class NebulaClientExample(nebulaPool: NebulaClient) {
 
   def execute(stmt: String): ZIO[Scope with NebulaSessionPoolConfig, Throwable, NebulaResultSet] =
-    nebulaPool.getSession.flatMap(_.execute(stmt))
+    nebulaPool.getSession.flatMap(_.execute(Stmt.str(stmt)))
 }
 
 object NebulaClientExample {
