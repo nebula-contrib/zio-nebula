@@ -19,15 +19,14 @@ ZIO Client for NebulaGraph
 
 ## Dependency
 
-Support Scala 2 or Scala 3:
+Support Scala 2.13 or Scala 3:
 ```scala
 libraryDependencies += "io.github.jxnu-liguobin" %% "zio-nebula" % <latest version>
 ```
 
 ## Environment
 
-- zio 2
-- zio-config 4.0.0-RC16
+- zio 2.0.13
 - nebula-java 3.6.0
 
 ## Example
@@ -52,10 +51,8 @@ object NebulaSessionClientExample {
 object NebulaSessionClientMain extends ZIOAppDefault {
 
   override def run = (for {
-    _ <- ZIO
-           .serviceWithZIO[NebulaSessionClient](_.init())
-    _ <- ZIO
-           .serviceWithZIO[NebulaSessionClientExample](
+    _ <- ZIO.serviceWithZIO[NebulaSessionClient](_.init())
+    _ <- ZIO.serviceWithZIO[NebulaSessionClientExample](
              _.execute("""
                          |INSERT VERTEX person(name, age) VALUES 
                          |'Bob':('Bob', 10), 
@@ -63,8 +60,7 @@ object NebulaSessionClientMain extends ZIOAppDefault {
                          |'Jerry':('Jerry', 13),
                          |'John':('John', 11);""".stripMargin).flatMap(r => ZIO.logInfo(r.toString))
            )
-    _ <- ZIO
-           .serviceWithZIO[NebulaSessionClientExample](
+    _ <- ZIO.serviceWithZIO[NebulaSessionClientExample](
              _.execute("""
                          |INSERT EDGE like(likeness) VALUES
                          |'Bob'->'Lily':(80.0),
@@ -73,8 +69,7 @@ object NebulaSessionClientMain extends ZIOAppDefault {
                          |'Tom'->'Jerry':(68.3),
                          |'Bob'->'John':(97.2);""".stripMargin).flatMap(r => ZIO.logInfo(r.toString))
            )
-    _ <- ZIO
-           .serviceWithZIO[NebulaSessionClientExample](
+    _ <- ZIO.serviceWithZIO[NebulaSessionClientExample](
              _.execute("""
                          |USE test;
                          |MATCH (p:person) RETURN p LIMIT 4;
@@ -91,4 +86,65 @@ object NebulaSessionClientMain extends ZIOAppDefault {
 }
 ```
 
-See [examples](./examples/src/main/scala/zio/nebula/example/) for more clients.
+## Configuration
+
+- key `graph` for `NebulaSessionClient`
+- key `meta` for `NebulaMetaClient`
+- key `storage` for `NebulaStorageClient`
+- key `pool` for `NebulaClient`
+
+```hocon
+{
+  graph = {
+    address = [
+      {
+        host = "127.0.0.1",
+        port = 9669
+      }
+    ]
+    auth = {
+      username = "root"
+      password = "nebula"
+    }
+    spaceName = "test"
+    reconnect = true
+  }
+
+  meta = {
+    address = [
+      {
+        host = "127.0.0.1",
+        port = 9559
+      }
+    ]
+    timeoutMills = 30000
+    connectionRetry = 3
+    executionRetry = 1
+    enableSSL = false
+  }
+
+  storage = {
+    address = [
+      {
+        host = "127.0.0.1",
+        port = 9559
+      }
+    ]
+    timeoutMills = 30000
+    connectionRetry = 3
+    executionRetry = 1
+    enableSSL = false
+  }
+
+  pool {
+    timeoutMills = 60000
+    enableSsl = false
+    minConnsSize = 10
+    maxConnsSize = 10
+    intervalIdleMills = 100
+    waitTimeMills = 100
+  }
+}
+```
+
+See [examples](./examples/src/main/scala/zio/nebula/example/) for more clients and configurations.
