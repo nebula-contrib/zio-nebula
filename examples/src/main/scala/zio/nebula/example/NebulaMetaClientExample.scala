@@ -6,10 +6,10 @@ import zio.nebula.meta._
 
 import com.vesoft.nebula.meta.SpaceItem
 
-final class NebulaMetaClientExample(nebulaMetaManager: NebulaMetaClient) {
+final class NebulaMetaClientExample(metaClient: NebulaMetaClient) {
 
   def getSpace(spaceName: String): Task[SpaceItem] =
-    nebulaMetaManager.getSpace(spaceName)
+    metaClient.getSpace(spaceName)
 }
 
 object NebulaMetaClientExample {

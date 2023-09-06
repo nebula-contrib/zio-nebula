@@ -37,11 +37,11 @@ Usually, we use a session client, which can be conveniently used in ZIO applicat
 import zio._
 import zio.nebula._
 
-final class NebulaSessionClientExample(nebulaSessionPool: NebulaSessionClient) {
+final class NebulaSessionClientExample(sessionClient: NebulaSessionClient) {
 
   def execute(stmt: String): ZIO[Any, Throwable, NebulaResultSet] = {
     // Your business logic
-    nebulaSessionPool.execute(stmt)
+    sessionClient.execute(stmt)
   }
 }
 

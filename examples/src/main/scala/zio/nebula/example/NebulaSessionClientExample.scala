@@ -3,10 +3,10 @@ package zio.nebula.example
 import zio._
 import zio.nebula._
 
-final class NebulaSessionClientExample(nebulaSessionPool: NebulaSessionClient) {
+final class NebulaSessionClientExample(sessionClient: NebulaSessionClient) {
 
   def execute(stmt: String): ZIO[Any, Throwable, NebulaResultSet] =
-    nebulaSessionPool.execute(stmt)
+    sessionClient.execute(stmt)
 }
 
 object NebulaSessionClientExample {
