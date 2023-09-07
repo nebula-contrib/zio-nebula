@@ -1,14 +1,17 @@
 val zioVersion          = "2.0.13"
-val scala3Version       = "3.2.2"
-val scala2Version       = "2.13.10"
+val scala3_Version      = "3.2.2"
+val scala2_13Version    = "2.13.10"
+val scala2_12Version    = "2.12.16"
 val zioConfigVersion    = "4.0.0-RC16"
 val nebulaClientVersion = "3.6.0"
 val logbackVersion      = "1.4.5"
 
+val supportCrossVersionList = Seq(scala3_Version, scala2_13Version, scala2_12Version)
+
 inThisBuild(
   List(
-    scalaVersion     := scala3Version,
-    homepage         := Some(url("https://github.com/hjfruit/zio-nebula")),
+    scalaVersion     := supportCrossVersionList.head,
+    homepage         := Some(url("https://github.com/nebula-contrib/zio-nebula")),
     licenses         := List("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
     organization     := "io.github.jxnu-liguobin",
     organizationName := "梦境迷离",
@@ -30,7 +33,7 @@ lazy val core = project
   .in(file("core"))
   .settings(
     name               := "zio-nebula",
-    crossScalaVersions := Seq(scala3Version, scala2Version),
+    crossScalaVersions := supportCrossVersionList,
     libraryDependencies ++= Seq(
       "com.vesoft"     % "client"              % nebulaClientVersion,
       "dev.zio"       %% "zio-config-typesafe" % zioConfigVersion,
@@ -46,7 +49,7 @@ lazy val examples = project
   .in(file("examples"))
   .settings(
     publish / skip     := true,
-    crossScalaVersions := Seq(scala3Version, scala2Version),
+    crossScalaVersions := supportCrossVersionList,
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % logbackVersion
     )

@@ -6,11 +6,11 @@ ZIO Client for NebulaGraph
 ![CI][Badge-CI] [![Nexus (Snapshots)][Badge-Snapshots]][Link-Snapshots] [![Sonatype Nexus (Releases)][Badge-Release]][Link-Release]
 
 
-[Badge-CI]: https://github.com/hjfruit/zio-nebula/actions/workflows/scala.yml/badge.svg
+[Badge-CI]: https://github.com/nebula-contrib/zio-nebula/actions/workflows/scala.yml/badge.svg
 [Badge-Snapshots]: https://img.shields.io/nexus/s/io.github.jxnu-liguobin/zio-nebula_3?server=https%3A%2F%2Foss.sonatype.org
 [Link-Snapshots]: https://oss.sonatype.org/content/repositories/snapshots/io/github/jxnu-liguobin/zio-nebula_3/
-[Link-Release]: https://index.scala-lang.org/hjfruit/zio-nebula/zio-nebula
-[Badge-Release]: https://index.scala-lang.org/hjfruit/zio-nebula/zio-nebula/latest-by-scala-version.svg?platform=jvm
+[Link-Release]: https://index.scala-lang.org/nebula-contrib/zio-nebula/zio-nebula
+[Badge-Release]: https://index.scala-lang.org/nebula-contrib/zio-nebula/zio-nebula/latest-by-scala-version.svg?platform=jvm
 
 
 [zio-nebula](https://github.com/hjfruit/zio-nebula) is a simple wrapper around [nebula-java](https://github.com/vesoft-inc/nebula-java/) for easier integration into Scala, ZIO applications.
@@ -19,7 +19,7 @@ ZIO Client for NebulaGraph
 
 ## Dependency
 
-Support Scala 2.13 or Scala 3:
+Support Scala 3, Scala 2.13 and Scala 2.12:
 ```scala
 libraryDependencies += "io.github.jxnu-liguobin" %% "zio-nebula" % <latest version>
 ```
@@ -88,11 +88,13 @@ object NebulaSessionClientMain extends ZIOAppDefault {
 
 ## Configuration
 
-- key `graph` for `NebulaSessionClient`
-- key `meta` for `NebulaMetaClient`
-- key `storage` for `NebulaStorageClient`
-- key `pool` for `NebulaClient`
+Introduction for configuring keys:
+  - key `graph` for `NebulaSessionClient`
+  - key `meta` for `NebulaMetaClient`
+  - key `storage` for `NebulaStorageClient`
+  - key `pool` for `NebulaClient`
 
+Sample Configuration:
 ```hocon
 {
   graph = {
