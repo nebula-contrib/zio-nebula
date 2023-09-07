@@ -19,13 +19,13 @@ private[nebula] object NebulaStorageClientLive {
   private val DEFAULT_ALLOW_READ_FOLLOWER: Boolean = true
 }
 
-private[nebula] final class NebulaStorageClientLive(storageClient: StorageClient) extends NebulaStorageClient {
+private[nebula] final class NebulaStorageClientLive(underlying: StorageClient) extends NebulaStorageClient {
 
   import NebulaStorageClientLive._
 
-  override def connect(): Task[Boolean] = ZIO.attemptBlocking(storageClient.connect())
+  override def connect(): Task[Boolean] = ZIO.attemptBlocking(underlying.connect())
 
-  override def close(): Task[Unit] = ZIO.attempt(storageClient.close())
+  override def close(): Task[Unit] = ZIO.attempt(underlying.close())
 
   override def scan(scanInput: ScanInput): Task[scanInput.T] = {
     scanInput match {
@@ -38,7 +38,7 @@ private[nebula] final class NebulaStorageClientLive(storageClient: StorageClient
         ZIO.attempt {
           (part, returnCols) match {
             case (Some(_part), Some(_returnCols)) =>
-              storageClient.scanVertex(
+              underlying.scanVertex(
                 spaceName,
                 _part,
                 tagName,
@@ -50,7 +50,7 @@ private[nebula] final class NebulaStorageClientLive(storageClient: StorageClient
                 allowConfig.allowReadFromFollower
               )
             case (Some(_part), None)              =>
-              storageClient.scanVertex(
+              underlying.scanVertex(
                 spaceName,
                 _part,
                 tagName,
@@ -61,7 +61,7 @@ private[nebula] final class NebulaStorageClientLive(storageClient: StorageClient
                 allowConfig.allowReadFromFollower
               )
             case (None, Some(_returnCols))        =>
-              storageClient.scanVertex(
+              underlying.scanVertex(
                 spaceName,
                 tagName,
                 _returnCols.asJava,
@@ -73,7 +73,7 @@ private[nebula] final class NebulaStorageClientLive(storageClient: StorageClient
               )
 
             case (None, None) =>
-              storageClient.scanVertex(
+              underlying.scanVertex(
                 spaceName,
                 tagName,
                 limit,
@@ -95,7 +95,7 @@ private[nebula] final class NebulaStorageClientLive(storageClient: StorageClient
         ZIO.attempt {
           (part, returnCols) match {
             case (Some(_part), Some(_returnCols)) =>
-              storageClient.scanEdge(
+              underlying.scanEdge(
                 spaceName,
                 _part,
                 edgeName,
@@ -107,7 +107,7 @@ private[nebula] final class NebulaStorageClientLive(storageClient: StorageClient
                 allowConfig.allowReadFromFollower
               )
             case (Some(_part), None)              =>
-              storageClient.scanEdge(
+              underlying.scanEdge(
                 spaceName,
                 _part,
                 edgeName,
@@ -118,7 +118,7 @@ private[nebula] final class NebulaStorageClientLive(storageClient: StorageClient
                 allowConfig.allowReadFromFollower
               )
             case (None, Some(_returnCols))        =>
-              storageClient.scanEdge(
+              underlying.scanEdge(
                 spaceName,
                 edgeName,
                 _returnCols.asJava,
@@ -130,7 +130,7 @@ private[nebula] final class NebulaStorageClientLive(storageClient: StorageClient
               )
 
             case (None, None) =>
-              storageClient.scanEdge(
+              underlying.scanEdge(
                 spaceName,
                 edgeName,
                 limit,

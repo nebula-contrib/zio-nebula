@@ -14,9 +14,9 @@ final case class ScanVertex(
   part: Option[Int],
   tagName: String,
   returnCols: Option[List[String]],
-  limit: Option[Int],
-  between: Option[Between],
-  allowConfig: Option[AllowConfig]
+  limit: Option[Int] = None,
+  between: Option[Between] = None,
+  allowConfig: Option[AllowConfig] = None
 ) extends ScanInput {
   override type T = ScanVertexResultIterator
 }
@@ -26,9 +26,9 @@ final case class ScanEdge(
   part: Option[Int],
   edgeName: String,
   returnCols: Option[List[String]],
-  limit: Option[Int],
-  between: Option[Between],
-  allowConfig: Option[AllowConfig]
+  limit: Option[Int] = None,
+  between: Option[Between] = None,
+  allowConfig: Option[AllowConfig] = None
 ) extends ScanInput {
   override type T = ScanEdgeResultIterator
 }

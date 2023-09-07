@@ -25,7 +25,7 @@ object NebulaStorageClientMain extends ZIOAppDefault {
     _       <- ZIO.logInfo(s"connect status: ${connect.toString}")
     scan    <- ZIO
                  .serviceWithZIO[NebulaStorageClientExample](
-                   _.scan(ScanEdge("test", None, "like", None, None, None, None))
+                   _.scan(ScanEdge("test", None, "like", None))
                  )
     _       <- ZIO.logInfo(s"scan result: ${scan.next().toString}")
 

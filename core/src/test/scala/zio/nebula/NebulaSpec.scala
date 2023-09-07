@@ -13,7 +13,7 @@ trait NebulaSpec extends ZIOSpecDefault {
     (specLayered @@ beforeAll(
       ZIO.serviceWithZIO[NebulaClient](_.init())
         *> ZIO.serviceWithZIO[NebulaClient](
-          _.getSession.flatMap(_.execute(Stmt.str("CREATE SPACE IF NOT EXISTS test(vid_type=fixed_string(20));")))
+          _.openSession().flatMap(_.execute(Stmt.str("CREATE SPACE IF NOT EXISTS test(vid_type=fixed_string(20));")))
         ) *>
         ZIO.serviceWithZIO[NebulaSessionClient](_.init())
     ) @@ sequential)

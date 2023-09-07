@@ -17,23 +17,23 @@ private[nebula] final class NebulaMetaClientLive(underlying: MetaManager) extend
 
   override def close(): Task[Unit] = ZIO.attempt(underlying.close())
 
-  override def getSpaceId(spaceName: String): Task[Int] = ZIO.attempt(underlying.getSpaceId(spaceName))
+  override def spaceId(spaceName: String): Task[Int] = ZIO.attempt(underlying.getSpaceId(spaceName))
 
-  override def getSpace(spaceName: String): Task[SpaceItem] = ZIO.attempt(underlying.getSpace(spaceName))
+  override def space(spaceName: String): Task[SpaceItem] = ZIO.attempt(underlying.getSpace(spaceName))
 
-  override def getTagId(spaceName: String, tagName: String): Task[Int] =
+  override def tagId(spaceName: String, tagName: String): Task[Int] =
     ZIO.attempt(underlying.getTagId(spaceName, tagName))
 
-  override def getTag(spaceName: String, tagName: String): Task[TagItem] =
+  override def tag(spaceName: String, tagName: String): Task[TagItem] =
     ZIO.attempt(underlying.getTag(spaceName, tagName))
 
-  override def getEdgeType(spaceName: String, edgeName: String): Task[Int] =
+  override def edgeType(spaceName: String, edgeName: String): Task[Int] =
     ZIO.attempt(underlying.getEdgeType(spaceName, edgeName))
 
-  override def getLeader(spaceName: String, part: Int): Task[NebulaHostAddress] =
+  override def leader(spaceName: String, part: Int): Task[NebulaHostAddress] =
     ZIO.attempt(underlying.getLeader(spaceName, part)).map(h => NebulaHostAddress(h.getHost, h.getPort))
 
-  override def getSpaceParts(spaceName: String): Task[List[Int]] =
+  override def spaceParts(spaceName: String): Task[List[Int]] =
     ZIO.attempt(
       underlying
         .getSpaceParts(spaceName)
@@ -44,7 +44,7 @@ private[nebula] final class NebulaMetaClientLive(underlying: MetaManager) extend
         .toList
     )
 
-  override def getPartsAlloc(spaceName: String): Task[Map[Int, List[NebulaHostAddress]]] =
+  override def partsAlloc(spaceName: String): Task[Map[Int, List[NebulaHostAddress]]] =
     ZIO.attempt(
       underlying
         .getPartsAlloc(spaceName)

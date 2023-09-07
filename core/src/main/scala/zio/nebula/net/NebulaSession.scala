@@ -32,15 +32,15 @@ final class NebulaSession(private val underlying: Session) {
     }
   }
 
-  def ping: Task[Boolean] = ZIO.attempt(underlying.ping())
+  def ping(): Task[Boolean] = ZIO.attempt(underlying.ping())
 
-  def pingSession: Task[Boolean] = ZIO.attempt(underlying.pingSession())
+  def pingSession(): Task[Boolean] = ZIO.attempt(underlying.pingSession())
 
   def release(): Task[Unit] = ZIO.attempt(underlying.release())
 
-  def getGraphHost: Task[HostAddress] = ZIO.attempt(underlying.getGraphHost)
+  def graphHost: Task[HostAddress] = ZIO.attempt(underlying.getGraphHost)
 
-  def getSessionID: Task[Long] = ZIO.attempt(underlying.getSessionID)
+  def sessionID: Task[Long] = ZIO.attempt(underlying.getSessionID)
 
   def close(): Task[Unit] = ZIO.attempt(underlying.close())
 

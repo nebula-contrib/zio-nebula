@@ -9,7 +9,7 @@ import com.vesoft.nebula.meta.SpaceItem
 final class NebulaMetaClientExample(metaClient: NebulaMetaClient) {
 
   def getSpace(spaceName: String): Task[SpaceItem] =
-    metaClient.getSpace(spaceName)
+    metaClient.space(spaceName)
 }
 
 object NebulaMetaClientExample {

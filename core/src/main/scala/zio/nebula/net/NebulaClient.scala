@@ -18,13 +18,13 @@ trait NebulaClient {
 
   def close(): Task[Unit]
 
-  def getSession: ZIO[Scope & NebulaSessionPoolConfig, Throwable, NebulaSession]
+  def openSession(): ZIO[Scope & NebulaSessionPoolConfig, Throwable, NebulaSession]
 
-  def getActiveConnNum: Task[Int]
+  def activeConnNum: Task[Int]
 
-  def getIdleConnNum: Task[Int]
+  def idleConnNum: Task[Int]
 
-  def getWaitersNum: Task[Int]
+  def waitersNum: Task[Int]
 
 }
 
