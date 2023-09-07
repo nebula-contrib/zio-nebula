@@ -14,9 +14,9 @@ private[nebula] final class NebulaSessionClientLive(underlying: SessionPool) ext
   override def execute(stmt: String): Task[NebulaResultSet] =
     ZIO.attempt(new NebulaResultSet(underlying.execute(stmt)))
 
-  override def getIdleSessionNums: Task[Int] = ZIO.attempt(underlying.getIdleSessionNums)
+  override def idleSessionNum: Task[Int] = ZIO.attempt(underlying.getIdleSessionNums)
 
-  override def getSessionNums: Task[Int] = ZIO.attempt(underlying.getSessionNums)
+  override def sessionNum: Task[Int] = ZIO.attempt(underlying.getSessionNums)
 
   override def isActive: Task[Boolean] = ZIO.attempt(underlying.isActive)
 
@@ -24,6 +24,6 @@ private[nebula] final class NebulaSessionClientLive(underlying: SessionPool) ext
 
   override def close(): Task[Unit] = ZIO.attempt(underlying.close())
 
-  override def init(): Task[Boolean] = ZIO.attemptBlocking(underlying.init())
+  override def init(): Task[Boolean] = ZIO.attempt(underlying.init())
 
 }

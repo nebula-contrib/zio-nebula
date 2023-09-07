@@ -2,7 +2,7 @@ val zioVersion          = "2.0.13"
 val scala3_Version      = "3.2.2"
 val scala2_13Version    = "2.13.10"
 val scala2_12Version    = "2.12.16"
-val zioConfigVersion    = "4.0.0-RC16"
+val zioConfigVersion    = "4.0.0-RC16" // 3.3.0+ not support
 val nebulaClientVersion = "3.6.0"
 val logbackVersion      = "1.4.5"
 
@@ -29,20 +29,26 @@ inThisBuild(
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
 addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck")
 
+val _zioTests = Seq(
+  "dev.zio" %% "zio-test-magnolia" % zioVersion,
+  "dev.zio" %% "zio-test"          % zioVersion,
+  "dev.zio" %% "zio-test-sbt"      % zioVersion
+)
+
 lazy val core = project
   .in(file("core"))
   .settings(
-    name               := "zio-nebula",
-    crossScalaVersions := supportCrossVersionList,
+    name                     := "zio-nebula",
+    crossScalaVersions       := supportCrossVersionList,
     libraryDependencies ++= Seq(
       "com.vesoft"     % "client"              % nebulaClientVersion,
       "dev.zio"       %% "zio-config-typesafe" % zioConfigVersion,
       "dev.zio"       %% "zio-config-magnolia" % zioConfigVersion,
       "dev.zio"       %% "zio"                 % zioVersion,
-      "dev.zio"       %% "zio-test"            % zioVersion     % Test,
       "ch.qos.logback" % "logback-classic"     % logbackVersion % Test
-    ),
-    testFrameworks     := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
+    ) ++ _zioTests.map(_ % Test),
+    Test / parallelExecution := false,
+    testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
   )
 
 lazy val examples = project
@@ -59,7 +65,10 @@ lazy val examples = project
 lazy val `zio-nebula` = project
   .in(file("."))
   .settings(
-    publish / skip := true
+    crossScalaVersions := Nil,
+    publish / skip     := true,
+    testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"),
+    libraryDependencies ++= _zioTests.map(_ % Test)
   )
   .aggregate(
     core,

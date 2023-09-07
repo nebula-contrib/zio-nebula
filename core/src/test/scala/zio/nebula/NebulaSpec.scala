@@ -9,14 +9,21 @@ trait NebulaSpec extends ZIOSpecDefault {
 
   type Nebula = Client with SessionClient with Storage with Meta with Scope
 
+  override def aspects: Chunk[TestAspectAtLeastR[TestEnvironment]] =
+    Chunk(TestAspect.fibers, TestAspect.timeout(180.seconds))
+
   override def spec =
     (specLayered @@ beforeAll(
       ZIO.serviceWithZIO[NebulaClient](_.init())
         *> ZIO.serviceWithZIO[NebulaClient](
-          _.getSession.flatMap(_.execute(Stmt.str("CREATE SPACE IF NOT EXISTS test(vid_type=fixed_string(20));")))
-        ) *>
-        ZIO.serviceWithZIO[NebulaSessionClient](_.init())
-    ) @@ sequential)
+          _.openSession().flatMap(_.execute(Stmt.str("""
+                                                       |CREATE SPACE IF NOT EXISTS test(vid_type=fixed_string(20));
+                                                       |USE test;
+                                                       |CREATE TAG IF NOT EXISTS person(name string, age int);
+                                                       |CREATE EDGE IF NOT EXISTS like(likeness double)
+                                                       |""".stripMargin)))
+        )
+    ) @@ sequential @@ eventually)
       .provideShared(
         Scope.default,
         MetaEnv,

@@ -22,7 +22,7 @@ private[nebula] final class NebulaClientLive(underlying: NebulaPl) extends Nebul
       config <- ZIO.service[NebulaPoolConfig]
       status <-
         ZIO.serviceWithZIO[NebulaSessionPoolConfig](sessionConfig =>
-          ZIO.attemptBlocking(
+          ZIO.attempt(
             underlying.init(sessionConfig.address.map(d => new HostAddress(d.host, d.port)).asJava, config.toJava)
           )
         )
@@ -30,7 +30,7 @@ private[nebula] final class NebulaClientLive(underlying: NebulaPl) extends Nebul
 
   def close(): Task[Unit] = ZIO.attempt(underlying.close())
 
-  def getSession: ZIO[Scope & NebulaSessionPoolConfig, Throwable, NebulaSession] =
+  def openSession(): ZIO[Scope & NebulaSessionPoolConfig, Throwable, NebulaSession] =
     for {
       sessionConfig <- ZIO.service[NebulaSessionPoolConfig]
       session       <-
@@ -47,10 +47,10 @@ private[nebula] final class NebulaClientLive(underlying: NebulaPl) extends Nebul
         )(_.close().onError(e => ZIO.logErrorCause(e)).ignoreLogged)
     } yield session
 
-  def getActiveConnNum: Task[Int] = ZIO.attempt(underlying.getActiveConnNum)
+  def activeConnNum: Task[Int] = ZIO.attempt(underlying.getActiveConnNum)
 
-  def getIdleConnNum: Task[Int] = ZIO.attempt(underlying.getIdleConnNum)
+  def idleConnNum: Task[Int] = ZIO.attempt(underlying.getIdleConnNum)
 
-  def getWaitersNum: Task[Int] = ZIO.attempt(underlying.getWaitersNum)
+  def waitersNum: Task[Int] = ZIO.attempt(underlying.getWaitersNum)
 
 }

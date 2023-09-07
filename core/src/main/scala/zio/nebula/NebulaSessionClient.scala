@@ -45,12 +45,12 @@ trait NebulaSessionClient {
   /**
    * get the number of all Session
    */
-  def getSessionNums: Task[Int]
+  def sessionNum: Task[Int]
 
   /**
    * get the number of idle Session
    */
-  def getIdleSessionNums: Task[Int]
+  def idleSessionNum: Task[Int]
 }
 
 object NebulaSessionClient {

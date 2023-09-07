@@ -15,61 +15,61 @@ import com.vesoft.nebula.graph.PlanDescription
  *   梦境迷离
  * @version 1.0,2023/8/29
  */
-final class NebulaResultSet(resultSet: ResultSet) {
+final class NebulaResultSet(underlying: ResultSet) {
 
   import NebulaResultSet._
 
-  def isSucceeded: Boolean = resultSet.isSucceeded
+  def isSucceeded: Boolean = underlying.isSucceeded
 
-  def isEmpty: Boolean = resultSet.isEmpty
+  def isEmpty: Boolean = underlying.isEmpty
 
-  def errorCode: Int = resultSet.getErrorCode
+  def errorCode: Int = underlying.getErrorCode
 
-  def spaceName: String = resultSet.getSpaceName
+  def spaceName: String = underlying.getSpaceName
 
-  def errorMessage: String = resultSet.getErrorMessage
+  def errorMessage: String = underlying.getErrorMessage
 
-  def comment: String = resultSet.getComment
+  def comment: String = underlying.getComment
 
-  def latency: Long = resultSet.getLatency
+  def latency: Long = underlying.getLatency
 
-  def planDesc: PlanDescription = resultSet.getPlanDesc
+  def planDesc: PlanDescription = underlying.getPlanDesc
 
-  def keys: List[String] = resultSet.getColumnNames.asScala.toList
+  def keys: List[String] = underlying.getColumnNames.asScala.toList
 
-  def columnNames: List[String] = resultSet.getColumnNames.asScala.toList
+  def columnNames: List[String] = underlying.getColumnNames.asScala.toList
 
-  def rowsSize: Int = resultSet.rowsSize()
+  def rowsSize: Int = underlying.rowsSize()
 
-  def rowValues(index: Int): NebulaRecord = new NebulaRecord(resultSet.rowValues(index))
+  def rowValues(index: Int): NebulaRecord = new NebulaRecord(underlying.rowValues(index))
 
-  def colValues(columnName: String): List[ValueWrapper] = resultSet.colValues(columnName).asScala.toList
+  def colValues(columnName: String): List[ValueWrapper] = underlying.colValues(columnName).asScala.toList
 
-  def rows: List[Row] = resultSet.getRows.asScala.toList
+  def rows: List[Row] = underlying.getRows.asScala.toList
 
-  override def toString: String = resultSet.toString
+  override def toString: String = underlying.toString
 }
 
 object NebulaResultSet {
 
-  final class NebulaRecord(record: Record) extends Iterable[ValueWrapper] {
+  final class NebulaRecord(private val underlying: Record) extends Iterable[ValueWrapper] {
 
-    override def iterator: Iterator[ValueWrapper] = record.iterator().asScala
+    override def iterator: Iterator[ValueWrapper] = underlying.iterator().asScala
 
-    override def foreach[U](f: ValueWrapper => U): Unit = record.forEach((t: ValueWrapper) => f.apply(t))
+    override def foreach[U](f: ValueWrapper => U): Unit = underlying.forEach((t: ValueWrapper) => f.apply(t))
 
-    override def toString(): String = record.toString
+    override def toString(): String = underlying.toString
 
-    def spliterator: Spliterator[ValueWrapper] = record.spliterator
+    def spliterator: Spliterator[ValueWrapper] = underlying.spliterator
 
-    def get(index: Int): ValueWrapper = record.get(index)
+    def get(index: Int): ValueWrapper = underlying.get(index)
 
-    def get(columnName: String): ValueWrapper = record.get(columnName)
+    def get(columnName: String): ValueWrapper = underlying.get(columnName)
 
-    def values: util.List[ValueWrapper] = record.values()
+    def values: util.List[ValueWrapper] = underlying.values()
 
-    override def size: Int = record.size()
+    override def size: Int = underlying.size()
 
-    def contains(columnName: String): Boolean = record.contains(columnName)
+    def contains(columnName: String): Boolean = underlying.contains(columnName)
   }
 }

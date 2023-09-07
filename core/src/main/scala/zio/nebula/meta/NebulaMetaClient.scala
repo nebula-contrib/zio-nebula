@@ -18,21 +18,21 @@ trait NebulaMetaClient {
 
   def close(): Task[Unit]
 
-  def getSpaceId(spaceName: String): Task[Int]
+  def spaceId(spaceName: String): Task[Int]
 
-  def getSpace(spaceName: String): Task[SpaceItem]
+  def space(spaceName: String): Task[SpaceItem]
 
-  def getTagId(spaceName: String, tagName: String): Task[Int]
+  def tagId(spaceName: String, tagName: String): Task[Int]
 
-  def getTag(spaceName: String, tagName: String): Task[TagItem]
+  def tag(spaceName: String, tagName: String): Task[TagItem]
 
-  def getEdgeType(spaceName: String, edgeName: String): Task[Int]
+  def edgeType(spaceName: String, edgeName: String): Task[Int]
 
-  def getLeader(spaceName: String, part: Int): Task[NebulaHostAddress]
+  def leader(spaceName: String, part: Int): Task[NebulaHostAddress]
 
-  def getSpaceParts(spaceName: String): Task[List[Int]]
+  def spaceParts(spaceName: String): Task[List[Int]]
 
-  def getPartsAlloc(spaceName: String): Task[Map[Int, List[NebulaHostAddress]]]
+  def partsAlloc(spaceName: String): Task[Map[Int, List[NebulaHostAddress]]]
 
   def listHosts: Task[Set[NebulaHostAddress]]
 }
