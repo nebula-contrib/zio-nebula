@@ -23,7 +23,7 @@ private[nebula] final class NebulaStorageClientLive(underlying: StorageClient) e
 
   import NebulaStorageClientLive._
 
-  override def connect(): Task[Boolean] = ZIO.attemptBlocking(underlying.connect())
+  override def connect(): Task[Boolean] = ZIO.attempt(underlying.connect())
 
   override def close(): Task[Unit] = ZIO.attempt(underlying.close())
 
