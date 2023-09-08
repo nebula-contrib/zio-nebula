@@ -9,6 +9,9 @@ trait NebulaSpec extends ZIOSpecDefault {
 
   type Nebula = Client with SessionClient with Storage with Meta with Scope
 
+  override def aspects: Chunk[TestAspectAtLeastR[TestEnvironment]] =
+    Chunk(TestAspect.fibers, TestAspect.timeout(180.seconds))
+
   override def spec =
     (specLayered @@ beforeAll(
       ZIO.serviceWithZIO[NebulaClient](_.init())
@@ -20,7 +23,7 @@ trait NebulaSpec extends ZIOSpecDefault {
                                                        |CREATE EDGE IF NOT EXISTS like(likeness double)
                                                        |""".stripMargin)))
         )
-    ) @@ sequential)
+    ) @@ sequential @@ eventually)
       .provideShared(
         Scope.default,
         MetaEnv,
