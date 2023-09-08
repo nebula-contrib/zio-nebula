@@ -47,6 +47,7 @@ lazy val core = project
       "dev.zio"       %% "zio"                 % zioVersion,
       "ch.qos.logback" % "logback-classic"     % logbackVersion % Test
     ) ++ _zioTests.map(_ % Test),
+    Test / parallelExecution := false,
     testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
   )
 

@@ -2,7 +2,8 @@ package zio.nebula
 
 import zio.ZIO
 import zio.nebula.meta.NebulaMetaClient
-import zio.nebula.storage.{ NebulaStorageClient, ScanEdge }
+import zio.nebula.net.{NebulaClient, Stmt}
+import zio.nebula.storage.{NebulaStorageClient, ScanEdge}
 import zio.test._
 
 /**
@@ -39,6 +40,10 @@ object NebulaClientSpec extends NebulaSpec {
       suite("nebula session pool")(
         test("create and query") {
           for {
+            _ <- ZIO.serviceWithZIO[NebulaClient] (
+              _.openSession().flatMap(_.execute(Stmt.str("""
+                                                           |CREATE SPACE IF NOT EXISTS test(vid_type=fixed_string(20));
+                                                           |""".stripMargin))))
             init <- ZIO.serviceWithZIO[NebulaSessionClient](_.init())
             _    <- ZIO.logInfo(s"init session: $init")
             res1 <- ZIO.serviceWithZIO[NebulaSessionClient](_.execute(insertVertexes))
