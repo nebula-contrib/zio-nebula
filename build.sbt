@@ -1,5 +1,5 @@
 val zioVersion          = "2.0.13"
-val scala3_Version      = "3.2.2"
+val scala3_Version      = "3.3.1"
 val scala2_13Version    = "2.13.10"
 val scala2_12Version    = "2.12.16"
 val zioConfigVersion    = "4.0.0-RC16"
@@ -59,6 +59,7 @@ lazy val examples = project
 lazy val `zio-nebula` = project
   .in(file("."))
   .settings(
+    crossScalaVersions := Nil,
     publish / skip := true
   )
   .aggregate(

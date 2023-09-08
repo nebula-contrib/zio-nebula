@@ -24,10 +24,15 @@ Support Scala 3, Scala 2.13 and Scala 2.12:
 libraryDependencies += "io.github.jxnu-liguobin" %% "zio-nebula" % <latest version>
 ```
 
-## Environment
+## Version
 
-- zio 2.0.13
-- nebula-java 3.6.0
+
+There are the version correspondence between zio-nebula and nebula-java:
+
+|  zio  | zio-nebula | nebula-java |
+|:-----:|:----------:|:-----------:|
+| 2.0.x |   0.0.x    |    3.6.0    |
+
 
 ## Example
 
