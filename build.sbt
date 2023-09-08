@@ -29,6 +29,12 @@ inThisBuild(
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
 addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck")
 
+val _zioTests = Seq(
+  "dev.zio" %% "zio-test-magnolia" % zioVersion,
+  "dev.zio" %% "zio-test"          % zioVersion,
+  "dev.zio" %% "zio-test-sbt"      % zioVersion
+)
+
 lazy val core = project
   .in(file("core"))
   .settings(
@@ -39,10 +45,9 @@ lazy val core = project
       "dev.zio"       %% "zio-config-typesafe" % zioConfigVersion,
       "dev.zio"       %% "zio-config-magnolia" % zioConfigVersion,
       "dev.zio"       %% "zio"                 % zioVersion,
-      "dev.zio"       %% "zio-test"            % zioVersion     % Test,
       "ch.qos.logback" % "logback-classic"     % logbackVersion % Test
-    ),
-    testFrameworks     := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
+    ) ++ _zioTests.map(_ % Test),
+    testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
   )
 
 lazy val examples = project
@@ -60,7 +65,9 @@ lazy val `zio-nebula` = project
   .in(file("."))
   .settings(
     crossScalaVersions := Nil,
-    publish / skip := true
+    publish / skip     := true,
+    testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"),
+    libraryDependencies ++= _zioTests.map(_ % Test)
   )
   .aggregate(
     core,
