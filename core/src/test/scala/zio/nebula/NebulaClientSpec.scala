@@ -2,7 +2,6 @@ package zio.nebula
 
 import zio.ZIO
 import zio.nebula.meta.NebulaMetaClient
-import zio.nebula.net.{ NebulaClient, Stmt, StringStmt }
 import zio.nebula.storage.{ NebulaStorageClient, ScanEdge }
 import zio.test._
 
@@ -13,18 +12,9 @@ import zio.test._
  */
 object NebulaClientSpec extends NebulaSpec {
 
-  private def init(space: String): StringStmt =
-    Stmt.str(
-      s"""
-         |CREATE SPACE IF NOT EXISTS $space(vid_type=fixed_string(20));
-         |USE $space;
-         |CREATE TAG IF NOT EXISTS person(name string, age int);
-         |CREATE EDGE IF NOT EXISTS like(likeness double)
-         |""".stripMargin
-    )
-
   val insertVertexes =
     """
+      |use test;
       |INSERT VERTEX person(name, age) VALUES 
       |'Bob':('Bob', 10), 
       |'Lily':('Lily', 9),'Tom':('Tom', 10),
@@ -33,6 +23,7 @@ object NebulaClientSpec extends NebulaSpec {
 
   val insertEdges =
     """
+      |use test;
       |INSERT EDGE like(likeness) VALUES
       |'Bob'->'Lily':(80.0),
       |'Bob'->'Tom':(70.0),
@@ -76,7 +67,7 @@ object NebulaClientSpec extends NebulaSpec {
             status     <- ZIO.serviceWithZIO[NebulaStorageClient](_.connect())
             _          <- ZIO.logInfo(s"connect status: ${status.toString}")
             scanResult <- ZIO.serviceWithZIO[NebulaStorageClient](
-                            _.scan(ScanEdge("test", None, "likeness", None))
+                            _.scan(ScanEdge("test", None, "like", None))
                           )
             _          <- ZIO.logInfo(s"scan result: ${scanResult.next().toString}")
           } yield assertTrue(scanResult != null)
