@@ -38,8 +38,8 @@ val _zioTests = Seq(
 lazy val core = project
   .in(file("core"))
   .settings(
-    name               := "zio-nebula",
-    crossScalaVersions := supportCrossVersionList,
+    name                     := "zio-nebula",
+    crossScalaVersions       := supportCrossVersionList,
     libraryDependencies ++= Seq(
       "com.vesoft"     % "client"              % nebulaClientVersion,
       "dev.zio"       %% "zio-config-typesafe" % zioConfigVersion,
