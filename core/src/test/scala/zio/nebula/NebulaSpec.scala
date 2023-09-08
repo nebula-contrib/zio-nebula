@@ -19,8 +19,7 @@ trait NebulaSpec extends ZIOSpecDefault {
                                                        |CREATE TAG IF NOT EXISTS person(name string, age int);
                                                        |CREATE EDGE IF NOT EXISTS like(likeness double)
                                                        |""".stripMargin)))
-        ) *>
-        ZIO.serviceWithZIO[NebulaSessionClient](_.init())
+        )
     ) @@ sequential)
       .provideShared(
         Scope.default,
