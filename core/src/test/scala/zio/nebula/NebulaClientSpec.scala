@@ -14,7 +14,6 @@ object NebulaClientSpec extends NebulaSpec {
 
   val insertVertexes =
     """
-      |use test;
       |INSERT VERTEX person(name, age) VALUES 
       |'Bob':('Bob', 10), 
       |'Lily':('Lily', 9),'Tom':('Tom', 10),
@@ -23,7 +22,6 @@ object NebulaClientSpec extends NebulaSpec {
 
   val insertEdges =
     """
-      |use test;
       |INSERT EDGE like(likeness) VALUES
       |'Bob'->'Lily':(80.0),
       |'Bob'->'Tom':(70.0),
@@ -33,7 +31,6 @@ object NebulaClientSpec extends NebulaSpec {
 
   val query =
     """
-      |USE test;
       |MATCH (p:person) RETURN p LIMIT 4;
       |""".stripMargin
 
@@ -69,8 +66,8 @@ object NebulaClientSpec extends NebulaSpec {
             scanResult <- ZIO.serviceWithZIO[NebulaStorageClient](
                             _.scan(ScanEdge("test", None, "like", None))
                           )
-            _          <- ZIO.logInfo(s"scan result: ${scanResult.next().toString}")
-          } yield assertTrue(scanResult != null)
+            _          <- ZIO.logInfo(s"scan result: $scanResult")
+          } yield assertTrue(scanResult.hasNext)
         }
       )
     )
