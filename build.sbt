@@ -1,7 +1,7 @@
 val zioVersion          = "2.0.13"
-val scala3_Version      = "3.2.2"
+val scala3_Version      = "3.3.1"
 val scala2_13Version    = "2.13.12"
-val scala2_12Version    = "2.12.16"
+val scala2_12Version    = "2.12.18"
 val zioConfigVersion    = "4.0.0-RC16" // 3.3.0+ not support
 val nebulaClientVersion = "3.6.0"
 val logbackVersion      = "1.4.5"
