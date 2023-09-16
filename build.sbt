@@ -4,7 +4,7 @@ val scala2_13Version    = "2.13.10"
 val scala2_12Version    = "2.12.16"
 val zioConfigVersion    = "4.0.0-RC16" // 3.3.0+ not support
 val nebulaClientVersion = "3.6.0"
-val logbackVersion      = "1.4.11"
+val logbackVersion      = "1.4.5"
 
 val supportCrossVersionList = Seq(scala3_Version, scala2_13Version, scala2_12Version)
 
