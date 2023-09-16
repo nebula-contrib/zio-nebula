@@ -12,7 +12,8 @@ import com.vesoft.nebula.client.graph._
 private[nebula] final class NebulaSessionClientLive(underlying: SessionPool) extends NebulaSessionClient {
 
   override def execute(stmt: String): Task[NebulaResultSet] =
-    ZIO.attempt(new NebulaResultSet(underlying.execute(stmt)))
+    GlobalSettings.printLog(stmt) *>
+      ZIO.attempt(new NebulaResultSet(underlying.execute(stmt)))
 
   override def idleSessionNum: Task[Int] = ZIO.attempt(underlying.getIdleSessionNums)
 
