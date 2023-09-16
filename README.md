@@ -32,6 +32,7 @@ There are the version correspondence between zio-nebula and nebula-java:
 |  zio  | zio-nebula | nebula-java |
 |:-----:|:----------:|:-----------:|
 | 2.0.x |   0.0.x    |    3.6.0    |
+| 2.0.x |   0.1.x    |    3.6.0    |
 
 
 ## Example
@@ -102,14 +103,14 @@ Introduction for configuring keys:
 Sample Configuration:
 ```hocon
 {
-  graph = {
+  graph {
     address = [
       {
         host = "127.0.0.1",
         port = 9669
       }
     ]
-    auth = {
+    auth {
       username = "root"
       password = "nebula"
     }
@@ -117,7 +118,7 @@ Sample Configuration:
     reconnect = true
   }
 
-  meta = {
+  meta {
     address = [
       {
         host = "127.0.0.1",
@@ -130,7 +131,7 @@ Sample Configuration:
     enableSSL = false
   }
 
-  storage = {
+  storage {
     address = [
       {
         host = "127.0.0.1",
