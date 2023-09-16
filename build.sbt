@@ -1,10 +1,11 @@
 val zioVersion          = "2.0.16"
-val scala3_Version      = "3.2.2"
-val scala2_13Version    = "2.13.10"
-val scala2_12Version    = "2.12.16"
-val zioConfigVersion    = "4.0.0-RC16" // 3.3.0+ not support
+val scala3_Version      = "3.3.1"
+val scala2_13Version    = "2.13.12"
+val scala2_12Version    = "2.12.18"
+val zioConfigVersion    = "4.0.0-RC16"
 val nebulaClientVersion = "3.6.0"
 val logbackVersion      = "1.4.5"
+val silencerVersion     = "1.4.2"
 
 val supportCrossVersionList = Seq(scala3_Version, scala2_13Version, scala2_12Version)
 
@@ -41,11 +42,13 @@ lazy val core = project
     name                     := "zio-nebula",
     crossScalaVersions       := supportCrossVersionList,
     libraryDependencies ++= Seq(
-      "com.vesoft"     % "client"              % nebulaClientVersion,
-      "dev.zio"       %% "zio-config-typesafe" % zioConfigVersion,
-      "dev.zio"       %% "zio-config-magnolia" % zioConfigVersion,
-      "dev.zio"       %% "zio"                 % zioVersion,
-      "ch.qos.logback" % "logback-classic"     % logbackVersion % Test
+      "com.vesoft"       % "client"              % nebulaClientVersion,
+      "dev.zio"         %% "zio-config-typesafe" % zioConfigVersion,
+      "dev.zio"         %% "zio-config-magnolia" % zioConfigVersion,
+      "dev.zio"         %% "zio"                 % zioVersion,
+      // see https://github.com/zio/zio-config/issues/1245
+      "com.github.ghik" %% "silencer-lib"        % silencerVersion % Provided cross CrossVersion.for3Use2_13,
+      "ch.qos.logback"   % "logback-classic"     % logbackVersion  % Test
     ) ++ _zioTests.map(_ % Test),
     Test / parallelExecution := false,
     testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
