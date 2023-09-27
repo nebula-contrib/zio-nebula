@@ -40,8 +40,6 @@ object NebulaClientSpec extends NebulaSpec {
       suite("nebula session pool")(
         test("create and query") {
           for {
-            init <- ZIO.serviceWithZIO[NebulaSessionClient](_.init())
-            _    <- ZIO.logInfo(s"init session: $init")
             res1 <- ZIO.serviceWithZIO[NebulaSessionClient](_.execute(insertVertexes))
             _    <- ZIO.logInfo(s"exec insert vertex: ${res1.errorMessage}")
             res2 <- ZIO.serviceWithZIO[NebulaSessionClient](_.execute(insertEdges))
