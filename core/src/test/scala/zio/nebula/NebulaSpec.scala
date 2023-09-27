@@ -5,9 +5,15 @@ import zio.nebula.net.{ NebulaClient, Stmt }
 import zio.test._
 import zio.test.TestAspect._
 
+import testcontainers.containers.NebulaSimpleClusterContainer
+
 trait NebulaSpec extends ZIOSpecDefault {
 
-  type Nebula = Client with SessionClient with Storage with Meta with Scope
+  type Nebula = Client with Storage with Meta with Scope
+
+  val container: NebulaSimpleClusterContainer = new NebulaSimpleClusterContainer(subnetIp = "172.30.0.0/16")
+
+  container.start()
 
   override def aspects: Chunk[TestAspectAtLeastR[TestEnvironment]] =
     Chunk(TestAspect.fibers, TestAspect.timeout(180.seconds))
@@ -26,10 +32,9 @@ trait NebulaSpec extends ZIOSpecDefault {
     ) @@ sequential @@ eventually)
       .provideShared(
         Scope.default,
-        MetaEnv,
-        StorageEnv,
-        SessionClientEnv,
-        ClientEnv
+        ZioNebulaEnvironment.defaultMeta(container.metadHostList.head, container.metadPortList.head),
+        ZioNebulaEnvironment.defaultStorage(container.metadHostList.head, container.metadPortList.head),
+        ZioNebulaEnvironment.defaultClient(container.graphdHostList.head, container.graphdPortList.head)
       )
 
   def specLayered: Spec[Nebula, Throwable]

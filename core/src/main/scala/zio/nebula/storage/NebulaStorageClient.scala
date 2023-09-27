@@ -24,7 +24,7 @@ trait NebulaStorageClient {
 
 object NebulaStorageClient {
 
-  lazy val layer: ZLayer[NebulaStorageConfig & Scope, Nothing, NebulaStorageClient] =
+  lazy val layer: ZLayer[NebulaStorageConfig & Scope, Throwable, NebulaStorageClient] =
     ZLayer.fromZIO {
       for {
         config <- ZIO.serviceWith[NebulaStorageConfig](_.underlying)
@@ -44,5 +44,5 @@ object NebulaStorageClient {
                   )(_.close().onError(e => ZIO.logErrorCause(e)).ignoreLogged)
       } yield manger
 
-    }.orDie
+    }
 }

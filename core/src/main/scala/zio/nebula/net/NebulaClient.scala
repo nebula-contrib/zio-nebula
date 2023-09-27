@@ -34,6 +34,6 @@ object NebulaClient {
     ZIO.attempt(d.close()).onError(e => ZIO.logErrorCause(e)).ignoreLogged
   )
 
-  lazy val layer: ZLayer[Scope, Nothing, NebulaClient] =
+  lazy val layer: ZLayer[Scope, Throwable, NebulaClient] =
     ZLayer.fromZIO(makePool.map(pool => new NebulaClientLive(pool)))
 }

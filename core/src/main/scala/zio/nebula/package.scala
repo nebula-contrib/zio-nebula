@@ -16,24 +16,24 @@ package object nebula {
   type Storage       = NebulaStorageClient
   type Meta          = NebulaMetaClient
 
-  lazy val SessionClientEnv: ZLayer[Scope, Nothing, SessionClient] = ZLayer.makeSome[Scope, SessionClient](
+  lazy val SessionClientEnv: ZLayer[Scope, Throwable, SessionClient] = ZLayer.makeSome[Scope, SessionClient](
     NebulaSessionClient.layer,
     NebulaConfig.sessionConfigLayer
   )
 
-  lazy val ClientEnv: ZLayer[Scope, Nothing, Client] =
+  lazy val ClientEnv: ZLayer[Scope, Throwable, Client] =
     ZLayer.makeSome[Scope, Client](
       NebulaClient.layer,
       NebulaConfig.poolConfigLayer,
       NebulaConfig.sessionConfigLayer
     )
 
-  lazy val StorageEnv: ZLayer[Scope, Nothing, Storage] = ZLayer.makeSome[Scope, Storage](
+  lazy val StorageEnv: ZLayer[Scope, Throwable, Storage] = ZLayer.makeSome[Scope, Storage](
     NebulaStorageClient.layer,
     NebulaConfig.storageConfigLayer
   )
 
-  lazy val MetaEnv: ZLayer[Scope, Nothing, Meta] = ZLayer.makeSome[Scope, Meta](
+  lazy val MetaEnv: ZLayer[Scope, Throwable, Meta] = ZLayer.makeSome[Scope, Meta](
     NebulaMetaClient.layer,
     NebulaConfig.metaConfigLayer
   )

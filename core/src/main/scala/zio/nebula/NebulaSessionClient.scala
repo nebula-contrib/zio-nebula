@@ -55,7 +55,7 @@ trait NebulaSessionClient {
 
 object NebulaSessionClient {
 
-  private def sessionLayer: ZLayer[NebulaSessionPoolConfig & Scope, Throwable, SessionPool] =
+  def sessionLayer: ZLayer[NebulaSessionPoolConfig & Scope, Throwable, SessionPool] =
     ZLayer.fromZIO {
       ZIO.serviceWithZIO[NebulaSessionPoolConfig](nebulaConfig =>
         ZIO.acquireRelease(
@@ -82,10 +82,8 @@ object NebulaSessionClient {
       )
     }
 
-  lazy val layer: ZLayer[NebulaSessionPoolConfig & Scope, Nothing, NebulaSessionClient] = {
-    val pool = ZLayer.fromZIO(
+  lazy val layer: ZLayer[NebulaSessionPoolConfig & Scope, Throwable, NebulaSessionClient] =
+    sessionLayer >>> ZLayer.fromZIO(
       ZIO.serviceWith[SessionPool](new NebulaSessionClientLive(_))
     )
-    (sessionLayer >>> pool).orDie
-  }
 }
