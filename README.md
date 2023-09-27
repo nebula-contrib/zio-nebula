@@ -33,6 +33,7 @@ There are the version correspondence between zio-nebula and nebula-java:
 |:-----:|:----------:|:-----------:|
 | 2.0.x |   0.0.x    |    3.6.0    |
 | 2.0.x |   0.1.x    |    3.6.0    |
+| 2.0.x |   0.1.1    |    3.6.1    |
 
 
 ## Example

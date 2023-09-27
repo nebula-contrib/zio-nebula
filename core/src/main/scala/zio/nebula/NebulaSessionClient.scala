@@ -75,6 +75,7 @@ object NebulaSessionClient {
                 .setCleanTime(nebulaConfig.cleanTimeSeconds)
                 .setReconnect(nebulaConfig.reconnect)
                 .setHealthCheckTime(nebulaConfig.healthCheckTimeSeconds)
+                .setUseHttp2(nebulaConfig.useHttp2)
             )
           )
         )(release => ZIO.attempt(release.close()).onError(e => ZIO.logErrorCause(e)).ignoreLogged)
