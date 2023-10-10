@@ -27,9 +27,6 @@ jobs:
     - name: Checking Code style
       run: sbt check
       
-    - name: Run NebulaGraph
-      run: docker-compose -f examples/src/main/resources/docker-compose.yaml up -d      
-      
     - name: Run tests
       run: sbt test
       

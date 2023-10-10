@@ -66,7 +66,8 @@ final case class NebulaSessionPoolConfig(
   intervalTimeMills: Int = 0,
   healthCheckTimeSeconds: Int = 600,
   cleanTimeSeconds: Int = 3600,
-  reconnect: Boolean = false
+  reconnect: Boolean = false,
+  useHttp2: Boolean = false
 )
 
 object NebulaConfig {
