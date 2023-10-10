@@ -1,12 +1,9 @@
 package zio.nebula
 
 import zio._
-import zio.nebula.NebulaSessionClient.sessionLayer
 import zio.nebula.meta.NebulaMetaClient
 import zio.nebula.net.NebulaClient
 import zio.nebula.storage.NebulaStorageClient
-
-import com.vesoft.nebula.client.graph.SessionPool
 
 /**
  * This is the default configuration dedicated to testing.
