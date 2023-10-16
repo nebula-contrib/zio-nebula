@@ -25,6 +25,9 @@ private[nebula] final class NebulaSessionClientLive(underlying: SessionPool) ext
 
   override def close(): Task[Unit] = ZIO.attempt(underlying.close())
 
+  @deprecated(
+    "init the SessionPool this function is moved into SessionPool's constructor, no need to call it manually."
+  )
   override def init(): Task[Boolean] = ZIO.attempt(underlying.init())
 
 }

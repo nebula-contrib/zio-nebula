@@ -17,8 +17,6 @@ object NebulaSessionClientMain extends ZIOAppDefault {
 
   override def run = (for {
     _ <- ZIO
-           .serviceWithZIO[NebulaSessionClient](_.init())
-    _ <- ZIO
            .serviceWithZIO[NebulaSessionClientExample](
              _.execute("""
                          |INSERT VERTEX person(name, age) VALUES 

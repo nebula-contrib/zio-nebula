@@ -55,36 +55,30 @@ trait NebulaSessionClient {
 
 object NebulaSessionClient {
 
-  private def sessionLayer: ZLayer[NebulaSessionPoolConfig & Scope, Throwable, SessionPool] =
-    ZLayer.fromZIO {
-      ZIO.serviceWithZIO[NebulaSessionPoolConfig](nebulaConfig =>
-        ZIO.acquireRelease(
-          ZIO.attempt(
-            new SessionPool(
-              new SessionPoolConfig(
-                nebulaConfig.address.map(d => new HostAddress(d.host, d.port)).asJava,
-                nebulaConfig.spaceName,
-                nebulaConfig.auth.username,
-                nebulaConfig.auth.password
-              ).setMaxSessionSize(nebulaConfig.maxSessionSize)
-                .setMinSessionSize(nebulaConfig.minSessionSize)
-                .setRetryTimes(nebulaConfig.retryTimes)
-                .setWaitTime(nebulaConfig.waitTimeMills)
-                .setIntervalTime(nebulaConfig.intervalTimeMills)
-                .setTimeout(nebulaConfig.timeoutMills)
-                .setCleanTime(nebulaConfig.cleanTimeSeconds)
-                .setReconnect(nebulaConfig.reconnect)
-                .setHealthCheckTime(nebulaConfig.healthCheckTimeSeconds)
-            )
-          )
-        )(release => ZIO.attempt(release.close()).onError(e => ZIO.logErrorCause(e)).ignoreLogged)
-      )
-    }
-
-  lazy val layer: ZLayer[NebulaSessionPoolConfig & Scope, Nothing, NebulaSessionClient] = {
-    val pool = ZLayer.fromZIO(
-      ZIO.serviceWith[SessionPool](new NebulaSessionClientLive(_))
-    )
-    (sessionLayer >>> pool).orDie
+  lazy val layer: ZLayer[Scope with NebulaSessionPoolConfig, Throwable, NebulaSessionClient] = ZLayer.fromZIO {
+    for {
+      nebulaConfig <- ZIO.service[NebulaSessionPoolConfig]
+      sessionPool  <- ZIO.acquireRelease(
+                        ZIO.attempt(
+                          new SessionPool(
+                            new SessionPoolConfig(
+                              nebulaConfig.address.map(d => new HostAddress(d.host, d.port)).asJava,
+                              nebulaConfig.spaceName,
+                              nebulaConfig.auth.username,
+                              nebulaConfig.auth.password
+                            ).setMaxSessionSize(nebulaConfig.maxSessionSize)
+                              .setMinSessionSize(nebulaConfig.minSessionSize)
+                              .setRetryTimes(nebulaConfig.retryTimes)
+                              .setWaitTime(nebulaConfig.waitTimeMills)
+                              .setIntervalTime(nebulaConfig.intervalTimeMills)
+                              .setTimeout(nebulaConfig.timeoutMills)
+                              .setCleanTime(nebulaConfig.cleanTimeSeconds)
+                              .setReconnect(nebulaConfig.reconnect)
+                              .setHealthCheckTime(nebulaConfig.healthCheckTimeSeconds)
+                              .setUseHttp2(nebulaConfig.useHttp2)
+                          )
+                        )
+                      )(release => ZIO.attempt(release.close()).ignoreLogged)
+    } yield new NebulaSessionClientLive(sessionPool)
   }
 }

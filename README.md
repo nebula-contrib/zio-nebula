@@ -32,7 +32,8 @@ There are the version correspondence between zio-nebula and nebula-java:
 |  zio  | zio-nebula | nebula-java |
 |:-----:|:----------:|:-----------:|
 | 2.0.x |   0.0.x    |    3.6.0    |
-| 2.0.x |   0.1.x    |    3.6.0    |
+| 2.0.x |   0.1.0    |    3.6.0    |
+| 2.0.x |   0.1.1    |    3.6.1    |
 
 
 ## Example
@@ -57,7 +58,7 @@ object NebulaSessionClientExample {
 object NebulaSessionClientMain extends ZIOAppDefault {
 
   override def run = (for {
-    _ <- ZIO.serviceWithZIO[NebulaSessionClient](_.init())
+    _ <- ZIO.serviceWithZIO[NebulaSessionClient](_.init()) // since 0.1.1, no need to call it manually. 
     _ <- ZIO.serviceWithZIO[NebulaSessionClientExample](
              _.execute("""
                          |INSERT VERTEX person(name, age) VALUES 
