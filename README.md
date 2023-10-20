@@ -17,15 +17,19 @@ ZIO Client for NebulaGraph
 
 [NebulaGraph](https://github.com/vesoft-inc/nebula) is a popular open-source graph database that can handle large volumes of data with milliseconds of latency, scale up quickly, and have the ability to perform fast graph analytics. NebulaGraph has been widely used for social media, recommendation systems, knowledge graphs, security, capital flows, AI, etc.
 
-## Dependency
+## Introduction
 
-Support Scala 3, Scala 2.13 and Scala 2.12:
+- Supports all clients: Session Pool、Pool、Storage、Meta
+- Support for configuring clients with typesafe config
+- Other optimizations suitable for Scala pure functional
+- Support Scala 3, Scala 2.13 and Scala 2.12
+
+## Installation
+
+In order to use this library, we need to add the following line in our `build.sbt` file:
 ```scala
 libraryDependencies += "io.github.jxnu-liguobin" %% "zio-nebula" % <latest version>
 ```
-
-## Version
-
 
 There are the version correspondence between zio-nebula and nebula-java:
 
