@@ -18,7 +18,9 @@ trait NebulaClient {
 
   def close(): Task[Unit]
 
-  def openSession(): ZIO[Scope & NebulaSessionPoolConfig, Throwable, NebulaSession]
+  def openSession(): ZIO[NebulaSessionPoolConfig, Throwable, NebulaSession]
+
+  def openSession(sessionPoolConfig: NebulaSessionPoolConfig): ZIO[Any, Throwable, NebulaSession]
 
   def activeConnNum: Task[Int]
 
