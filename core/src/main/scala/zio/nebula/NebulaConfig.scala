@@ -55,9 +55,9 @@ final case class NebulaPoolConfig(
 }
 
 final case class NebulaSessionPoolConfig(
-  address: List[NebulaHostAddress],
-  auth: NebulaAuth,
-  spaceName: String,
+  address: List[NebulaHostAddress], // both for NebulaClient and NebulaSessionClient
+  auth: NebulaAuth,                 // both for NebulaClient and NebulaSessionClient
+  spaceName: String,                // both for NebulaClient and NebulaSessionClient
   maxSessionSize: Int = 10,
   minSessionSize: Int = 1,
   waitTimeMills: Int = 0,
@@ -66,7 +66,7 @@ final case class NebulaSessionPoolConfig(
   intervalTimeMills: Int = 0,
   healthCheckTimeSeconds: Int = 600,
   cleanTimeSeconds: Int = 3600,
-  reconnect: Boolean = false,
+  reconnect: Boolean = false,       // both for NebulaClient and NebulaSessionClient
   useHttp2: Boolean = false
 )
 

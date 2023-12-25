@@ -30,21 +30,34 @@ private[nebula] final class NebulaClientLive(underlying: NebulaPl) extends Nebul
 
   def close(): Task[Unit] = ZIO.attempt(underlying.close())
 
-  def openSession(): ZIO[Scope & NebulaSessionPoolConfig, Throwable, NebulaSession] =
+  def openSession(sessionPoolConfig: NebulaSessionPoolConfig): ZIO[Any, Throwable, NebulaSession] =
+    for {
+      session <- ZIO.attempt(
+                   new NebulaSession(
+                     underlying.getSession(
+                       sessionPoolConfig.auth.username,
+                       sessionPoolConfig.auth.password,
+                       sessionPoolConfig.reconnect
+                     )
+                   )
+                 )
+      _       <- session.execute(Stmt.str(s"USE `${sessionPoolConfig.spaceName}`"))
+    } yield session
+
+  def openSession(): ZIO[NebulaSessionPoolConfig, Throwable, NebulaSession] =
     for {
       sessionConfig <- ZIO.service[NebulaSessionPoolConfig]
-      session       <-
-        ZIO.acquireRelease(
-          ZIO.attempt(
-            new NebulaSession(
-              underlying.getSession(
-                sessionConfig.auth.username,
-                sessionConfig.auth.password,
-                sessionConfig.reconnect
-              )
-            )
-          )
-        )(_.close().onError(e => ZIO.logErrorCause(e)).ignoreLogged)
+      session       <- ZIO.attempt(
+                         new NebulaSession(
+                           underlying.getSession(
+                             sessionConfig.auth.username,
+                             sessionConfig.auth.password,
+                             sessionConfig.reconnect
+                           )
+                         )
+                       )
+      _             <- session.execute(Stmt.str(s"USE `${sessionConfig.spaceName}`"))
+
     } yield session
 
   def activeConnNum: Task[Int] = ZIO.attempt(underlying.getActiveConnNum)
