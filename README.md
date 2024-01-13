@@ -50,7 +50,7 @@ import zio.nebula._
 final class NebulaSessionClientExample(sessionClient: NebulaSessionClient) {
 
   def execute(stmt: String): ZIO[Any, Throwable, NebulaResultSet] = {
-    // Your business logic
+    // your custom logic
     sessionClient.execute(stmt)
   }
 }
@@ -62,14 +62,15 @@ object NebulaSessionClientExample {
 object NebulaSessionClientMain extends ZIOAppDefault {
 
   override def run = (for {
-    _ <- ZIO.serviceWithZIO[NebulaSessionClient](_.init()) // since 0.1.1, no need to call it manually. 
+    // since 0.1.1, no need to call it manually.
+    _ <- ZIO.serviceWithZIO[NebulaSessionClient](_.init()) 
     _ <- ZIO.serviceWithZIO[NebulaSessionClientExample](
              _.execute("""
                          |INSERT VERTEX person(name, age) VALUES 
                          |'Bob':('Bob', 10), 
                          |'Lily':('Lily', 9),'Tom':('Tom', 10),
                          |'Jerry':('Jerry', 13),
-                         |'John':('John', 11);""".stripMargin).flatMap(r => ZIO.logInfo(r.toString))
+                         |'John':('John', 11);""".stripMargin)
            )
     _ <- ZIO.serviceWithZIO[NebulaSessionClientExample](
              _.execute("""
@@ -78,14 +79,13 @@ object NebulaSessionClientMain extends ZIOAppDefault {
                          |'Bob'->'Tom':(70.0),
                          |'Lily'->'Jerry':(84.0),
                          |'Tom'->'Jerry':(68.3),
-                         |'Bob'->'John':(97.2);""".stripMargin).flatMap(r => ZIO.logInfo(r.toString))
+                         |'Bob'->'John':(97.2);""".stripMargin)
            )
     _ <- ZIO.serviceWithZIO[NebulaSessionClientExample](
              _.execute("""
                          |USE test;
                          |MATCH (p:person) RETURN p LIMIT 4;
                          |""".stripMargin)
-               .flatMap(r => ZIO.logInfo(r.rows.toString()))
            )
   } yield ())
     .provide(
@@ -100,10 +100,10 @@ object NebulaSessionClientMain extends ZIOAppDefault {
 ## Configuration
 
 Introduction for configuring keys:
-  - key `graph` for `NebulaSessionClient`
-  - key `meta` for `NebulaMetaClient`
-  - key `storage` for `NebulaStorageClient`
-  - key `pool` for `NebulaClient`
+  - key `graph` for `NebulaSessionClient`, For structure, please refer to `zio.nebula.NebulaSessionPoolConfig`
+  - key `meta` for `NebulaMetaClient`, For structure, please refer to `zio.nebula.NebulaMetaConfig`
+  - key `storage` for `NebulaStorageClient`, For structure, please refer to `zio.nebula.NebulaStorageConfig`
+  - key `pool` for `NebulaClient`, For structure, please refer to `zio.nebula.NebulaPoolConfig`
 
 Sample Configuration:
 ```hocon

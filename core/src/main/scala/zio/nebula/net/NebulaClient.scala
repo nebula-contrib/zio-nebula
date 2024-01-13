@@ -2,7 +2,6 @@ package zio.nebula.net
 
 import zio._
 import zio.nebula._
-import zio.nebula.NebulaPoolConfig
 
 import com.vesoft.nebula.client.graph.{ NebulaPoolConfig => _ }
 import com.vesoft.nebula.client.graph.net.{ NebulaPool => Pool }
@@ -14,13 +13,22 @@ import com.vesoft.nebula.client.graph.net.{ NebulaPool => Pool }
  */
 trait NebulaClient {
 
-  def init(): ZIO[NebulaSessionPoolConfig & NebulaPoolConfig, Throwable, Boolean]
+  def init(): ZIO[NebulaPoolConfig, Throwable, Boolean]
 
+  /**
+   * close the client
+   */
   def close(): Task[Unit]
 
-  def openSession(): ZIO[NebulaSessionPoolConfig, Throwable, NebulaSession]
+  /**
+   * init the client and execute `USE spaceName` if exists
+   */
+  def openSession(useSpace: Boolean): ZIO[NebulaPoolConfig, Throwable, NebulaSession]
 
-  def openSession(sessionPoolConfig: NebulaSessionPoolConfig): ZIO[Any, Throwable, NebulaSession]
+  /**
+   * init the client by using poolConfig
+   */
+  def openSession(poolConfig: NebulaPoolConfig): ZIO[Any, Throwable, NebulaSession]
 
   def activeConnNum: Task[Int]
 
