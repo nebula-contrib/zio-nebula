@@ -39,15 +39,10 @@ object ZioNebulaEnvironment {
         maxConnsSize = 10,
         intervalIdleMills = 100,
         waitTimeMills = 100,
-        sslParam = None
-      )
-    ) ++ ZLayer.fromZIO(
-      ZIO.attempt(
-        NebulaSessionPoolConfig(
-          List(NebulaHostAddress(host, port)),
-          NebulaAuth(defaultUser, defaultPwd),
-          defaultSpace
-        )
+        sslParam = None,
+        address = List(NebulaHostAddress(host, port)),
+        auth = NebulaAuth(defaultUser, defaultPwd),
+        spaceName = Some(defaultSpace)
       )
     )
 
