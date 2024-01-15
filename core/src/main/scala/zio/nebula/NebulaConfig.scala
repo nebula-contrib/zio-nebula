@@ -28,6 +28,9 @@ final case class NebulaStorageConfig(
 )
 
 final case class NebulaPoolConfig(
+  address: List[NebulaHostAddress],
+  auth: NebulaAuth,
+  spaceName: Option[String],
   minConnsSize: Int = 0,
   maxConnsSize: Int = 10,
   timeoutMills: Int = 0,
@@ -36,7 +39,8 @@ final case class NebulaPoolConfig(
   waitTimeMills: Int = 0,
   minClusterHealthRate: Double = 1d,
   enableSsl: Boolean = false,
-  sslParam: Option[SSLParam]
+  sslParam: Option[SSLParam],
+  reconnect: Boolean = false
 ) {
 
   def toJava: PoolConfig = {
@@ -55,9 +59,9 @@ final case class NebulaPoolConfig(
 }
 
 final case class NebulaSessionPoolConfig(
-  address: List[NebulaHostAddress], // both for NebulaClient and NebulaSessionClient
-  auth: NebulaAuth,                 // both for NebulaClient and NebulaSessionClient
-  spaceName: String,                // both for NebulaClient and NebulaSessionClient
+  address: List[NebulaHostAddress],
+  auth: NebulaAuth,
+  spaceName: String,
   maxSessionSize: Int = 10,
   minSessionSize: Int = 1,
   waitTimeMills: Int = 0,
@@ -66,7 +70,7 @@ final case class NebulaSessionPoolConfig(
   intervalTimeMills: Int = 0,
   healthCheckTimeSeconds: Int = 600,
   cleanTimeSeconds: Int = 3600,
-  reconnect: Boolean = false,       // both for NebulaClient and NebulaSessionClient
+  reconnect: Boolean = false,
   useHttp2: Boolean = false
 )
 
