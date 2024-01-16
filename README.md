@@ -99,13 +99,8 @@ object NebulaSessionClientMain extends ZIOAppDefault {
 
 ## Configuration
 
-Introduction for configuring keys:
-  - key `graph` for `NebulaSessionClient`, For structure, please refer to `zio.nebula.NebulaSessionPoolConfig`
-  - key `meta` for `NebulaMetaClient`, For structure, please refer to `zio.nebula.NebulaMetaConfig`
-  - key `storage` for `NebulaStorageClient`, For structure, please refer to `zio.nebula.NebulaStorageConfig`
-  - key `pool` for `NebulaClient`, For structure, please refer to `zio.nebula.NebulaPoolConfig`
-
-Sample Configuration:
+`NebulaSessionClient` Configuration:
+> For the entire structure, see `zio.nebula.NebulaSessionPoolConfig`.
 ```hocon
 {
   graph {
@@ -122,7 +117,12 @@ Sample Configuration:
     spaceName = "test"
     reconnect = true
   }
-
+}
+```
+`NebulaMetaClient` Configuration:
+> For the entire structure, see `zio.nebula.NebulaMetaConfig`.
+```hocon
+{
   meta {
     address = [
       {
@@ -135,7 +135,12 @@ Sample Configuration:
     executionRetry = 1
     enableSSL = false
   }
-
+}
+```
+`NebulaStorageClient` Configuration:
+> For the entire structure, see `zio.nebula.NebulaStorageConfig`.
+```hocon
+{
   storage {
     address = [
       {
@@ -148,8 +153,24 @@ Sample Configuration:
     executionRetry = 1
     enableSSL = false
   }
-
+}
+```
+`NebulaClient` Configuration:
+> For the entire structure, see `zio.nebula.NebulaPoolConfig`.
+```hocon
+{
   pool {
+    address = [
+      {
+        host = "127.0.0.1",
+        port = 9669
+      }
+    ]
+    auth {
+      username = "root"
+      password = "nebula"
+    }
+    spaceName = "test"
     timeoutMills = 60000
     enableSsl = false
     minConnsSize = 10
