@@ -24,8 +24,7 @@ package object nebula {
   lazy val ClientEnv: ZLayer[Scope, Throwable, Client] =
     ZLayer.makeSome[Scope, Client](
       NebulaClient.layer,
-      NebulaConfig.poolConfigLayer,
-      NebulaConfig.sessionConfigLayer
+      NebulaConfig.poolConfigLayer
     )
 
   lazy val StorageEnv: ZLayer[Scope, Throwable, Storage] = ZLayer.makeSome[Scope, Storage](
