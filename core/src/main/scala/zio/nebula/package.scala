@@ -12,7 +12,7 @@ import zio.nebula.storage._
 package object nebula {
 
   type SessionClient = NebulaSessionClient
-  type Client        = NebulaClient with NebulaPoolConfig
+  type Client        = NebulaClient & NebulaPoolConfig
   type Storage       = NebulaStorageClient
   type Meta          = NebulaMetaClient
 

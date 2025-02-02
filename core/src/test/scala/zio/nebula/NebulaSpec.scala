@@ -9,7 +9,7 @@ import testcontainers.containers.NebulaSimpleClusterContainer
 
 trait NebulaSpec extends ZIOSpecDefault {
 
-  type Nebula = Client with Storage with Meta with Scope
+  type Nebula = Client & Storage & Meta & Scope
 
   val container: NebulaSimpleClusterContainer = new NebulaSimpleClusterContainer(subnetIp = "172.30.0.0/16")
 

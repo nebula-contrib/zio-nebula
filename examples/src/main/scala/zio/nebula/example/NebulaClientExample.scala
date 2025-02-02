@@ -6,7 +6,7 @@ import zio.nebula.net.{ NebulaClient, Stmt }
 
 final class NebulaClientExample(nebulaClient: NebulaClient) {
 
-  def execute(stmt: String): ZIO[Scope with NebulaPoolConfig, Throwable, NebulaResultSet] =
+  def execute(stmt: String): ZIO[Scope & NebulaPoolConfig, Throwable, NebulaResultSet] =
     nebulaClient.openSession(false).flatMap(_.execute(Stmt.str(stmt)))
 }
 
