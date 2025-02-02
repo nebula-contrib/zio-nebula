@@ -55,7 +55,7 @@ trait NebulaSessionClient {
 
 object NebulaSessionClient {
 
-  lazy val layer: ZLayer[Scope with NebulaSessionPoolConfig, Throwable, NebulaSessionClient] = ZLayer.fromZIO {
+  lazy val layer: ZLayer[Scope & NebulaSessionPoolConfig, Throwable, NebulaSessionClient] = ZLayer.fromZIO {
     for {
       nebulaConfig <- ZIO.service[NebulaSessionPoolConfig]
       sessionPool  <- ZIO.acquireRelease(
