@@ -14,8 +14,8 @@ object NebulaClientSpec extends NebulaSpec {
 
   val insertVertexes =
     """
-      |INSERT VERTEX person(name, age) VALUES 
-      |'Bob':('Bob', 10), 
+      |INSERT VERTEX person(name, age) VALUES
+      |'Bob':('Bob', 10),
       |'Lily':('Lily', 9),'Tom':('Tom', 10),
       |'Jerry':('Jerry', 13),
       |'John':('John', 11);""".stripMargin
