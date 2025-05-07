@@ -1,30 +1,36 @@
+import sbt.ThisBuild
+import xerial.sbt.Sonatype.sonatypeCentralHost
+
 val zioVersion                  = "2.1.14"
 val scala3_Version              = "3.6.3"
 val scala2_13Version            = "2.13.16"
 val scala2_12Version            = "2.12.20"
-val zioConfigVersion            = "4.0.3"
+val zioConfigVersion            = "4.0.4"
 val nebulaClientVersion         = "3.8.4"
+
 val logbackVersion              = "1.4.11"
 val silencerVersion             = "1.4.2"
-val testcontainersNebulaVersion = "0.1.2"
+val testcontainersNebulaVersion = "0.2.0"
 
 val supportCrossVersionList = Seq(scala3_Version, scala2_13Version, scala2_12Version)
 
 inThisBuild(
   List(
-    scalaVersion     := supportCrossVersionList.head,
-    homepage         := Some(url("https://github.com/nebula-contrib/zio-nebula")),
-    licenses         := List("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
-    organization     := "io.github.jxnu-liguobin",
-    organizationName := "梦境迷离",
-    developers       := List(
+    scalaVersion                       := supportCrossVersionList.head,
+    homepage                           := Some(url("https://github.com/nebula-contrib/zio-nebula")),
+    licenses                           := List("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
+    organization                       := "io.github.jxnu-liguobin",
+    organizationName                   := "梦境迷离",
+    developers                         := List(
       Developer(
         id = "jxnu-liguobin",
         name = "梦境迷离",
         email = "dreamylost@outlook.com",
         url = url("https://github.com/jxnu-liguobin")
       )
-    )
+    ),
+    ThisBuild / sonatypeProfileName    := "org.bitlap",
+    ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
   )
 )
 
@@ -67,7 +73,7 @@ lazy val examples = project
   )
   .dependsOn(core)
 
-lazy val `zio-nebula` = project
+lazy val `root` = project
   .in(file("."))
   .settings(
     crossScalaVersions := Nil,
