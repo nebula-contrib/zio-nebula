@@ -67,7 +67,7 @@ lazy val examples = project
   )
   .dependsOn(core)
 
-lazy val `zio-nebula` = project
+lazy val `root` = project
   .in(file("."))
   .settings(
     crossScalaVersions := Nil,
