@@ -1,3 +1,6 @@
+import sbt.ThisBuild
+import xerial.sbt.Sonatype.sonatypeCentralHost
+
 val zioVersion                  = "2.0.13"
 val scala3_Version              = "3.3.1"
 val scala2_13Version            = "2.13.12"
@@ -12,19 +15,21 @@ val supportCrossVersionList = Seq(scala3_Version, scala2_13Version, scala2_12Ver
 
 inThisBuild(
   List(
-    scalaVersion     := supportCrossVersionList.head,
-    homepage         := Some(url("https://github.com/nebula-contrib/zio-nebula")),
-    licenses         := List("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
-    organization     := "io.github.jxnu-liguobin",
-    organizationName := "梦境迷离",
-    developers       := List(
+    scalaVersion                       := supportCrossVersionList.head,
+    homepage                           := Some(url("https://github.com/nebula-contrib/zio-nebula")),
+    licenses                           := List("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
+    organization                       := "io.github.jxnu-liguobin",
+    organizationName                   := "梦境迷离",
+    developers                         := List(
       Developer(
         id = "jxnu-liguobin",
         name = "梦境迷离",
         email = "dreamylost@outlook.com",
         url = url("https://github.com/jxnu-liguobin")
       )
-    )
+    ),
+    ThisBuild / sonatypeProfileName    := "org.bitlap",
+    ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
   )
 )
 
