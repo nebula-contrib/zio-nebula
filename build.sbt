@@ -29,7 +29,7 @@ inThisBuild(
         url = url("https://github.com/jxnu-liguobin")
       )
     ),
-    ThisBuild / sonatypeProfileName    := "org.bitlap",
+    ThisBuild / sonatypeProfileName    := "io.github.jxnu-liguobin",
     ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
   )
 )
