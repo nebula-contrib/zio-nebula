@@ -12,7 +12,7 @@ import zio.nebula.storage._
 package object nebula {
 
   type SessionClient = NebulaSessionClient
-  type Client        = NebulaClient with NebulaPoolConfig
+  type Client        = NebulaClient & NebulaPoolConfig
   type Storage       = NebulaStorageClient
   type Meta          = NebulaMetaClient
 
@@ -24,8 +24,7 @@ package object nebula {
   lazy val ClientEnv: ZLayer[Scope, Throwable, Client] =
     ZLayer.makeSome[Scope, Client](
       NebulaClient.layer,
-      NebulaConfig.poolConfigLayer,
-      NebulaConfig.sessionConfigLayer
+      NebulaConfig.poolConfigLayer
     )
 
   lazy val StorageEnv: ZLayer[Scope, Throwable, Storage] = ZLayer.makeSome[Scope, Storage](
