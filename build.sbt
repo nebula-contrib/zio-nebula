@@ -1,12 +1,12 @@
 import sbt.ThisBuild
 import xerial.sbt.Sonatype.sonatypeCentralHost
 
-val zioVersion                  = "2.1.14"
-val scala3_Version              = "3.6.3"
-val scala2_13Version            = "2.13.16"
-val scala2_12Version            = "2.12.20"
-val zioConfigVersion            = "4.0.4"
-val nebulaClientVersion         = "3.8.4"
+val zioVersion          = "2.1.14"
+val scala3_Version      = "3.6.3"
+val scala2_13Version    = "2.13.16"
+val scala2_12Version    = "2.12.20"
+val zioConfigVersion    = "4.0.4"
+val nebulaClientVersion = "3.8.4"
 
 val logbackVersion              = "1.4.11"
 val silencerVersion             = "1.4.2"
