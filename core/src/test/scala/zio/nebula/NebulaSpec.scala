@@ -5,13 +5,13 @@ import zio.nebula.net.{ NebulaClient, Stmt }
 import zio.test._
 import zio.test.TestAspect._
 
-import testcontainers.containers.NebulaSimpleClusterContainer
+import testcontainers.containers.ArbitraryNebulaCluster
 
 trait NebulaSpec extends ZIOSpecDefault {
 
   type Nebula = Client & Storage & Meta & Scope
 
-  val container: NebulaSimpleClusterContainer = new NebulaSimpleClusterContainer(subnetIp = "172.30.0.0/16")
+  val container: ArbitraryNebulaCluster = ArbitraryNebulaCluster(subnetIp = "172.30.0.0/16")
 
   container.start()
 
