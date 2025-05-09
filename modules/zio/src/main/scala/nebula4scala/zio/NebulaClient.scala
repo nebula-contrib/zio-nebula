@@ -1,7 +1,7 @@
 package nebula4scala.zio
 
-import com.vesoft.nebula.client.graph.NebulaPoolConfig as _
-import com.vesoft.nebula.client.graph.net.NebulaPool as Pool
+import com.vesoft.nebula.client.graph.{ NebulaPoolConfig => _ }
+import com.vesoft.nebula.client.graph.net.{ NebulaPool => Pool }
 
 import _root_.zio._
 import nebula4scala.SyncFuture

@@ -76,30 +76,6 @@ lazy val `core` = project
       "org.scala-lang.modules" %% "scala-collection-compat" % scalaCollectionVersion
     ) ++ conditionalDependencies.value
   )
-  .settings(
-    Compile / sourceDirectories := {
-      val baseDir   = (Compile / sourceDirectory).value
-      val sharedDir = baseDir / "scala"
-      val scala2Dir = baseDir / "scala-2"
-      val scala3Dir = baseDir / "scala-3"
-      if (isScala3(scalaVersion.value)) {
-        Seq(sharedDir, scala3Dir)
-      } else {
-        Seq(sharedDir, scala2Dir)
-      }
-    },
-    Test / sourceDirectories := {
-      val baseDir   = (Test / sourceDirectory).value
-      val sharedDir = baseDir / "scala"
-      val scala2Dir = baseDir / "scala-2"
-      val scala3Dir = baseDir / "scala-3"
-      if (isScala3(scalaVersion.value)) {
-        Seq(sharedDir, scala3Dir)
-      } else {
-        Seq(sharedDir, scala2Dir)
-      }
-    }
-  )
 
 lazy val `cats` = project
   .in(file("modules/cats"))

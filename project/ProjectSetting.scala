@@ -13,9 +13,7 @@ object ProjectSetting {
       "-language:higherKinds",
       "-language:implicitConversions",
       "-language:postfixOps",
-      "-deprecation",
-      "-Yretain-trees",
-      "-Xmax-inlines:512"
+      "-deprecation"
     ),
     autoAPIMappings          := true,
     version                  := (ThisBuild / version).value,

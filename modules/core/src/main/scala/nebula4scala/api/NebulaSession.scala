@@ -5,6 +5,7 @@ import com.vesoft.nebula.client.graph.data.HostAddress
 import nebula4scala.data.input.Stmt
 
 trait NebulaSession[F[_]] {
+
   def execute(stmt: Stmt): F[stmt.T]
 
   def ping(): F[Boolean]

@@ -3,7 +3,7 @@ package nebula4scala.data.meta
 import com.vesoft.nebula.client.graph.data
 import com.vesoft.nebula.client.graph.data.{ CASignedSSLParam, SelfSignedSSLParam }
 
-private[nebula4scala] sealed trait SSLParam {
+sealed trait SSLParam {
   self =>
 
   def toJava: data.SSLParam =

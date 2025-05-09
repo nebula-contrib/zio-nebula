@@ -4,7 +4,7 @@ import zio.config._
 import zio.config.magnolia.deriveConfig
 import zio.config.typesafe.TypesafeConfigProvider
 
-import com.typesafe.config.{ Config as TConfig, ConfigFactory }
+import com.typesafe.config.{ Config => TConfig, ConfigFactory }
 
 import _root_.zio._
 import nebula4scala.data._
