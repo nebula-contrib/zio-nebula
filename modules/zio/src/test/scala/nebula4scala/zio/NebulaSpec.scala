@@ -1,14 +1,14 @@
 package nebula4scala.zio
 
-import zio.*
-import zio.test.*
-import zio.test.TestAspect.*
+import zio._
+import zio.test._
+import zio.test.TestAspect._
 
-import nebula4scala.api.*
-import nebula4scala.data.*
-import nebula4scala.data.input.*
-import nebula4scala.zio.envs.*
-import nebula4scala.zio.net.NebulaClient
+import nebula4scala.api._
+import nebula4scala.data._
+import nebula4scala.data.input._
+import nebula4scala.zio.NebulaClient
+import nebula4scala.zio.envs._
 import testcontainers.containers.ArbitraryNebulaCluster
 
 trait NebulaSpec extends ZIOSpecDefault {

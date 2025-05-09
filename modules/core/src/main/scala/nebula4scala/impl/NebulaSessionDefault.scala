@@ -1,15 +1,15 @@
 package nebula4scala.impl
 
 import scala.concurrent.Future
-import scala.jdk.CollectionConverters.*
+import scala.jdk.CollectionConverters._
 
 import com.vesoft.nebula.client.graph.data.HostAddress
 import com.vesoft.nebula.client.graph.net.Session
 
 import nebula4scala.SyncFuture
 import nebula4scala.api.NebulaSession
-import nebula4scala.data.*
-import nebula4scala.data.input.*
+import nebula4scala.data._
+import nebula4scala.data.input._
 
 final class NebulaSessionDefault(private val underlying: Session) extends NebulaSession[SyncFuture] {
 

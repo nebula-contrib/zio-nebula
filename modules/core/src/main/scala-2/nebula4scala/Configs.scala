@@ -1,30 +1,39 @@
 package nebula4scala
 
-import nebula4scala.data.*
+import nebula4scala.data._
 import nebula4scala.data.meta.SSLParam
-import pureconfig.*
+import pureconfig._
+import pureconfig.generic.FieldCoproductHint
 import pureconfig.generic.ProductHint
+import pureconfig.generic.auto._
+import pureconfig.generic.semiauto._
 import pureconfig.generic.semiauto.deriveReader
 
 object Configs {
 
-  given [T]: ProductHint[T] = ProductHint[T](ConfigFieldMapping(CamelCase, CamelCase))
 
-  given ConfigReader[NebulaConfig] = deriveReader[NebulaConfig]
+  implicit def customProductHint[A]: ProductHint[A] = ProductHint[A](ConfigFieldMapping(CamelCase, CamelCase))
 
-  given ConfigReader[NebulaSessionPoolConfig] = deriveReader[NebulaSessionPoolConfig]
+  implicit val nc: ConfigReader[NebulaConfig] = deriveReader[NebulaConfig]
 
-  given ConfigReader[NebulaAuth] = deriveReader[NebulaAuth]
+  implicit val nspc: ConfigReader[NebulaSessionPoolConfig] =
+    deriveReader[NebulaSessionPoolConfig]
 
-  given ConfigReader[NebulaPoolConfig] = deriveReader[NebulaPoolConfig]
+  implicit val na: ConfigReader[NebulaAuth] = deriveReader[NebulaAuth]
 
-  given ConfigReader[NebulaHostAddress] = deriveReader[NebulaHostAddress]
+  implicit val npc: ConfigReader[NebulaPoolConfig] =
+    deriveReader[NebulaPoolConfig]
 
-  given ConfigReader[SSLParam] = deriveReader[SSLParam]
+  implicit val nha: ConfigReader[NebulaHostAddress] =
+    deriveReader[NebulaHostAddress]
 
-  given ConfigReader[NebulaMetaConfig] = deriveReader[NebulaMetaConfig]
+  implicit val ssp: ConfigReader[SSLParam] = deriveReader[SSLParam]
 
-  given ConfigReader[NebulaStorageConfig] = deriveReader[NebulaStorageConfig]
+  implicit val nmc: ConfigReader[NebulaMetaConfig] =
+    deriveReader[NebulaMetaConfig]
+
+  implicit val nsc: ConfigReader[NebulaStorageConfig] =
+    deriveReader[NebulaStorageConfig]
 
   private lazy val defaultGraphConfig   = ConfigSource.default.at("graph")
   private lazy val defaultMetaConfig    = ConfigSource.default.at("meta")

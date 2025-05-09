@@ -23,14 +23,14 @@ Nebula client built on top of ZIO, Cats Effect, Fs2 and official [nebula java cl
 
 ## Installation
 
-In order to use this library, we need to add the following line in our `build.sbt` file:
+In order to use this library, you need to select one based on your application and add the following line in our `build.sbt` file:
 ```scala
 // for zio application
 libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-zio" % <latest version>
 // for cats-effect application
 libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-cats" % <latest version>
-// for scala application
-libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-core" % <latest version> // synchronous wrapper by Future
+// for scala application, synchronous wrapper by Future
+libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-core" % <latest version> 
 ```
 
 There are the version correspondence between nebula4scala and nebula-java:

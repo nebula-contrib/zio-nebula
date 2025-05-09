@@ -1,9 +1,9 @@
 package nebula4scala.data.value
 
-import scala.jdk.CollectionConverters.*
+import scala.jdk.CollectionConverters._
 
-import com.vesoft.nebula.*
-import com.vesoft.nebula.client.graph.data.*
+import com.vesoft.nebula._
+import com.vesoft.nebula.client.graph.data._
 import com.vesoft.nebula.client.graph.exception.InvalidValueException
 
 object ValueWrapper {
@@ -37,12 +37,14 @@ object ValueWrapper {
 
   final case class Null(nullType: Int) extends NullType
 
-  extension (valueWrapper: com.vesoft.nebula.client.graph.data.ValueWrapper)
+  implicit final class ValueWrapperNebulaClass(val valueWrapper: com.vesoft.nebula.client.graph.data.ValueWrapper)
+      extends AnyVal {
 
     def asScala: ValueWrapper =
       ValueWrapper(valueWrapper.getValue, ENCODING, TIMEZONE_OFFSET)
+  }
 
-  extension (valueWrapper: ValueWrapper)
+  implicit final class ValueWrapperClass(val valueWrapper: ValueWrapper) extends AnyVal {
 
     def asJava: com.vesoft.nebula.client.graph.data.ValueWrapper =
       new com.vesoft.nebula.client.graph.data.ValueWrapper(
@@ -50,11 +52,12 @@ object ValueWrapper {
         valueWrapper.decodeType,
         valueWrapper.timezoneOffset
       )
+  }
 }
 
 final case class ValueWrapper(value: Value, decodeType: String = "utf-8", timezoneOffset: Int = 0) {
 
-  import ValueWrapper.*
+  import ValueWrapper._
 
   private def descType(): String = value.getSetField match {
     case Value.NVAL  => "NULL"
@@ -112,7 +115,7 @@ final case class ValueWrapper(value: Value, decodeType: String = "utf-8", timezo
   def isDuration: Boolean = value.getSetField == Value.DUVAL
 
   def asNull: NullType = value.getSetField match {
-    case Value.NVAL => Null((value.getFieldValue.asInstanceOf[com.vesoft.nebula.NullType]).getValue)
+    case Value.NVAL => Null(value.getFieldValue.asInstanceOf[com.vesoft.nebula.NullType].getValue)
     case _ => throw new InvalidValueException(s"Cannot get field nullType because value's type is ${descType()}")
   }
 
@@ -137,19 +140,19 @@ final case class ValueWrapper(value: Value, decodeType: String = "utf-8", timezo
   }
 
   def asList: List[ValueWrapper] = value.getSetField match {
-    case Value.LVAL => value.getLVal.getValues.asScala.map(v => ValueWrapper(v, decodeType, timezoneOffset)).toList
+    case Value.LVAL => value.getLVal.getValues.asScala.map(v => new ValueWrapper(v, decodeType, timezoneOffset)).toList
     case _ => throw new InvalidValueException(s"Cannot get field type `list' because value's type is ${descType()}")
   }
 
   def asSet: Set[ValueWrapper] = value.getSetField match {
-    case Value.UVAL => value.getUVal.getValues.asScala.map(v => ValueWrapper(v, decodeType, timezoneOffset)).toSet
+    case Value.UVAL => value.getUVal.getValues.asScala.map(v => new ValueWrapper(v, decodeType, timezoneOffset)).toSet
     case _ => throw new InvalidValueException(s"Cannot get field type `set' because value's type is ${descType()}")
   }
 
   def asMap: Map[String, ValueWrapper] = value.getSetField match {
     case Value.MVAL => {
       value.getMVal.getKvs.asScala.map { case (k, v) =>
-        new String(k, decodeType) -> ValueWrapper(v, decodeType, timezoneOffset)
+        new String(k, decodeType) -> new ValueWrapper(v, decodeType, timezoneOffset)
       }.toMap
     }
     case _ => throw new InvalidValueException(s"Cannot get field type `map' because value's type is ${descType()}")
@@ -157,20 +160,20 @@ final case class ValueWrapper(value: Value, decodeType: String = "utf-8", timezo
 
   def asTime: TimeWrapper = value.getSetField match {
     case Value.TVAL =>
-      val wrapper = TimeWrapper(value.getTVal)
+      val wrapper = new TimeWrapper(value.getTVal)
       wrapper.setDecodeType(decodeType).setTimezoneOffset(timezoneOffset)
       wrapper
     case _ => throw new InvalidValueException(s"Cannot get field time because value's type is ${descType()}")
   }
 
   def asDate: DateWrapper = value.getSetField match {
-    case Value.DVAL => DateWrapper(value.getDVal)
+    case Value.DVAL => new DateWrapper(value.getDVal)
     case _          => throw new InvalidValueException(s"Cannot get field date because value's type is ${descType()}")
   }
 
   def asDateTime: DateTimeWrapper = value.getSetField match {
     case Value.DTVAL =>
-      val wrapper = DateTimeWrapper(value.getDtVal)
+      val wrapper = new DateTimeWrapper(value.getDtVal)
       wrapper.setDecodeType(decodeType).setTimezoneOffset(timezoneOffset)
       wrapper
     case _ => throw new InvalidValueException(s"Cannot get field datetime because value's type is ${descType()}")
@@ -178,7 +181,7 @@ final case class ValueWrapper(value: Value, decodeType: String = "utf-8", timezo
 
   def asNode: Node = value.getSetField match {
     case Value.VVAL =>
-      val wrapper = Node(value.getVVal)
+      val wrapper = new Node(value.getVVal)
       wrapper.setDecodeType(decodeType).setTimezoneOffset(timezoneOffset)
       wrapper
     case _ => throw new InvalidValueException(s"Cannot get field Node because value's type is ${descType()}")
@@ -186,7 +189,7 @@ final case class ValueWrapper(value: Value, decodeType: String = "utf-8", timezo
 
   def asRelationship: Relationship = value.getSetField match {
     case Value.EVAL =>
-      val wrapper = Relationship(value.getEVal)
+      val wrapper = new Relationship(value.getEVal)
       wrapper.setDecodeType(decodeType).setTimezoneOffset(timezoneOffset)
       wrapper
     case _ => throw new InvalidValueException(s"Cannot get field Relationship because value's type is ${descType()}")
@@ -194,7 +197,7 @@ final case class ValueWrapper(value: Value, decodeType: String = "utf-8", timezo
 
   def asPath: PathWrapper = value.getSetField match {
     case Value.PVAL =>
-      val wrapper = PathWrapper(value.getPVal)
+      val wrapper = new PathWrapper(value.getPVal)
       wrapper.setDecodeType(decodeType).setTimezoneOffset(timezoneOffset)
       wrapper
     case _ => throw new InvalidValueException(s"Cannot get field PathWrapper because value's type is ${descType()}")
@@ -202,7 +205,7 @@ final case class ValueWrapper(value: Value, decodeType: String = "utf-8", timezo
 
   def asGeography: GeographyWrapper = value.getSetField match {
     case Value.GGVAL =>
-      val wrapper = GeographyWrapper(value.getGgVal)
+      val wrapper = new GeographyWrapper(value.getGgVal)
       wrapper.setDecodeType(decodeType).setTimezoneOffset(timezoneOffset)
       wrapper
     case _ =>
@@ -211,11 +214,11 @@ final case class ValueWrapper(value: Value, decodeType: String = "utf-8", timezo
 
   def asDuration: DurationWrapper = value.getSetField match {
     case Value.DUVAL =>
-      val wrapper = DurationWrapper(value.getDuVal)
+      val wrapper = new DurationWrapper(value.getDuVal)
       wrapper.setDecodeType(decodeType).setTimezoneOffset(timezoneOffset)
       wrapper
     case _ =>
-      throw (new InvalidValueException(s"Cannot get field DurationWrapper because value's type is ${descType()}"))
+      throw new InvalidValueException(s"Cannot get field DurationWrapper because value's type is ${descType()}")
   }
 
   override def toString: String = {

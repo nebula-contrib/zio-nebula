@@ -1,6 +1,6 @@
 package nebula4scala.api
 
-import nebula4scala.data.*
+import nebula4scala.data._
 
 trait NebulaClient[F[_]] {
 

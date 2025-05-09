@@ -3,9 +3,9 @@ package nebula4scala.cats
 import cats.effect.{ Async, Resource }
 
 import nebula4scala.SyncFuture
-import nebula4scala.api.*
-import nebula4scala.data.*
-import nebula4scala.data.input.*
+import nebula4scala.api._
+import nebula4scala.data._
+import nebula4scala.data.input._
 import nebula4scala.impl.NebulaStorageClientDefault
 
 object NebulaStorageClient {

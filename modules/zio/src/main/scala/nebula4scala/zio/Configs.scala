@@ -1,15 +1,13 @@
 package nebula4scala.zio
 
-import zio.config.*
+import zio.config._
 import zio.config.magnolia.deriveConfig
 import zio.config.typesafe.TypesafeConfigProvider
 
 import com.typesafe.config.{ Config as TConfig, ConfigFactory }
 
-import _root_.zio.*
-import nebula4scala.api.*
-import nebula4scala.data.*
-import nebula4scala.zio.NebulaMetaClient
+import _root_.zio._
+import nebula4scala.data._
 
 object Configs {
 

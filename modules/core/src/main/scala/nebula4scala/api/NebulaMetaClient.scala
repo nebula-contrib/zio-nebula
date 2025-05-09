@@ -1,8 +1,8 @@
 package nebula4scala.api
 
-import com.vesoft.nebula.meta.{SpaceItem, TagItem}
-import nebula4scala.data.NebulaHostAddress
+import com.vesoft.nebula.meta.{ SpaceItem, TagItem }
 
+import nebula4scala.data.NebulaHostAddress
 
 trait NebulaMetaClient[F[_]] {
 

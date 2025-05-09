@@ -1,11 +1,12 @@
 package nebula4scala.example.cats
 
-import cats.*
-import cats.effect.*
+import cats._
+import cats.effect._
+
 import nebula4scala.Configs
-import nebula4scala.cats.*
-import nebula4scala.data.*
-import nebula4scala.data.input.*
+import nebula4scala.cats._
+import nebula4scala.data._
+import nebula4scala.data.input._
 
 object NebulaClientExample extends IOApp {
 

@@ -1,6 +1,7 @@
 import org.scalafmt.sbt.ScalafmtPlugin.autoImport.scalafmtOnCompile
-import sbt.*
-import sbt.Keys.*
+
+import sbt._
+import sbt.Keys._
 
 object ProjectSetting {
 
@@ -13,7 +14,6 @@ object ProjectSetting {
       "-language:implicitConversions",
       "-language:postfixOps",
       "-deprecation",
-      "-Xkind-projector:underscores",
       "-Yretain-trees",
       "-Xmax-inlines:512"
     ),

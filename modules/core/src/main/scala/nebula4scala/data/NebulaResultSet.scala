@@ -2,8 +2,9 @@ package nebula4scala.data
 
 import java.util.stream.StreamSupport
 
-import scala.jdk.CollectionConverters.*
-import scala.jdk.StreamConverters.*
+import scala.collection.JavaConverters._
+import scala.collection.compat.immutable.LazyList
+import scala.collection.convert._
 
 import com.vesoft.nebula.Row
 import com.vesoft.nebula.client.graph.data
@@ -11,9 +12,9 @@ import com.vesoft.nebula.client.graph.data.ResultSet
 import com.vesoft.nebula.client.graph.data.ResultSet.Record
 import com.vesoft.nebula.graph.PlanDescription
 
-import nebula4scala.data.NebulaResultSet.*
-import nebula4scala.data.value.*
-import nebula4scala.data.value.ValueWrapper.*
+import nebula4scala.data.NebulaResultSet._
+import nebula4scala.data.value._
+import nebula4scala.data.value.ValueWrapper._
 
 final class NebulaResultSet(underlying: ResultSet) {
 
@@ -60,7 +61,12 @@ object NebulaResultSet {
     override def toString(): String = underlying.toString
 
     def lazyValues(parallel: Boolean = false): LazyList[ValueWrapper] =
-      StreamSupport.stream(underlying.spliterator(), parallel).map(_.asScala).toScala(LazyList)
+      StreamSupport
+        .stream(underlying.spliterator(), parallel)
+        .iterator()
+        .asScala
+        .map(_.asScala)
+        .to(LazyList)
 
     def get(index: Int): ValueWrapper = underlying.get(index).asScala
 

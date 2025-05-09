@@ -1,11 +1,12 @@
 package nebula4scala.example.zio
 
-import nebula4scala.api.*
-import nebula4scala.data.*
-import nebula4scala.data.input.*
-import nebula4scala.zio.*
-import nebula4scala.zio.envs.*
-import zio.*
+import zio._
+
+import nebula4scala.api._
+import nebula4scala.data._
+import nebula4scala.data.input._
+import nebula4scala.zio._
+import nebula4scala.zio.envs._
 
 final class NebulaStorageClientExample(nebulaStorageClient: NebulaStorageClient[Task]) {
 

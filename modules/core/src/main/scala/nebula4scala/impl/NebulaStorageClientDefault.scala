@@ -1,21 +1,21 @@
 package nebula4scala.impl
 
 import scala.concurrent.Future
-import scala.jdk.CollectionConverters.*
+import scala.jdk.CollectionConverters._
 
 import com.vesoft.nebula.client.graph.data.HostAddress
 import com.vesoft.nebula.client.storage.StorageClient
 
-import nebula4scala.*
-import nebula4scala.api.*
-import nebula4scala.data.*
-import nebula4scala.data.input.*
+import nebula4scala._
+import nebula4scala.api._
+import nebula4scala.data._
+import nebula4scala.data.input._
 
 object NebulaStorageClientDefault {
 
-  def make(config: NebulaStorageConfig): NebulaStorageClient[SyncFuture] =
+  def make(config: NebulaStorageConfig): NebulaStorageClient[SyncFuture] = {
     val nebulaConfig = config.underlying
-    NebulaStorageClientDefault(
+    new NebulaStorageClientDefault(
       new StorageClient(
         nebulaConfig.address.map(a => new HostAddress(a.host, a.port)).asJava,
         nebulaConfig.timeoutMills,
@@ -25,11 +25,12 @@ object NebulaStorageClientDefault {
         nebulaConfig.casSigned.orElse(nebulaConfig.selfSigned).map(_.toJava).orNull
       )
     )
+  }
 }
 
 final class NebulaStorageClientDefault(underlying: StorageClient) extends NebulaStorageClient[SyncFuture] {
 
-  import Constant.*
+  import Constant._
 
   override def connect(): SyncFuture[Boolean] = Future.successful(underlying.connect())
 

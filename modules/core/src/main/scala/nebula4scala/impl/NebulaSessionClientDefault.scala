@@ -1,18 +1,18 @@
 package nebula4scala.impl
 
 import scala.concurrent.Future
-import scala.jdk.CollectionConverters.*
+import scala.jdk.CollectionConverters._
 
-import com.vesoft.nebula.client.graph.*
+import com.vesoft.nebula.client.graph._
 import com.vesoft.nebula.client.graph.data.HostAddress
 
 import nebula4scala.SyncFuture
 import nebula4scala.api.NebulaSessionClient
-import nebula4scala.data.*
+import nebula4scala.data._
 
 object NebulaSessionClientDefault {
 
-  def make(sessionPoolConfig: NebulaSessionPoolConfig): NebulaSessionClient[SyncFuture] =
+  def make(sessionPoolConfig: NebulaSessionPoolConfig): NebulaSessionClient[SyncFuture] = {
     val sessionPool = new SessionPool(
       new SessionPoolConfig(
         sessionPoolConfig.address.map(d => new HostAddress(d.host, d.port)).asJava,
@@ -32,6 +32,7 @@ object NebulaSessionClientDefault {
     )
 
     new NebulaSessionClientDefault((sessionPool))
+  }
 }
 
 final class NebulaSessionClientDefault(underlying: SessionPool) extends NebulaSessionClient[SyncFuture] {

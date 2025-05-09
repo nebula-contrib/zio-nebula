@@ -1,12 +1,10 @@
 package nebula4scala.zio
 
-import zio.*
+import zio._
 
-import nebula4scala.data.*
-import nebula4scala.zio.envs.*
-import nebula4scala.zio.meta.NebulaMetaClient
-import nebula4scala.zio.net.NebulaClient
-import nebula4scala.zio.storage.NebulaStorageClient
+import nebula4scala.data._
+import nebula4scala.zio.*
+import nebula4scala.zio.envs._
 
 object ZioNebulaEnvironment {
 

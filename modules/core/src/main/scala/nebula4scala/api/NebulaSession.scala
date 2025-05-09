@@ -1,6 +1,7 @@
 package nebula4scala.api
 
 import com.vesoft.nebula.client.graph.data.HostAddress
+
 import nebula4scala.data.input.Stmt
 
 trait NebulaSession[F[_]] {

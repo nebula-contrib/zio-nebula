@@ -1,6 +1,6 @@
 package nebula4scala.data.input
 
-import nebula4scala.data.*
+import nebula4scala.data._
 
 sealed trait Stmt {
   type T

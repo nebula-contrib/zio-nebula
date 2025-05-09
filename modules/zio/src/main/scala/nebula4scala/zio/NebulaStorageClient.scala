@@ -1,11 +1,11 @@
 package nebula4scala.zio
 
-import zio.*
+import zio._
 
-import nebula4scala.*
-import nebula4scala.api.*
-import nebula4scala.data.*
-import nebula4scala.data.input.*
+import nebula4scala._
+import nebula4scala.api._
+import nebula4scala.data._
+import nebula4scala.data.input._
 import nebula4scala.impl.NebulaStorageClientDefault
 
 object NebulaStorageClient {

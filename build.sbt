@@ -1,21 +1,41 @@
-import sbt.ThisBuild
+import sbt.{ Test, ThisBuild, * }
+import sbt.Keys.*
 import xerial.sbt.Sonatype.sonatypeCentralHost
 
-val zioVersion          = "2.1.14"
-val scala3_Version      = "3.6.3"
-val scala2_13Version    = "2.13.16"
-val scala2_12Version    = "2.12.20"
-val zioConfigVersion    = "4.0.4"
-val nebulaClientVersion = "3.8.4"
-val catsVersion         = "2.9.0"
-val catsEffectVersion   = "3.5.7"
-val pureconfigVersion   = "0.17.8"
+val zioVersion             = "2.1.14"
+val scala3_Version         = "3.6.3"
+val scala2_13Version       = "2.13.16"
+val scala2_12Version       = "2.12.20"
+val zioConfigVersion       = "4.0.4"
+val nebulaClientVersion    = "3.8.4"
+val catsVersion            = "2.9.0"
+val catsEffectVersion      = "3.5.7"
+val pureconfigVersion      = "0.17.8"
+val scalaCollectionVersion = "2.9.0"
 
 val logbackVersion              = "1.4.11"
 val silencerVersion             = "1.4.2"
 val testcontainersNebulaVersion = "0.2.0"
 
 val supportCrossVersionList = Seq(scala3_Version, scala2_13Version, scala2_12Version)
+
+def isScala3(scalaVersion: String): Boolean = {
+  CrossVersion.partialVersion(scalaVersion) match {
+    case Some((3, _)) => true
+    case _            => false
+  }
+}
+
+val conditionalDependencies = Def.setting {
+  if (isScala3(scalaVersion.value)) {
+    Seq(
+      "com.github.pureconfig" %% "pureconfig-generic-scala3" % pureconfigVersion
+    )
+  } else
+    Seq(
+      "com.github.pureconfig" %% "pureconfig-generic" % pureconfigVersion
+    )
+}
 
 inThisBuild(
   List(
@@ -52,10 +72,33 @@ lazy val `core` = project
     name               := "nebula4scala-core",
     crossScalaVersions := supportCrossVersionList,
     libraryDependencies ++= Seq(
-      "com.vesoft"             % "client"                    % nebulaClientVersion,
-      "com.github.pureconfig" %% "pureconfig-core"           % pureconfigVersion,
-      "com.github.pureconfig" %% "pureconfig-generic-scala3" % pureconfigVersion
-    )
+      "com.vesoft"              % "client"                  % nebulaClientVersion,
+      "org.scala-lang.modules" %% "scala-collection-compat" % scalaCollectionVersion
+    ) ++ conditionalDependencies.value
+  )
+  .settings(
+    Compile / sourceDirectories := {
+      val baseDir   = (Compile / sourceDirectory).value
+      val sharedDir = baseDir / "scala"
+      val scala2Dir = baseDir / "scala-2"
+      val scala3Dir = baseDir / "scala-3"
+      if (isScala3(scalaVersion.value)) {
+        Seq(sharedDir, scala3Dir)
+      } else {
+        Seq(sharedDir, scala2Dir)
+      }
+    },
+    Test / sourceDirectories := {
+      val baseDir   = (Test / sourceDirectory).value
+      val sharedDir = baseDir / "scala"
+      val scala2Dir = baseDir / "scala-2"
+      val scala3Dir = baseDir / "scala-3"
+      if (isScala3(scalaVersion.value)) {
+        Seq(sharedDir, scala3Dir)
+      } else {
+        Seq(sharedDir, scala2Dir)
+      }
+    }
   )
 
 lazy val `cats` = project

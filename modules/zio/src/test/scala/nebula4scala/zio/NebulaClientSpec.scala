@@ -1,13 +1,12 @@
 package nebula4scala.zio
 
 import zio.{ Scope, Task, ZIO }
-import zio.test.*
+import zio.test._
 
-import nebula4scala.api.*
-import nebula4scala.data.*
-import nebula4scala.data.input.*
-import nebula4scala.zio.meta.NebulaMetaClient
-import nebula4scala.zio.storage.*
+import nebula4scala.api._
+import nebula4scala.data._
+import nebula4scala.data.input._
+import nebula4scala.zio._
 
 object NebulaClientSpec extends NebulaSpec {
 

@@ -1,20 +1,19 @@
 package nebula4scala.impl
 
+import scala.collection.JavaConverters._
 import scala.concurrent.Future
-import scala.jdk.CollectionConverters.*
 
-import com.vesoft.nebula.client.graph.NebulaPoolConfig as _
+import com.vesoft.nebula.client.graph.{ NebulaPoolConfig => _ }
 import com.vesoft.nebula.client.graph.data.HostAddress
-import com.vesoft.nebula.client.graph.net.NebulaPool as NebulaPl
-import com.vesoft.nebula.client.graph.net.NebulaPool as Pool
+import com.vesoft.nebula.client.graph.net.{ NebulaPool => Pool }
 
 import nebula4scala.SyncFuture
 import nebula4scala.api.{ NebulaClient, NebulaSession }
-import nebula4scala.data.*
+import nebula4scala.data._
 import nebula4scala.data.input.Stmt
 
 object NebulaClientDefault {
-  def make: NebulaClient[SyncFuture] = new NebulaClientDefault(new NebulaPl)
+  def make: NebulaClient[SyncFuture] = new NebulaClientDefault(new Pool)
 
 }
 

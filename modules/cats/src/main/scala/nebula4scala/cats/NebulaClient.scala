@@ -1,14 +1,14 @@
 package nebula4scala.cats
 
-import cats.syntax.all.*
+import cats.syntax.all._
 
 import com.vesoft.nebula.client.graph.NebulaPoolConfig as _
 
-import _root_.cats.effect.*
+import _root_.cats.effect._
 import nebula4scala.SyncFuture
-import nebula4scala.api.*
-import nebula4scala.data.*
-import nebula4scala.impl.*
+import nebula4scala.api._
+import nebula4scala.data._
+import nebula4scala.impl._
 
 object NebulaClient {
 

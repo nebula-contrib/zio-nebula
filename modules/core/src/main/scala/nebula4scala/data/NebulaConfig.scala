@@ -1,6 +1,6 @@
 package nebula4scala.data
 
-import com.vesoft.nebula.client.graph.NebulaPoolConfig as PoolConfig
+import com.vesoft.nebula.client.graph.{ NebulaPoolConfig => PoolConfig }
 
 import nebula4scala.data.meta.SSLParam
 

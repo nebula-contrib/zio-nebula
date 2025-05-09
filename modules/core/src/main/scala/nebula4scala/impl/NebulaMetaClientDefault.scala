@@ -1,15 +1,15 @@
 package nebula4scala.impl
 
 import scala.concurrent.Future
-import scala.jdk.CollectionConverters.*
+import scala.jdk.CollectionConverters._
 
 import com.vesoft.nebula.client.graph.data.HostAddress
 import com.vesoft.nebula.client.meta.MetaManager
-import com.vesoft.nebula.meta.*
+import com.vesoft.nebula.meta._
 
 import nebula4scala.SyncFuture
 import nebula4scala.api.NebulaMetaClient
-import nebula4scala.data.*
+import nebula4scala.data._
 
 object NebulaMetaClientDefault {
 

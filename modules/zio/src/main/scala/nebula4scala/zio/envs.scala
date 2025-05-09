@@ -1,8 +1,8 @@
 package nebula4scala.zio
 
-import _root_.zio.*
-import nebula4scala.api.*
-import nebula4scala.data.*
+import _root_.zio._
+import nebula4scala.api._
+import nebula4scala.data._
 
 object envs {
 

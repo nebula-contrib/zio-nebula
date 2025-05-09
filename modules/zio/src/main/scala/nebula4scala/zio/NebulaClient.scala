@@ -3,10 +3,10 @@ package nebula4scala.zio
 import com.vesoft.nebula.client.graph.NebulaPoolConfig as _
 import com.vesoft.nebula.client.graph.net.NebulaPool as Pool
 
-import _root_.zio.*
+import _root_.zio._
 import nebula4scala.SyncFuture
 import nebula4scala.api.{ NebulaClient, NebulaSession }
-import nebula4scala.data.*
+import nebula4scala.data._
 import nebula4scala.impl.NebulaClientDefault
 
 object NebulaClient {

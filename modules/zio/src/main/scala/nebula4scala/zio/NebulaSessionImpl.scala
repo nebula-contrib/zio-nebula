@@ -1,13 +1,13 @@
 package nebula4scala.zio
 
-import zio.*
+import zio._
 
 import com.vesoft.nebula.client.graph.data.HostAddress
 
 import nebula4scala.SyncFuture
 import nebula4scala.api.NebulaSession
-import nebula4scala.data.*
-import nebula4scala.data.input.*
+import nebula4scala.data._
+import nebula4scala.data.input._
 
 final class NebulaSessionImpl(private val underlying: NebulaSession[SyncFuture]) extends NebulaSession[Task] {
 
