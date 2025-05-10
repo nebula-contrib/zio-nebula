@@ -1,7 +1,5 @@
 package nebula4scala.zio
 
-import scala.util._
-
 import zio._
 import zio.test._
 import zio.test.TestAspect._
@@ -21,7 +19,7 @@ trait NebulaSpec extends ZIOSpecDefault {
   container.start()
 
   override def aspects: Chunk[TestAspectAtLeastR[TestEnvironment]] =
-    Chunk(TestAspect.fibers, TestAspect.timeout(300.seconds))
+    Chunk(TestAspect.fibers, TestAspect.timeout(180.seconds))
 
   override def spec =
     (specLayered @@ beforeAll(

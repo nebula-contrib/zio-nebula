@@ -22,7 +22,7 @@ object NebulaClient {
       ZIO.fromFuture(_ => underlying.getSession(poolConfig).map(s => new NebulaSessionImpl(s)))
 
     def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean): Task[NebulaSession[Task]] =
-      ZIO.fromFuture(_=> underlying.getSession(poolConfig, useSpace).map(s => new NebulaSessionImpl(s)))
+      ZIO.fromFuture(_ => underlying.getSession(poolConfig, useSpace).map(s => new NebulaSessionImpl(s)))
 
     def activeConnNum: Task[Int] = ZIO.fromFuture(ec => underlying.activeConnNum)
 
