@@ -66,8 +66,8 @@ lazy val _zioTests = Seq(
   "dev.zio" %% "zio-test-sbt"      % zioVersion
 )
 
-lazy val `core` = project
-  .in(file("modules/core"))
+lazy val `nebula4scala-core` = project
+  .in(file("modules/nebula4scala-core"))
   .settings(
     name               := "nebula4scala-core",
     crossScalaVersions := supportCrossVersionList,
@@ -77,8 +77,8 @@ lazy val `core` = project
     ) ++ conditionalDependencies.value
   )
 
-lazy val `cats` = project
-  .in(file("modules/cats"))
+lazy val `nebula4scala-cats` = project
+  .in(file("modules/nebula4scala-cats"))
   .settings(
     name               := "nebula4scala-cats",
     crossScalaVersions := supportCrossVersionList,
@@ -87,10 +87,10 @@ lazy val `cats` = project
     )
   )
   .settings(ProjectSetting.value)
-  .dependsOn(`core`)
+  .dependsOn(`nebula4scala-core`)
 
-lazy val `zio` = project
-  .in(file("modules/zio"))
+lazy val `nebula4scala-zio` = project
+  .in(file("modules/nebula4scala-zio"))
   .settings(
     name               := "nebula4scala-zio",
     crossScalaVersions := supportCrossVersionList,
@@ -106,7 +106,7 @@ lazy val `zio` = project
     testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
   )
   .settings(ProjectSetting.value)
-  .dependsOn(`core`)
+  .dependsOn(`nebula4scala-core`)
 
 lazy val examples = project
   .in(file("examples"))
@@ -117,8 +117,8 @@ lazy val examples = project
     )
   )
   .settings(ProjectSetting.noPublish)
-  .dependsOn(`zio` % "compile->compile;test->test")
-  .dependsOn(`cats` % "compile->compile;test->test")
+  .dependsOn(`nebula4scala-zio` % "compile->compile;test->test")
+  .dependsOn(`nebula4scala-cats` % "compile->compile;test->test")
 
 lazy val `root` = project
   .in(file("."))
@@ -129,8 +129,8 @@ lazy val `root` = project
   )
   .settings(ProjectSetting.noPublish)
   .aggregate(
-    `zio`,
-    `core`,
-    `cats`,
+    `nebula4scala-zio`,
+    `nebula4scala-core`,
+    `nebula4scala-cats`,
     examples
   )
