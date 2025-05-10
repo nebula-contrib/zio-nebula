@@ -81,9 +81,9 @@ object NebulaClientSpec extends NebulaSpec {
             _             <- ZIO.logInfo(s"execute insert vertex: $res1")
             res2          <- client.execute(Stmt.str[Task](insertEdges)).flatMap(_.errorMessageM)
             _             <- ZIO.logInfo(s"execute insert edge: $res2")
-            res3          <- client.execute(Stmt.str[Task](query)).flatMap(_.errorMessageM)
+            res3          <- client.execute(Stmt.str[Task](query)).flatMap(_.rowsM)
             _             <- ZIO.logInfo(s"execute query $res3")
-          } yield assertTrue(res3.length == 4)).provideSome[NebulaClient[Task]](session, Scope.default)
+          } yield assertTrue(res3.size == 4)).provideSome[NebulaClient[Task]](session, Scope.default)
 
         }
       )

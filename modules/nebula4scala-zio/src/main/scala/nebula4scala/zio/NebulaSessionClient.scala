@@ -13,10 +13,9 @@ object NebulaSessionClient {
 
     override def execute(stmt: Stmt): Task[stmt.T] =
       ZIO
-        .fromFuture(implicit ec => underlying.execute(stmt))
+        .fromFuture(_ => underlying.execute(stmt))
         .map {
           case set: NebulaResultSet[_] =>
-            println(s"get default resultset:${set}:${set.asInstanceOf[NebulaResultSet[SyncFuture]]}")
             new NebulaResultSetImpl(set.asInstanceOf[NebulaResultSet[SyncFuture]])
           case str: String => str
         }
