@@ -1,16 +1,18 @@
 package nebula4scala.example.zio
 
+import zio._
+
 import _root_.zio._
+import nebula4scala._
 import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.data.input._
-import nebula4scala.zio._
-import nebula4scala.zio.envs._
+import nebula4scala.zio.syntax._
 
 final class NebulaClientExample(poolConfig: NebulaPoolConfig, nebulaClient: NebulaClient[Task]) {
 
-  def execute(stmt: String): ZIO[Scope & NebulaPoolConfig, Throwable, NebulaResultSet] =
-    nebulaClient.openSession(poolConfig, false).flatMap(_.execute(Stmt.str(stmt)))
+  def execute(stmt: String): ZIO[Scope & NebulaPoolConfig, Throwable, NebulaResultSet[Task]] =
+    nebulaClient.getSession(poolConfig, false).flatMap(_.execute(Stmt.str[Task](stmt)))
 }
 
 object NebulaClientExample {
@@ -31,8 +33,9 @@ object NebulaClientMain extends ZIOAppDefault {
               |USE test;
               |CREATE TAG IF NOT EXISTS person(name string, age int);
               |CREATE EDGE IF NOT EXISTS like(likeness double)
-              |""".stripMargin).flatMap(r => ZIO.logInfo(r.toString))
+              |""".stripMargin)
         )
+      _ <- ZIO.logInfo(res.toString)
     } yield res)
       .provide(
         Scope.default,

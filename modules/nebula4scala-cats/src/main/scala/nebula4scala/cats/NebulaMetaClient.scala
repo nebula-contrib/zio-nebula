@@ -4,10 +4,10 @@ import cats.effect._
 
 import com.vesoft.nebula.meta.{ SpaceItem, TagItem }
 
-import nebula4scala.SyncFuture
 import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.impl.NebulaMetaClientDefault
+import nebula4scala.syntax._
 
 object NebulaMetaClient {
 
@@ -56,6 +56,6 @@ object NebulaMetaClient {
 
   def resource[F[_]: Async](config: NebulaMetaConfig): Resource[F, NebulaMetaClient[F]] =
     Resource.make(
-      Async[F].delay(new Impl(NebulaMetaClientDefault.make(config)))
+      Async[F].blocking(new Impl(NebulaMetaClientDefault.make(config)))
     )(client => client.close())
 }

@@ -12,11 +12,11 @@ trait NebulaClient[F[_]] {
 
   /** init the client and execute `USE spaceName` if exists
    */
-  def openSession(poolConfig: NebulaPoolConfig, useSpace: Boolean): F[NebulaSession[F]]
+  def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean): F[NebulaSession[F]]
 
   /** init the client by using poolConfig
    */
-  def openSession(poolConfig: NebulaPoolConfig): F[NebulaSession[F]]
+  def getSession(poolConfig: NebulaPoolConfig): F[NebulaSession[F]]
 
   def activeConnNum: F[Int]
 

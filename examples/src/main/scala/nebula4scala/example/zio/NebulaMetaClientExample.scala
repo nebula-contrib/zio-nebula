@@ -6,7 +6,7 @@ import com.vesoft.nebula.meta.SpaceItem
 
 import nebula4scala.api._
 import nebula4scala.zio._
-import nebula4scala.zio.envs._
+import nebula4scala.zio.syntax._
 
 final class NebulaMetaClientExample(metaClient: NebulaMetaClient[Task]) {
 

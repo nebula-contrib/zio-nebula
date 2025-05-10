@@ -6,9 +6,10 @@ import scala.jdk.CollectionConverters._
 import com.vesoft.nebula.client.graph._
 import com.vesoft.nebula.client.graph.data.HostAddress
 
-import nebula4scala.SyncFuture
-import nebula4scala.api.NebulaSessionClient
+import nebula4scala.api._
 import nebula4scala.data._
+import nebula4scala.data.input._
+import nebula4scala.syntax._
 
 object NebulaSessionClientDefault {
 
@@ -31,14 +32,29 @@ object NebulaSessionClientDefault {
         .setUseHttp2(sessionPoolConfig.useHttp2)
     )
 
-    new NebulaSessionClientDefault((sessionPool))
+    new NebulaSessionClientDefault(sessionPool)
   }
 }
 
 final class NebulaSessionClientDefault(underlying: SessionPool) extends NebulaSessionClient[SyncFuture] {
 
-  override def execute(stmt: String): SyncFuture[NebulaResultSet] =
-    Future.successful(new NebulaResultSet(underlying.execute(stmt)))
+  override def execute(stmt: Stmt): SyncFuture[stmt.T] =
+    Future.successful {
+      stmt match {
+        case StringStmt(_stmt) =>
+          new NebulaResultSetDefault(underlying.execute(_stmt)).asInstanceOf[stmt.T]
+        case StringStmtWithMap(_stmt, parameterMap) =>
+          new NebulaResultSetDefault(underlying.execute(_stmt, parameterMap.asJava)).asInstanceOf[stmt.T]
+        case JsonStmt(jsonStmt) =>
+          underlying
+            .executeJson(jsonStmt)
+            .asInstanceOf[stmt.T]
+        case JsonStmtWithMap(jsonStmt, parameterMap) =>
+          underlying
+            .executeJsonWithParameter(jsonStmt, parameterMap.asJava)
+            .asInstanceOf[stmt.T]
+      }
+    }
 
   override def idleSessionNum: SyncFuture[Int] = Future.successful(underlying.getIdleSessionNums)
 

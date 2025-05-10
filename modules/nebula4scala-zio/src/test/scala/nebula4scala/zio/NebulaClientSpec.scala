@@ -1,12 +1,17 @@
 package nebula4scala.zio
 
-import zio.{ Scope, Task, ZIO }
+import java.util.concurrent.TimeUnit
+
+import scala.util._
+
+import zio._
 import zio.test._
 
 import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.data.input._
 import nebula4scala.zio._
+import nebula4scala.zio.syntax._
 
 object NebulaClientSpec extends NebulaSpec {
 
@@ -32,7 +37,32 @@ object NebulaClientSpec extends NebulaSpec {
       |MATCH (p:person) RETURN p LIMIT 4;
       |""".stripMargin
 
-  lazy val session = ZioNebulaEnvironment.defaultSession(container.graphdHostList.head, container.graphdPortList.head)
+  lazy val session = {
+    // Java initializes the session in the constructor.
+    def layer() = Try(Unsafe.unsafe {
+      runtime ?=>
+      val layer = Runtime.default.unsafe
+        .run(
+          ZioNebulaEnvironment
+            .defaultSession(container.graphdHostList.head, container.graphdPortList.head)
+            .build
+            .provide(Scope.default)
+            .map(_.get)
+        )
+        .getOrThrowFiberFailure()
+      ZLayer.succeed(layer)
+    })
+
+    var ls = layer() match {
+      case Failure(exception) => layer()
+      case Success(value)     => Try(value)
+    }
+    while (ls.isFailure) {
+      ls = layer()
+    }
+    ls.get
+
+  }
 
   def specLayered: Spec[Nebula, Throwable] =
     suite("nebula suite")(
@@ -60,32 +90,28 @@ object NebulaClientSpec extends NebulaSpec {
       ),
       suite("nebula session pool")(
         test("create and query") {
-          for {
-            res1 <-
-              ZIO
-                .serviceWithZIO[NebulaSessionClient[Task]](_.execute(insertVertexes))
-                .provide(
-                  Scope.default,
-                  session
-                )
-            _ <- ZIO.logInfo(s"exec insert vertex: ${res1.errorMessage}")
-            res2 <-
-              ZIO
-                .serviceWithZIO[NebulaSessionClient[Task]](_.execute(insertEdges))
-                .provide(
-                  Scope.default,
-                  session
-                )
-            _ <- ZIO.logInfo(s"exec insert edge: ${res2.errorMessage}")
-            res3 <-
-              ZIO
-                .serviceWithZIO[NebulaSessionClient[Task]](_.execute(query))
-                .provide(
-                  Scope.default,
-                  session
-                )
-            _ <- ZIO.logInfo(s"exec query ${res3.errorMessage}")
-          } yield assertTrue(res3.rows.size == 4)
+          (for {
+            // Java initializes the session in the constructor.
+            activeConnNum <- ZIO.serviceWithZIO[NebulaClient[Task]](_.activeConnNum)
+            _             <- ZIO.logInfo(s"activeConnNum: $activeConnNum")
+            sessionNum <- ZIO
+              .serviceWithZIO[NebulaSessionClient[Task]](_.sessionNum)
+            _ <- ZIO.logInfo(s"sessionNum: $sessionNum")
+            res1 <- ZIO
+              .serviceWithZIO[NebulaSessionClient[Task]](
+                _.execute(Stmt.str[Task](insertVertexes)).flatMap(_.errorMessageM)
+              )
+            _ <- ZIO.logInfo(s"execute insert vertex: $res1")
+            res2 <- ZIO
+              .serviceWithZIO[NebulaSessionClient[Task]](
+                _.execute(Stmt.str[Task](insertEdges)).flatMap(_.errorMessageM)
+              )
+            _ <- ZIO.logInfo(s"execute insert edge: $res2")
+            res3 <- ZIO
+              .serviceWithZIO[NebulaSessionClient[Task]](_.execute(Stmt.str[Task](query)).flatMap(_.errorMessageM))
+            _ <- ZIO.logInfo(s"execute query $res3")
+          } yield assertTrue(res3.length == 4)).provideSome[NebulaClient[Task]](session)
+
         }
       )
     )

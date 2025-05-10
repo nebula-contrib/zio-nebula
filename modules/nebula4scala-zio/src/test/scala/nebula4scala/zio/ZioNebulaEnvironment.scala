@@ -1,10 +1,8 @@
 package nebula4scala.zio
 
-import zio._
-
+import _root_.zio._
 import nebula4scala.data._
-import nebula4scala.zio.*
-import nebula4scala.zio.envs._
+import nebula4scala.zio.syntax._
 
 object ZioNebulaEnvironment {
 
@@ -36,7 +34,8 @@ object ZioNebulaEnvironment {
         sslParam = None,
         address = List(NebulaHostAddress(host, port)),
         auth = NebulaAuth(defaultUser, defaultPwd),
-        spaceName = Some(defaultSpace)
+        spaceName = Some(defaultSpace),
+        reconnect = true
       )
     )
 

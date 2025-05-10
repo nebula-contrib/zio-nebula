@@ -1,6 +1,6 @@
 package nebula4scala.api
 
-import nebula4scala.data.NebulaResultSet
+import nebula4scala.data.input.Stmt
 
 trait NebulaSessionClient[F[_]] {
 
@@ -10,7 +10,7 @@ trait NebulaSessionClient[F[_]] {
    *    The nGql sentence. such as insert ngql `INSERT VERTEX person(name) VALUES "Tom":("Tom");`
    *  @return
    */
-  def execute(stmt: String): F[NebulaResultSet]
+  def execute(stmt: Stmt): F[stmt.T]
 
   /** close the session pool
    */

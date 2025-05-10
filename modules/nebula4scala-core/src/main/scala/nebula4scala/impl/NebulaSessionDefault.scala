@@ -6,10 +6,10 @@ import scala.jdk.CollectionConverters._
 import com.vesoft.nebula.client.graph.data.HostAddress
 import com.vesoft.nebula.client.graph.net.Session
 
-import nebula4scala.SyncFuture
 import nebula4scala.api.NebulaSession
 import nebula4scala.data._
 import nebula4scala.data.input._
+import nebula4scala.syntax._
 
 final class NebulaSessionDefault(private val underlying: Session) extends NebulaSession[SyncFuture] {
 
@@ -17,9 +17,9 @@ final class NebulaSessionDefault(private val underlying: Session) extends Nebula
     Future.successful {
       stmt match {
         case StringStmt(_stmt) =>
-          new NebulaResultSet(underlying.execute(_stmt)).asInstanceOf[stmt.T]
+          new NebulaResultSetDefault(underlying.execute(_stmt)).asInstanceOf[stmt.T]
         case StringStmtWithMap(_stmt, parameterMap) =>
-          new NebulaResultSet(underlying.executeWithParameter(_stmt, parameterMap.asJava)).asInstanceOf[stmt.T]
+          new NebulaResultSetDefault(underlying.executeWithParameter(_stmt, parameterMap.asJava)).asInstanceOf[stmt.T]
         case JsonStmt(jsonStmt) =>
           underlying
             .executeJson(jsonStmt)

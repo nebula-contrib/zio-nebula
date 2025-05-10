@@ -7,10 +7,10 @@ import com.vesoft.nebula.client.graph.{ NebulaPoolConfig => _ }
 import com.vesoft.nebula.client.graph.data.HostAddress
 import com.vesoft.nebula.client.graph.net.{ NebulaPool => Pool }
 
-import nebula4scala.SyncFuture
 import nebula4scala.api.{ NebulaClient, NebulaSession }
 import nebula4scala.data._
 import nebula4scala.data.input.Stmt
+import nebula4scala.syntax._
 
 object NebulaClientDefault {
   def make: NebulaClient[SyncFuture] = new NebulaClientDefault(new Pool)
@@ -26,7 +26,7 @@ final class NebulaClientDefault(underlying: Pool) extends NebulaClient[SyncFutur
 
   def close(): SyncFuture[Unit] = Future.successful(underlying.close())
 
-  def openSession(poolConfig: NebulaPoolConfig): SyncFuture[NebulaSession[SyncFuture]] =
+  def getSession(poolConfig: NebulaPoolConfig): SyncFuture[NebulaSession[SyncFuture]] =
     Future.successful(
       new NebulaSessionDefault(
         underlying.getSession(
@@ -37,7 +37,7 @@ final class NebulaClientDefault(underlying: Pool) extends NebulaClient[SyncFutur
       )
     )
 
-  def openSession(poolConfig: NebulaPoolConfig, useSpace: Boolean): SyncFuture[NebulaSession[SyncFuture]] =
+  def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean): SyncFuture[NebulaSession[SyncFuture]] =
     Future.successful {
       val session = new NebulaSessionDefault(
         underlying.getSession(
@@ -47,7 +47,7 @@ final class NebulaClientDefault(underlying: Pool) extends NebulaClient[SyncFutur
         )
       )
       if (useSpace && poolConfig.spaceName.nonEmpty) {
-        session.execute(Stmt.str(s"USE `${poolConfig.spaceName.orNull}`"))
+        session.execute(Stmt.str[SyncFuture](s"USE `${poolConfig.spaceName.orNull}`"))
       }
       session
     }

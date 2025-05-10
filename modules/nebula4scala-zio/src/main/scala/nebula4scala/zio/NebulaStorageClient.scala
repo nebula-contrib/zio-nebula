@@ -7,6 +7,7 @@ import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.data.input._
 import nebula4scala.impl.NebulaStorageClientDefault
+import nebula4scala.syntax._
 
 object NebulaStorageClient {
 
@@ -22,12 +23,12 @@ object NebulaStorageClient {
 
   }
 
-  lazy val layer: ZLayer[NebulaStorageConfig & Scope, Throwable, NebulaStorageClient[Task]] =
+  val layer: ZLayer[NebulaStorageConfig & Scope, Throwable, NebulaStorageClient[Task]] =
     ZLayer.fromZIO {
       for {
         config <- ZIO.service[NebulaStorageConfig]
         manger <- ZIO.acquireRelease(
-          ZIO.attempt(
+          ZIO.attemptBlocking(
             new Impl(NebulaStorageClientDefault.make(config))
           )
         )(release => release.close().onError(e => ZIO.logErrorCause(e)).ignoreLogged)

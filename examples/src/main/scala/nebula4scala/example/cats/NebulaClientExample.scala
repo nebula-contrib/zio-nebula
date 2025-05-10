@@ -5,6 +5,7 @@ import cats.effect._
 
 import nebula4scala.Configs
 import nebula4scala.cats._
+import nebula4scala.cats.syntax._
 import nebula4scala.data._
 import nebula4scala.data.input._
 
@@ -15,10 +16,10 @@ object NebulaClientExample extends IOApp {
       .resource[IO]
       .use { client =>
         client
-          .openSession(Configs.poolConfig(), false)
+          .getSession(Configs.poolConfig(), false)
           .flatMap(
             _.execute(
-              Stmt.str(
+              Stmt.str[IO](
                 """
             |CREATE SPACE IF NOT EXISTS test(vid_type=fixed_string(20));
             |USE test;

@@ -5,10 +5,10 @@ import cats.syntax.all._
 import com.vesoft.nebula.client.graph.{ NebulaPoolConfig => _ }
 
 import _root_.cats.effect._
-import nebula4scala.SyncFuture
 import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.impl._
+import nebula4scala.syntax._
 
 object NebulaClient {
 
@@ -21,12 +21,12 @@ object NebulaClient {
 
     override def close(): F[Unit] = Async[F].fromFuture(Async[F].delay(underlying.close()))
 
-    override def openSession(poolConfig: NebulaPoolConfig, useSpace: Boolean): F[NebulaSession[F]] =
+    override def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean): F[NebulaSession[F]] =
       Async[F]
         .fromFuture(
           Async[F].delay(
             underlying
-              .openSession(
+              .getSession(
                 poolConfig,
                 useSpace
               )
@@ -34,12 +34,12 @@ object NebulaClient {
         )
         .map(s => new NebulaSessionImpl(s))
 
-    override def openSession(poolConfig: NebulaPoolConfig): F[NebulaSession[F]] =
+    override def getSession(poolConfig: NebulaPoolConfig): F[NebulaSession[F]] =
       Async[F]
         .fromFuture(
           Async[F].delay(
             underlying
-              .openSession(
+              .getSession(
                 poolConfig
               )
           )
@@ -55,6 +55,6 @@ object NebulaClient {
 
   def resource[F[_]: Async]: Resource[F, NebulaClient[F]] =
     Resource.make(
-      Async[F].delay(new Impl(NebulaClientDefault.make))
+      Async[F].blocking(new Impl(NebulaClientDefault.make))
     )(client => client.close())
 }

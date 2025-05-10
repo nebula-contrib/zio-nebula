@@ -2,11 +2,11 @@ package nebula4scala.cats
 
 import cats.effect.{ Async, Resource }
 
-import nebula4scala.SyncFuture
 import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.data.input._
 import nebula4scala.impl.NebulaStorageClientDefault
+import nebula4scala.syntax._
 
 object NebulaStorageClient {
 
@@ -26,7 +26,7 @@ object NebulaStorageClient {
 
   def resource[F[_]: Async](config: NebulaStorageConfig): Resource[F, NebulaStorageClient[F]] = {
     Resource.make(
-      Async[F].delay(
+      Async[F].blocking(
         new Impl(NebulaStorageClientDefault.make(config))
       )
     )(client => client.close())

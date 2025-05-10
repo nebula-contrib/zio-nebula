@@ -1,5 +1,5 @@
-import sbt.{ Test, ThisBuild, * }
-import sbt.Keys.*
+import sbt._
+import sbt.Keys._
 import xerial.sbt.Sonatype.sonatypeCentralHost
 
 val zioVersion             = "2.1.14"
@@ -10,6 +10,7 @@ val zioConfigVersion       = "4.0.4"
 val nebulaClientVersion    = "3.8.4"
 val catsVersion            = "2.9.0"
 val catsEffectVersion      = "3.5.7"
+val fs2Version             = "3.11.0"
 val pureconfigVersion      = "0.17.8"
 val scalaCollectionVersion = "2.9.0"
 
@@ -76,6 +77,8 @@ lazy val `nebula4scala-core` = project
       "org.scala-lang.modules" %% "scala-collection-compat" % scalaCollectionVersion
     ) ++ conditionalDependencies.value
   )
+  .settings(ProjectSetting.value)
+  .enablePlugins(ScalafmtPlugin)
 
 lazy val `nebula4scala-cats` = project
   .in(file("modules/nebula4scala-cats"))
@@ -83,11 +86,13 @@ lazy val `nebula4scala-cats` = project
     name               := "nebula4scala-cats",
     crossScalaVersions := supportCrossVersionList,
     libraryDependencies ++= Seq(
-      "org.typelevel" %% "cats-effect" % catsEffectVersion
+      "org.typelevel" %% "cats-effect" % catsEffectVersion,
+      "co.fs2"        %% "fs2-io"      % fs2Version
     )
   )
   .settings(ProjectSetting.value)
   .dependsOn(`nebula4scala-core`)
+  .enablePlugins(ScalafmtPlugin)
 
 lazy val `nebula4scala-zio` = project
   .in(file("modules/nebula4scala-zio"))
@@ -107,6 +112,7 @@ lazy val `nebula4scala-zio` = project
   )
   .settings(ProjectSetting.value)
   .dependsOn(`nebula4scala-core`)
+  .enablePlugins(ScalafmtPlugin)
 
 lazy val examples = project
   .in(file("examples"))
@@ -116,9 +122,11 @@ lazy val examples = project
       "ch.qos.logback" % "logback-classic" % logbackVersion
     )
   )
+  .settings(ProjectSetting.value)
   .settings(ProjectSetting.noPublish)
   .dependsOn(`nebula4scala-zio` % "compile->compile;test->test")
   .dependsOn(`nebula4scala-cats` % "compile->compile;test->test")
+  .enablePlugins(ScalafmtPlugin)
 
 lazy val `root` = project
   .in(file("."))
@@ -127,6 +135,7 @@ lazy val `root` = project
     testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"),
     libraryDependencies ++= _zioTests.map(_ % Test)
   )
+  .settings(ProjectSetting.value)
   .settings(ProjectSetting.noPublish)
   .aggregate(
     `nebula4scala-zio`,
@@ -134,3 +143,4 @@ lazy val `root` = project
     `nebula4scala-cats`,
     examples
   )
+  .enablePlugins(ScalafmtPlugin)
