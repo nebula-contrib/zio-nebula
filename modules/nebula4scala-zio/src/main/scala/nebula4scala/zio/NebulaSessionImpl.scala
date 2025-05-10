@@ -7,17 +7,16 @@ import com.vesoft.nebula.client.graph.data.HostAddress
 import nebula4scala.api._
 import nebula4scala.data.input._
 import nebula4scala.syntax._
+import nebula4scala.zio.syntax._
 
 final class NebulaSessionImpl(private val underlying: NebulaSession[ScalaFuture]) extends NebulaSession[Task] {
 
   def execute(stmt: Stmt): Task[stmt.T] = {
     ZIO
       .blocking(ZIO.fromFuture(_ => underlying.execute(stmt)))
-      .map {
-        case set: NebulaResultSet[_] => new NebulaResultSetImpl(set.asInstanceOf[underlying.Resultset])
-        case str: String             => str
+      .flatMap { result =>
+        implicitly[ResultSetHandler[Task]].handle(result).asInstanceOf[Task[stmt.T]]
       }
-      .map(_.asInstanceOf[stmt.T])
   }
 
   def ping(): Task[Boolean] = ZIO.blocking(ZIO.fromFuture(_ => underlying.ping()))

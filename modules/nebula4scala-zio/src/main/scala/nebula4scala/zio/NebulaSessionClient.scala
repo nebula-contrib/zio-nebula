@@ -6,6 +6,7 @@ import nebula4scala.data._
 import nebula4scala.data.input._
 import nebula4scala.impl._
 import nebula4scala.syntax._
+import nebula4scala.zio.syntax._
 
 object NebulaSessionClient {
 
@@ -14,11 +15,9 @@ object NebulaSessionClient {
     override def execute(stmt: Stmt): Task[stmt.T] =
       ZIO
         .fromFuture(_ => underlying.execute(stmt))
-        .map {
-          case set: NebulaResultSet[_] => new NebulaResultSetImpl(set.asInstanceOf[underlying.Resultset])
-          case str: String             => str
+        .flatMap { result =>
+          implicitly[ResultSetHandler[Task]].handle(result).asInstanceOf[Task[stmt.T]]
         }
-        .map(_.asInstanceOf[stmt.T])
 
     override def idleSessionNum: Task[Int] = ZIO.fromFuture(_ => underlying.idleSessionNum)
 

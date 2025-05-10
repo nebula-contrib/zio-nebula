@@ -1,15 +1,24 @@
 package nebula4scala
 
-package zio {
+import _root_.zio._
+import _root_.zio.Task
+import nebula4scala.api._
+import nebula4scala.data._
+import nebula4scala.data.input.Context
+import nebula4scala.syntax.{ ResultSetHandler, ScalaFuture }
 
-  import _root_.zio._
-  import nebula4scala.api._
-  import nebula4scala.data._
+package zio {
 
   object syntax {
 
-    import _root_.zio.Task
-    import nebula4scala.data.input.Context
+    implicit val taskHandler: ResultSetHandler[Task] = new ResultSetHandler[Task] {
+
+      def handle(result: Any): Task[Any] = result match {
+        case set: NebulaResultSet[ScalaFuture] @unchecked => ZIO.succeed(new NebulaResultSetImpl(set))
+        case str: String                                  => ZIO.succeed(str)
+        case other => ZIO.fail(new IllegalArgumentException(s"Unexpected result type: ${other.getClass}"))
+      }
+    }
 
     implicit val context: Context[Task] = new Context[Task] {}
 

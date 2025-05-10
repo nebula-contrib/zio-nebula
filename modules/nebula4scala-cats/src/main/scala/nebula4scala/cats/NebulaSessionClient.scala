@@ -4,6 +4,7 @@ import cats.effect._
 import cats.syntax.all._
 
 import nebula4scala.api._
+import nebula4scala.cats.syntax._
 import nebula4scala.data._
 import nebula4scala.data.input._
 import nebula4scala.impl.NebulaSessionClientDefault
@@ -22,11 +23,7 @@ object NebulaSessionClient {
             underlying.execute(stmt)
           )
         )
-        .map {
-          case set: NebulaResultSet[_] => new NebulaResultSetImpl(set.asInstanceOf[underlying.Resultset])
-          case str: String             => str
-        }
-        .map(_.asInstanceOf[stmt.T])
+        .flatMap(result => implicitly[ResultSetHandler[F]].handle(result).asInstanceOf[F[stmt.T]])
 
     override def idleSessionNum: F[Int] = Async[F].fromFuture(Async[F].delay(underlying.idleSessionNum))
 
