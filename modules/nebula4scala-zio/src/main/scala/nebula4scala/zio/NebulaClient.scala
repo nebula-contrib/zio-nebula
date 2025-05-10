@@ -14,7 +14,7 @@ object NebulaClient {
   private final class Impl(underlying: NebulaClient[SyncFuture]) extends NebulaClient[Task] {
 
     def init(poolConfig: NebulaPoolConfig): Task[Boolean] =
-      ZIO.fromFuture(ec => underlying.init(poolConfig))
+      ZIO.fromFuture(_ => underlying.init(poolConfig))
 
     def close(): Task[Unit] = ZIO.attempt(underlying.close())
 
@@ -24,11 +24,11 @@ object NebulaClient {
     def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean): Task[NebulaSession[Task]] =
       ZIO.fromFuture(_ => underlying.getSession(poolConfig, useSpace).map(s => new NebulaSessionImpl(s)))
 
-    def activeConnNum: Task[Int] = ZIO.fromFuture(ec => underlying.activeConnNum)
+    def activeConnNum: Task[Int] = ZIO.fromFuture(_ => underlying.activeConnNum)
 
-    def idleConnNum: Task[Int] = ZIO.fromFuture(ec => underlying.idleConnNum)
+    def idleConnNum: Task[Int] = ZIO.fromFuture(_ => underlying.idleConnNum)
 
-    def waitersNum: Task[Int] = ZIO.fromFuture(ec => underlying.waitersNum)
+    def waitersNum: Task[Int] = ZIO.fromFuture(_ => underlying.waitersNum)
 
   }
 

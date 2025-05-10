@@ -12,38 +12,38 @@ object NebulaMetaClient {
 
   private final class Impl(underlying: NebulaMetaClient[SyncFuture]) extends NebulaMetaClient[Task] {
 
-    override def close(): Task[Unit] = ZIO.fromFuture(ec => underlying.close())
+    override def close(): Task[Unit] = ZIO.fromFuture(_ => underlying.close())
 
-    override def spaceId(spaceName: String): Task[Int] = ZIO.fromFuture(ec => underlying.spaceId(spaceName))
+    override def spaceId(spaceName: String): Task[Int] = ZIO.fromFuture(_ => underlying.spaceId(spaceName))
 
-    override def space(spaceName: String): Task[SpaceItem] = ZIO.fromFuture(ec => underlying.space(spaceName))
+    override def space(spaceName: String): Task[SpaceItem] = ZIO.fromFuture(_ => underlying.space(spaceName))
 
     override def tagId(spaceName: String, tagName: String): Task[Int] =
-      ZIO.fromFuture(ec => underlying.tagId(spaceName, tagName))
+      ZIO.fromFuture(_ => underlying.tagId(spaceName, tagName))
 
     override def tag(spaceName: String, tagName: String): Task[TagItem] =
-      ZIO.fromFuture(ec => underlying.tag(spaceName, tagName))
+      ZIO.fromFuture(_ => underlying.tag(spaceName, tagName))
 
     override def edgeType(spaceName: String, edgeName: String): Task[Int] =
-      ZIO.fromFuture(ec => underlying.edgeType(spaceName, edgeName))
+      ZIO.fromFuture(_ => underlying.edgeType(spaceName, edgeName))
 
     override def leader(spaceName: String, part: Int): Task[NebulaHostAddress] =
-      ZIO.fromFuture(ec => underlying.leader(spaceName, part))
+      ZIO.fromFuture(_ => underlying.leader(spaceName, part))
 
     override def spaceParts(spaceName: String): Task[List[Int]] =
-      ZIO.fromFuture(ec =>
+      ZIO.fromFuture(_ =>
         underlying
           .spaceParts(spaceName)
       )
 
     override def partsAlloc(spaceName: String): Task[Map[Int, List[NebulaHostAddress]]] =
-      ZIO.fromFuture(ec =>
+      ZIO.fromFuture(_ =>
         underlying
           .partsAlloc(spaceName)
       )
 
     override def listHosts: Task[Set[NebulaHostAddress]] =
-      ZIO.fromFuture(ec => underlying.listHosts)
+      ZIO.fromFuture(_ => underlying.listHosts)
   }
 
   val layer: ZLayer[NebulaMetaConfig & Scope, Throwable, NebulaMetaClient[Task]] =

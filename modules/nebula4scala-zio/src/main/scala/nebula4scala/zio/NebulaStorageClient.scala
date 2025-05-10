@@ -1,6 +1,7 @@
 package nebula4scala.zio
 
 import zio._
+
 import nebula4scala._
 import nebula4scala.api._
 import nebula4scala.data._
@@ -12,12 +13,12 @@ object NebulaStorageClient {
 
   private final class Impl(underlying: NebulaStorageClient[SyncFuture]) extends NebulaStorageClient[Task] {
 
-    override def connect(): Task[Boolean] = ZIO.fromFuture(ec => underlying.connect())
+    override def connect(): Task[Boolean] = ZIO.fromFuture(_ => underlying.connect())
 
-    override def close(): Task[Unit] = ZIO.fromFuture(ec => underlying.close())
+    override def close(): Task[Unit] = ZIO.fromFuture(_ => underlying.close())
 
     override def scan(scanInput: ScanInput): Task[scanInput.T] = {
-      ZIO.fromFuture(ec => underlying.scan(scanInput))
+      ZIO.fromFuture(_ => underlying.scan(scanInput))
     }
 
   }

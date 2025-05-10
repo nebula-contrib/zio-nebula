@@ -5,7 +5,6 @@ import zio._
 import com.vesoft.nebula.client.graph.data.HostAddress
 
 import nebula4scala.api._
-import nebula4scala.data._
 import nebula4scala.data.input._
 import nebula4scala.syntax._
 
@@ -13,7 +12,7 @@ final class NebulaSessionImpl(private val underlying: NebulaSession[SyncFuture])
 
   def execute(stmt: Stmt): Task[stmt.T] = {
     ZIO
-      .blocking(ZIO.fromFuture(ec => underlying.execute(stmt)))
+      .blocking(ZIO.fromFuture(_ => underlying.execute(stmt)))
       .map {
         case set: NebulaResultSet[_] =>
           new NebulaResultSetImpl(set.asInstanceOf[NebulaResultSet[SyncFuture]])
@@ -22,16 +21,16 @@ final class NebulaSessionImpl(private val underlying: NebulaSession[SyncFuture])
       .map(_.asInstanceOf[stmt.T])
   }
 
-  def ping(): Task[Boolean] = ZIO.blocking(ZIO.fromFuture(ec => underlying.ping()))
+  def ping(): Task[Boolean] = ZIO.blocking(ZIO.fromFuture(_ => underlying.ping()))
 
-  def pingSession(): Task[Boolean] = ZIO.blocking(ZIO.fromFuture(ec => underlying.pingSession()))
+  def pingSession(): Task[Boolean] = ZIO.blocking(ZIO.fromFuture(_ => underlying.pingSession()))
 
-  def release(): Task[Unit] = ZIO.blocking(ZIO.fromFuture(ec => underlying.release()))
+  def release(): Task[Unit] = ZIO.blocking(ZIO.fromFuture(_ => underlying.release()))
 
-  def graphHost: Task[HostAddress] = ZIO.blocking(ZIO.fromFuture(ec => underlying.graphHost))
+  def graphHost: Task[HostAddress] = ZIO.blocking(ZIO.fromFuture(_ => underlying.graphHost))
 
-  def sessionID: Task[Long] = ZIO.blocking(ZIO.fromFuture(ec => underlying.sessionID))
+  def sessionID: Task[Long] = ZIO.blocking(ZIO.fromFuture(_ => underlying.sessionID))
 
-  def close(): Task[Unit] = ZIO.blocking(ZIO.fromFuture(ec => underlying.close()))
+  def close(): Task[Unit] = ZIO.blocking(ZIO.fromFuture(_ => underlying.close()))
 
 }

@@ -21,15 +21,15 @@ object NebulaSessionClient {
         }
         .map(_.asInstanceOf[stmt.T])
 
-    override def idleSessionNum: Task[Int] = ZIO.fromFuture(ec => underlying.idleSessionNum)
+    override def idleSessionNum: Task[Int] = ZIO.fromFuture(_ => underlying.idleSessionNum)
 
-    override def sessionNum: Task[Int] = ZIO.fromFuture(ec => underlying.sessionNum)
+    override def sessionNum: Task[Int] = ZIO.fromFuture(_ => underlying.sessionNum)
 
-    override def isActive: Task[Boolean] = ZIO.fromFuture(ec => underlying.isActive)
+    override def isActive: Task[Boolean] = ZIO.fromFuture(_ => underlying.isActive)
 
-    override def isClosed: Task[Boolean] = ZIO.fromFuture(ec => underlying.isClosed)
+    override def isClosed: Task[Boolean] = ZIO.fromFuture(_ => underlying.isClosed)
 
-    override def close(): Task[Unit] = ZIO.fromFuture(ec => underlying.close())
+    override def close(): Task[Unit] = ZIO.fromFuture(_ => underlying.close())
 
   }
 

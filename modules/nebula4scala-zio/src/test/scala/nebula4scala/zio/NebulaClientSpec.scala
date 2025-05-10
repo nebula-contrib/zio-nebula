@@ -1,7 +1,5 @@
 package nebula4scala.zio
 
-import java.util.concurrent.TimeUnit
-
 import scala.util._
 
 import zio._
