@@ -3,9 +3,7 @@ package nebula4scala.data.input
 import scala.annotation.implicitNotFound
 
 import nebula4scala.api.NebulaResultSet
-import nebula4scala.data._
 import nebula4scala.data.input.Stmt._
-import nebula4scala.syntax._
 
 @implicitNotFound(msg =
   "No given instance of type Context[${F}] was found. Please provide an implicit instance of Context[${F}] to use the str method."

@@ -14,9 +14,8 @@ final class NebulaSessionImpl(private val underlying: NebulaSession[ScalaFuture]
     ZIO
       .blocking(ZIO.fromFuture(_ => underlying.execute(stmt)))
       .map {
-        case set: NebulaResultSet[_] =>
-          new NebulaResultSetImpl(set.asInstanceOf[NebulaResultSet[ScalaFuture]])
-        case str: String => str
+        case set: NebulaResultSet[_] => new NebulaResultSetImpl(set.asInstanceOf[underlying.Resultset])
+        case str: String             => str
       }
       .map(_.asInstanceOf[stmt.T])
   }

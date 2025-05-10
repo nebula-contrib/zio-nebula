@@ -1,8 +1,11 @@
 package nebula4scala.api
 
 import nebula4scala.data.input.Stmt
+import nebula4scala.syntax._
 
 trait NebulaSessionClient[F[_]] {
+
+  type Resultset = NebulaResultSet[ScalaFuture]
 
   def execute(stmt: Stmt): F[stmt.T]
 

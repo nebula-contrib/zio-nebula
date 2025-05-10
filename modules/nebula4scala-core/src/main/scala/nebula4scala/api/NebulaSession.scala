@@ -3,8 +3,11 @@ package nebula4scala.api
 import com.vesoft.nebula.client.graph.data.HostAddress
 
 import nebula4scala.data.input.Stmt
+import nebula4scala.syntax._
 
 trait NebulaSession[F[_]] {
+
+  type Resultset = NebulaResultSet[ScalaFuture]
 
   def execute(stmt: Stmt): F[stmt.T]
 

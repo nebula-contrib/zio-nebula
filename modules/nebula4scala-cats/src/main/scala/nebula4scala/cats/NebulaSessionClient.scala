@@ -23,9 +23,8 @@ object NebulaSessionClient {
           )
         )
         .map {
-          case set: NebulaResultSet[_] =>
-            new NebulaResultSetImpl(set.asInstanceOf[NebulaResultSet[ScalaFuture]])
-          case str: String => str
+          case set: NebulaResultSet[_] => new NebulaResultSetImpl(set.asInstanceOf[underlying.Resultset])
+          case str: String             => str
         }
         .map(_.asInstanceOf[stmt.T])
 
