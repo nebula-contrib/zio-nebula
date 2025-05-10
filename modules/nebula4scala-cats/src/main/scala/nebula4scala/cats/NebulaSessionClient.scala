@@ -16,7 +16,18 @@ object NebulaSessionClient {
   ) extends NebulaSessionClient[F] {
 
     override def execute(stmt: Stmt): F[stmt.T] =
-      Async[F].fromFuture(Async[F].delay(underlying.execute(stmt)))
+      Async[F]
+        .fromFuture(
+          Async[F].delay(
+            underlying.execute(stmt)
+          )
+        )
+        .map {
+          case set: NebulaResultSet[_] =>
+            new NebulaResultSetImpl(set.asInstanceOf[NebulaResultSet[SyncFuture]])
+          case str: String => str
+        }
+        .map(_.asInstanceOf[stmt.T])
 
     override def idleSessionNum: F[Int] = Async[F].fromFuture(Async[F].delay(underlying.idleSessionNum))
 

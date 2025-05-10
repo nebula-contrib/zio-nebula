@@ -39,28 +39,8 @@ object NebulaClientSpec extends NebulaSpec {
 
   lazy val session = {
     // Java initializes the session in the constructor.
-    def layer() = Try(Unsafe.unsafe {
-      runtime ?=>
-      val layer = Runtime.default.unsafe
-        .run(
-          ZioNebulaEnvironment
-            .defaultSession(container.graphdHostList.head, container.graphdPortList.head)
-            .build
-            .provide(Scope.default)
-            .map(_.get)
-        )
-        .getOrThrowFiberFailure()
-      ZLayer.succeed(layer)
-    })
-
-    var ls = layer() match {
-      case Failure(exception) => layer()
-      case Success(value)     => Try(value)
-    }
-    while (ls.isFailure) {
-      ls = layer()
-    }
-    ls.get
+    ZioNebulaEnvironment
+      .defaultSession(container.graphdHostList.head, container.graphdPortList.head)
 
   }
 
@@ -94,23 +74,16 @@ object NebulaClientSpec extends NebulaSpec {
             // Java initializes the session in the constructor.
             activeConnNum <- ZIO.serviceWithZIO[NebulaClient[Task]](_.activeConnNum)
             _             <- ZIO.logInfo(s"activeConnNum: $activeConnNum")
-            sessionNum <- ZIO
-              .serviceWithZIO[NebulaSessionClient[Task]](_.sessionNum)
-            _ <- ZIO.logInfo(s"sessionNum: $sessionNum")
-            res1 <- ZIO
-              .serviceWithZIO[NebulaSessionClient[Task]](
-                _.execute(Stmt.str[Task](insertVertexes)).flatMap(_.errorMessageM)
-              )
-            _ <- ZIO.logInfo(s"execute insert vertex: $res1")
-            res2 <- ZIO
-              .serviceWithZIO[NebulaSessionClient[Task]](
-                _.execute(Stmt.str[Task](insertEdges)).flatMap(_.errorMessageM)
-              )
-            _ <- ZIO.logInfo(s"execute insert edge: $res2")
-            res3 <- ZIO
-              .serviceWithZIO[NebulaSessionClient[Task]](_.execute(Stmt.str[Task](query)).flatMap(_.errorMessageM))
-            _ <- ZIO.logInfo(s"execute query $res3")
-          } yield assertTrue(res3.length == 4)).provideSome[NebulaClient[Task]](session)
+            client        <- ZIO.service[NebulaSessionClient[Task]]
+            sessionNum    <- client.sessionNum
+            _             <- ZIO.logInfo(s"sessionNum: $sessionNum")
+            res1          <- client.execute(Stmt.str[Task](insertVertexes)).flatMap(_.errorMessageM)
+            _             <- ZIO.logInfo(s"execute insert vertex: $res1")
+            res2          <- client.execute(Stmt.str[Task](insertEdges)).flatMap(_.errorMessageM)
+            _             <- ZIO.logInfo(s"execute insert edge: $res2")
+            res3          <- client.execute(Stmt.str[Task](query)).flatMap(_.errorMessageM)
+            _             <- ZIO.logInfo(s"execute query $res3")
+          } yield assertTrue(res3.length == 4)).provideSome[NebulaClient[Task]](session, Scope.default)
 
         }
       )

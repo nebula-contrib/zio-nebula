@@ -19,35 +19,35 @@ import nebula4scala.syntax._
 
 final class NebulaResultSetDefault(underlying: ResultSet) extends NebulaResultSet[SyncFuture] {
 
-  def isSucceededM: SyncFuture[Boolean] = Future.successful(underlying.isSucceeded)
+  def isSucceededM: SyncFuture[Boolean] = Future(underlying.isSucceeded)
 
-  def isEmptyM: SyncFuture[Boolean] = Future.successful(underlying.isEmpty)
+  def isEmptyM: SyncFuture[Boolean] = Future(underlying.isEmpty)
 
-  def errorCodeM: SyncFuture[Int] = Future.successful(underlying.getErrorCode)
+  def errorCodeM: SyncFuture[Int] = Future(underlying.getErrorCode)
 
-  def spaceNameM: SyncFuture[String] = Future.successful(underlying.getSpaceName)
+  def spaceNameM: SyncFuture[String] = Future(underlying.getSpaceName)
 
-  def errorMessageM: SyncFuture[String] = Future.successful(underlying.getErrorMessage)
+  def errorMessageM: SyncFuture[String] = Future(underlying.getErrorMessage)
 
-  def commentM: SyncFuture[String] = Future.successful(underlying.getComment)
+  def commentM: SyncFuture[String] = Future(underlying.getComment)
 
-  def latencyM: SyncFuture[Long] = Future.successful(underlying.getLatency)
+  def latencyM: SyncFuture[Long] = Future(underlying.getLatency)
 
-  def planDescM: SyncFuture[PlanDescription] = Future.successful(underlying.getPlanDesc)
+  def planDescM: SyncFuture[PlanDescription] = Future(underlying.getPlanDesc)
 
-  def keysM: SyncFuture[List[String]] = Future.successful(underlying.getColumnNames.asScala.toList)
+  def keysM: SyncFuture[List[String]] = Future(underlying.getColumnNames.asScala.toList)
 
-  def columnNamesM: SyncFuture[List[String]] = Future.successful(underlying.getColumnNames.asScala.toList)
+  def columnNamesM: SyncFuture[List[String]] = Future(underlying.getColumnNames.asScala.toList)
 
-  def rowsSizeM: SyncFuture[Int] = Future.successful(underlying.rowsSize())
+  def rowsSizeM: SyncFuture[Int] = Future(underlying.rowsSize())
 
   def rowValuesM(index: Int): SyncFuture[NebulaRecord[SyncFuture]] =
-    Future.successful(new NebulaRecordImpl(underlying.rowValues(index)))
+    Future(new NebulaRecordImpl(underlying.rowValues(index)))
 
   def colValuesM(columnName: String): SyncFuture[LazyList[ValueWrapper]] =
-    Future.successful(underlying.colValues(columnName).asScala.map(_.asScala).to(LazyList))
+    Future(underlying.colValues(columnName).asScala.map(_.asScala).to(LazyList))
 
-  def rowsM: SyncFuture[List[Row]] = Future.successful(underlying.getRows.asScala.toList)
+  def rowsM: SyncFuture[List[Row]] = Future(underlying.getRows.asScala.toList)
 
   override def toString: String = underlying.toString
 }
@@ -57,19 +57,19 @@ object NebulaResultSetDefault {
   final class NebulaRecordImpl(override val underlying: Record)
       extends NebulaRecordBase(underlying)
       with NebulaRecord[SyncFuture] {
-    override def iteratorM: SyncFuture[Iterator[ValueWrapper]] = Future.successful(super.iterator)
+    override def iteratorM: SyncFuture[Iterator[ValueWrapper]] = Future(super.iterator)
 
-    override def foreachM[U](f: ValueWrapper => U): SyncFuture[Unit] = Future.successful(super.iterator)
+    override def foreachM[U](f: ValueWrapper => U): SyncFuture[Unit] = Future(super.iterator)
 
     override def valuesM: SyncFuture[LazyList[ValueWrapper]] =
-      Future.successful(super.values)
+      Future(super.values)
 
-    override def getM(index: Int): SyncFuture[ValueWrapper] = Future.successful(super.get(index))
+    override def getM(index: Int): SyncFuture[ValueWrapper] = Future(super.get(index))
 
-    override def getM(columnName: String): SyncFuture[ValueWrapper] = Future.successful(super.get(columnName))
+    override def getM(columnName: String): SyncFuture[ValueWrapper] = Future(super.get(columnName))
 
-    override def sizeM: SyncFuture[Int] = Future.successful(super.size)
+    override def sizeM: SyncFuture[Int] = Future(super.size)
 
-    override def containsM(columnName: String): SyncFuture[Boolean] = Future.successful(super.contains(columnName))
+    override def containsM(columnName: String): SyncFuture[Boolean] = Future(super.contains(columnName))
   }
 }

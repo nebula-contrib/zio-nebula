@@ -3,8 +3,11 @@ package nebula4scala.api
 import com.vesoft.nebula.client.graph.data.HostAddress
 
 import nebula4scala.data.input.Stmt
+import nebula4scala.syntax.SyncFuture
 
 trait NebulaSession[F[_]] {
+
+  type DefaultType = NebulaSession[SyncFuture]
 
   def execute(stmt: Stmt): F[stmt.T]
 

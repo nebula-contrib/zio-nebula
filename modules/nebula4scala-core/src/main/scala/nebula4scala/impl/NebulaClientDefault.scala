@@ -1,7 +1,7 @@
 package nebula4scala.impl
 
 import scala.collection.JavaConverters._
-import scala.concurrent.Future
+import scala.concurrent.{ blocking, Future }
 
 import com.vesoft.nebula.client.graph.{ NebulaPoolConfig => _ }
 import com.vesoft.nebula.client.graph.data.HostAddress
@@ -20,14 +20,14 @@ object NebulaClientDefault {
 final class NebulaClientDefault(underlying: Pool) extends NebulaClient[SyncFuture] {
 
   def init(poolConfig: NebulaPoolConfig): SyncFuture[Boolean] =
-    Future.successful(
-      underlying.init(poolConfig.address.map(d => new HostAddress(d.host, d.port)).asJava, poolConfig.toJava)
+    Future(
+      blocking(underlying.init(poolConfig.address.map(d => new HostAddress(d.host, d.port)).asJava, poolConfig.toJava))
     )
 
-  def close(): SyncFuture[Unit] = Future.successful(underlying.close())
+  def close(): SyncFuture[Unit] = Future(underlying.close())
 
   def getSession(poolConfig: NebulaPoolConfig): SyncFuture[NebulaSession[SyncFuture]] =
-    Future.successful(
+    Future(
       new NebulaSessionDefault(
         underlying.getSession(
           poolConfig.auth.username,
@@ -38,7 +38,7 @@ final class NebulaClientDefault(underlying: Pool) extends NebulaClient[SyncFutur
     )
 
   def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean): SyncFuture[NebulaSession[SyncFuture]] =
-    Future.successful {
+    Future {
       val session = new NebulaSessionDefault(
         underlying.getSession(
           poolConfig.auth.username,
@@ -52,10 +52,10 @@ final class NebulaClientDefault(underlying: Pool) extends NebulaClient[SyncFutur
       session
     }
 
-  def activeConnNum: SyncFuture[Int] = Future.successful(underlying.getActiveConnNum)
+  def activeConnNum: SyncFuture[Int] = Future(underlying.getActiveConnNum)
 
-  def idleConnNum: SyncFuture[Int] = Future.successful(underlying.getIdleConnNum)
+  def idleConnNum: SyncFuture[Int] = Future(underlying.getIdleConnNum)
 
-  def waitersNum: SyncFuture[Int] = Future.successful(underlying.getWaitersNum)
+  def waitersNum: SyncFuture[Int] = Future(underlying.getWaitersNum)
 
 }

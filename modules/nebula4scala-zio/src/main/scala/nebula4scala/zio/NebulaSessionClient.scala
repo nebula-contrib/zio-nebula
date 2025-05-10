@@ -12,7 +12,15 @@ object NebulaSessionClient {
   private final class Impl(underlying: NebulaSessionClient[SyncFuture]) extends NebulaSessionClient[Task] {
 
     override def execute(stmt: Stmt): Task[stmt.T] =
-      ZIO.fromFuture(implicit ec => underlying.execute(stmt))
+      ZIO
+        .fromFuture(implicit ec => underlying.execute(stmt))
+        .map {
+          case set: NebulaResultSet[_] =>
+            println(s"get default resultset:${set}:${set.asInstanceOf[NebulaResultSet[SyncFuture]]}")
+            new NebulaResultSetImpl(set.asInstanceOf[NebulaResultSet[SyncFuture]])
+          case str: String => str
+        }
+        .map(_.asInstanceOf[stmt.T])
 
     override def idleSessionNum: Task[Int] = ZIO.fromFuture(ec => underlying.idleSessionNum)
 

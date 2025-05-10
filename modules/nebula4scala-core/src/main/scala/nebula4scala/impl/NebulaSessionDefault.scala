@@ -1,7 +1,8 @@
 package nebula4scala.impl
 
-import scala.concurrent.Future
+import scala.concurrent.{ blocking, Future }
 import scala.jdk.CollectionConverters._
+import scala.util._
 
 import com.vesoft.nebula.client.graph.data.HostAddress
 import com.vesoft.nebula.client.graph.net.Session
@@ -14,7 +15,7 @@ import nebula4scala.syntax._
 final class NebulaSessionDefault(private val underlying: Session) extends NebulaSession[SyncFuture] {
 
   def execute(stmt: Stmt): SyncFuture[stmt.T] =
-    Future.successful {
+    Future(blocking {
       stmt match {
         case StringStmt(_stmt) =>
           new NebulaResultSetDefault(underlying.execute(_stmt)).asInstanceOf[stmt.T]
@@ -29,18 +30,18 @@ final class NebulaSessionDefault(private val underlying: Session) extends Nebula
             .executeJsonWithParameter(jsonStmt, parameterMap.asJava)
             .asInstanceOf[stmt.T]
       }
-    }
+    })
 
-  def ping(): SyncFuture[Boolean] = Future.successful(underlying.ping())
+  def ping(): SyncFuture[Boolean] = Future(blocking(underlying.ping()))
 
-  def pingSession(): SyncFuture[Boolean] = Future.successful(underlying.pingSession())
+  def pingSession(): SyncFuture[Boolean] = Future(blocking(underlying.pingSession()))
 
-  def release(): SyncFuture[Unit] = Future.successful(underlying.release())
+  def release(): SyncFuture[Unit] = Future(blocking(underlying.release()))
 
-  def graphHost: SyncFuture[HostAddress] = Future.successful(underlying.getGraphHost)
+  def graphHost: SyncFuture[HostAddress] = Future(blocking(underlying.getGraphHost))
 
-  def sessionID: SyncFuture[Long] = Future.successful(underlying.getSessionID)
+  def sessionID: SyncFuture[Long] = Future(blocking(underlying.getSessionID))
 
-  def close(): SyncFuture[Unit] = Future.successful(underlying.close())
+  def close(): SyncFuture[Unit] = Future(blocking(underlying.close()))
 
 }
