@@ -38,10 +38,10 @@ final class NebulaResultSetImpl(underlying: NebulaResultSet[SyncFuture]) extends
   def rowsSizeM: Task[Int] = ZIO.fromFuture(ec => underlying.rowsSizeM)
 
   def rowValuesM(index: Int): Task[NebulaRecord[Task]] =
-    ZIO.fromFuture(implicit c => underlying.rowValuesM(index).map(f => new NebulaRecordImpl(f)))
+    ZIO.fromFuture(_ => underlying.rowValuesM(index).map(f => new NebulaRecordImpl(f)))
 
   def colValuesM(columnName: String): Task[LazyList[ValueWrapper]] =
-    ZIO.fromFuture(ec => underlying.colValuesM(columnName))
+    ZIO.fromFuture(_ => underlying.colValuesM(columnName))
 
   def rowsM: Task[List[Row]] = ZIO.fromFuture(ec => underlying.rowsM)
 

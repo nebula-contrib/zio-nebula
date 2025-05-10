@@ -1,6 +1,6 @@
 package nebula4scala.impl
 
-import scala.concurrent.{ blocking, Future }
+import scala.concurrent._
 import scala.jdk.CollectionConverters._
 import scala.util.{ Failure, Success }
 
