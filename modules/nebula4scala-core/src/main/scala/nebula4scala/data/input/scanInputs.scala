@@ -2,8 +2,6 @@ package nebula4scala.data.input
 
 import com.vesoft.nebula.client.storage.scan._
 
-import nebula4scala.data._
-
 final case class Between(startTime: Long, endTime: Long)
 
 final case class AllowConfig(allowPartSuccess: Boolean, allowReadFromFollower: Boolean)

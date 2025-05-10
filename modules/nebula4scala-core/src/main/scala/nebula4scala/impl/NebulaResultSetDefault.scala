@@ -6,7 +6,6 @@ import scala.collection.convert._
 import scala.concurrent.Future
 
 import com.vesoft.nebula.Row
-import com.vesoft.nebula.client.graph.data
 import com.vesoft.nebula.client.graph.data.ResultSet
 import com.vesoft.nebula.client.graph.data.ResultSet.Record
 import com.vesoft.nebula.graph.PlanDescription
@@ -17,37 +16,37 @@ import nebula4scala.data.value.ValueWrapper._
 import nebula4scala.impl.NebulaResultSetDefault.NebulaRecordImpl
 import nebula4scala.syntax._
 
-final class NebulaResultSetDefault(underlying: ResultSet) extends NebulaResultSet[SyncFuture] {
+final class NebulaResultSetDefault(underlying: ResultSet) extends NebulaResultSet[ScalaFuture] {
 
-  def isSucceededM: SyncFuture[Boolean] = Future(underlying.isSucceeded)
+  def isSucceededM: ScalaFuture[Boolean] = Future(underlying.isSucceeded)
 
-  def isEmptyM: SyncFuture[Boolean] = Future(underlying.isEmpty)
+  def isEmptyM: ScalaFuture[Boolean] = Future(underlying.isEmpty)
 
-  def errorCodeM: SyncFuture[Int] = Future(underlying.getErrorCode)
+  def errorCodeM: ScalaFuture[Int] = Future(underlying.getErrorCode)
 
-  def spaceNameM: SyncFuture[String] = Future(underlying.getSpaceName)
+  def spaceNameM: ScalaFuture[String] = Future(underlying.getSpaceName)
 
-  def errorMessageM: SyncFuture[String] = Future(underlying.getErrorMessage)
+  def errorMessageM: ScalaFuture[String] = Future(underlying.getErrorMessage)
 
-  def commentM: SyncFuture[String] = Future(underlying.getComment)
+  def commentM: ScalaFuture[String] = Future(underlying.getComment)
 
-  def latencyM: SyncFuture[Long] = Future(underlying.getLatency)
+  def latencyM: ScalaFuture[Long] = Future(underlying.getLatency)
 
-  def planDescM: SyncFuture[PlanDescription] = Future(underlying.getPlanDesc)
+  def planDescM: ScalaFuture[PlanDescription] = Future(underlying.getPlanDesc)
 
-  def keysM: SyncFuture[List[String]] = Future(underlying.getColumnNames.asScala.toList)
+  def keysM: ScalaFuture[List[String]] = Future(underlying.getColumnNames.asScala.toList)
 
-  def columnNamesM: SyncFuture[List[String]] = Future(underlying.getColumnNames.asScala.toList)
+  def columnNamesM: ScalaFuture[List[String]] = Future(underlying.getColumnNames.asScala.toList)
 
-  def rowsSizeM: SyncFuture[Int] = Future(underlying.rowsSize())
+  def rowsSizeM: ScalaFuture[Int] = Future(underlying.rowsSize())
 
-  def rowValuesM(index: Int): SyncFuture[NebulaRecord[SyncFuture]] =
+  def rowValuesM(index: Int): ScalaFuture[NebulaRecord[ScalaFuture]] =
     Future(new NebulaRecordImpl(underlying.rowValues(index)))
 
-  def colValuesM(columnName: String): SyncFuture[LazyList[ValueWrapper]] =
+  def colValuesM(columnName: String): ScalaFuture[LazyList[ValueWrapper]] =
     Future(underlying.colValues(columnName).asScala.map(_.asScala).to(LazyList))
 
-  def rowsM: SyncFuture[List[Row]] = Future(underlying.getRows.asScala.toList)
+  def rowsM: ScalaFuture[List[Row]] = Future(underlying.getRows.asScala.toList)
 
   override def toString: String = underlying.toString
 }
@@ -56,20 +55,20 @@ object NebulaResultSetDefault {
 
   final class NebulaRecordImpl(override val underlying: Record)
       extends NebulaRecordBase(underlying)
-      with NebulaRecord[SyncFuture] {
-    override def iteratorM: SyncFuture[Iterator[ValueWrapper]] = Future(super.iterator)
+      with NebulaRecord[ScalaFuture] {
+    override def iteratorM: ScalaFuture[Iterator[ValueWrapper]] = Future(super.iterator)
 
-    override def foreachM[U](f: ValueWrapper => U): SyncFuture[Unit] = Future(super.iterator)
+    override def foreachM[U](f: ValueWrapper => U): ScalaFuture[Unit] = Future(super.iterator)
 
-    override def valuesM: SyncFuture[LazyList[ValueWrapper]] =
+    override def valuesM: ScalaFuture[LazyList[ValueWrapper]] =
       Future(super.values)
 
-    override def getM(index: Int): SyncFuture[ValueWrapper] = Future(super.get(index))
+    override def getM(index: Int): ScalaFuture[ValueWrapper] = Future(super.get(index))
 
-    override def getM(columnName: String): SyncFuture[ValueWrapper] = Future(super.get(columnName))
+    override def getM(columnName: String): ScalaFuture[ValueWrapper] = Future(super.get(columnName))
 
-    override def sizeM: SyncFuture[Int] = Future(super.size)
+    override def sizeM: ScalaFuture[Int] = Future(super.size)
 
-    override def containsM(columnName: String): SyncFuture[Boolean] = Future(super.contains(columnName))
+    override def containsM(columnName: String): ScalaFuture[Boolean] = Future(super.contains(columnName))
   }
 }

@@ -2,7 +2,7 @@ package nebula4scala.impl
 
 import scala.concurrent._
 import scala.jdk.CollectionConverters._
-import scala.util.{ Failure, Success }
+import scala.util._
 
 import com.vesoft.nebula.client.graph._
 import com.vesoft.nebula.client.graph.data.HostAddress
@@ -14,7 +14,7 @@ import nebula4scala.syntax._
 
 object NebulaSessionClientDefault {
 
-  def make(sessionPoolConfig: NebulaSessionPoolConfig): NebulaSessionClient[SyncFuture] = {
+  def make(sessionPoolConfig: NebulaSessionPoolConfig): NebulaSessionClient[ScalaFuture] = {
     try {
       val sessionPool = new SessionPool(
         new SessionPoolConfig(
@@ -43,9 +43,9 @@ object NebulaSessionClientDefault {
   }
 }
 
-final class NebulaSessionClientDefault(underlying: SessionPool) extends NebulaSessionClient[SyncFuture] {
+final class NebulaSessionClientDefault(underlying: SessionPool) extends NebulaSessionClient[ScalaFuture] {
 
-  override def execute(stmt: Stmt): SyncFuture[stmt.T] = {
+  override def execute(stmt: Stmt): ScalaFuture[stmt.T] = {
     val f = Future(stmt match {
       case StringStmt(_stmt) =>
         new NebulaResultSetDefault(underlying.execute(_stmt)).asInstanceOf[stmt.T]
@@ -68,14 +68,14 @@ final class NebulaSessionClientDefault(underlying: SessionPool) extends NebulaSe
     f
   }
 
-  override def idleSessionNum: SyncFuture[Int] = Future(underlying.getIdleSessionNums)
+  override def idleSessionNum: ScalaFuture[Int] = Future(underlying.getIdleSessionNums)
 
-  override def sessionNum: SyncFuture[Int] = Future(underlying.getSessionNums)
+  override def sessionNum: ScalaFuture[Int] = Future(underlying.getSessionNums)
 
-  override def isActive: SyncFuture[Boolean] = Future(underlying.isActive)
+  override def isActive: ScalaFuture[Boolean] = Future(underlying.isActive)
 
-  override def isClosed: SyncFuture[Boolean] = Future(underlying.isClosed)
+  override def isClosed: ScalaFuture[Boolean] = Future(underlying.isClosed)
 
-  override def close(): SyncFuture[Unit] = Future(underlying.close())
+  override def close(): ScalaFuture[Unit] = Future(underlying.close())
 
 }

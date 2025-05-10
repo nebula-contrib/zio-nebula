@@ -13,20 +13,20 @@ import nebula4scala.data.input.Stmt
 import nebula4scala.syntax._
 
 object NebulaClientDefault {
-  def make: NebulaClient[SyncFuture] = new NebulaClientDefault(new Pool)
+  def make: NebulaClient[ScalaFuture] = new NebulaClientDefault(new Pool)
 
 }
 
-final class NebulaClientDefault(underlying: Pool) extends NebulaClient[SyncFuture] {
+final class NebulaClientDefault(underlying: Pool) extends NebulaClient[ScalaFuture] {
 
-  def init(poolConfig: NebulaPoolConfig): SyncFuture[Boolean] =
+  def init(poolConfig: NebulaPoolConfig): ScalaFuture[Boolean] =
     Future(
       blocking(underlying.init(poolConfig.address.map(d => new HostAddress(d.host, d.port)).asJava, poolConfig.toJava))
     )
 
-  def close(): SyncFuture[Unit] = Future(underlying.close())
+  def close(): ScalaFuture[Unit] = Future(underlying.close())
 
-  def getSession(poolConfig: NebulaPoolConfig): SyncFuture[NebulaSession[SyncFuture]] =
+  def getSession(poolConfig: NebulaPoolConfig): ScalaFuture[NebulaSession[ScalaFuture]] =
     Future(
       new NebulaSessionDefault(
         underlying.getSession(
@@ -37,7 +37,7 @@ final class NebulaClientDefault(underlying: Pool) extends NebulaClient[SyncFutur
       )
     )
 
-  def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean): SyncFuture[NebulaSession[SyncFuture]] =
+  def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean): ScalaFuture[NebulaSession[ScalaFuture]] =
     Future {
       val session = new NebulaSessionDefault(
         underlying.getSession(
@@ -47,15 +47,15 @@ final class NebulaClientDefault(underlying: Pool) extends NebulaClient[SyncFutur
         )
       )
       if (useSpace && poolConfig.spaceName.nonEmpty) {
-        session.execute(Stmt.str[SyncFuture](s"USE `${poolConfig.spaceName.orNull}`"))
+        session.execute(Stmt.str[ScalaFuture](s"USE `${poolConfig.spaceName.orNull}`"))
       }
       session
     }
 
-  def activeConnNum: SyncFuture[Int] = Future(underlying.getActiveConnNum)
+  def activeConnNum: ScalaFuture[Int] = Future(underlying.getActiveConnNum)
 
-  def idleConnNum: SyncFuture[Int] = Future(underlying.getIdleConnNum)
+  def idleConnNum: ScalaFuture[Int] = Future(underlying.getIdleConnNum)
 
-  def waitersNum: SyncFuture[Int] = Future(underlying.getWaitersNum)
+  def waitersNum: ScalaFuture[Int] = Future(underlying.getWaitersNum)
 
 }

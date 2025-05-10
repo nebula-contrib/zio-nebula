@@ -12,7 +12,7 @@ import nebula4scala.syntax._
 object NebulaSessionClient {
 
   private final class Impl[F[_]: Async](
-    underlying: NebulaSessionClient[SyncFuture]
+    underlying: NebulaSessionClient[ScalaFuture]
   ) extends NebulaSessionClient[F] {
 
     override def execute(stmt: Stmt): F[stmt.T] =
@@ -24,7 +24,7 @@ object NebulaSessionClient {
         )
         .map {
           case set: NebulaResultSet[_] =>
-            new NebulaResultSetImpl(set.asInstanceOf[NebulaResultSet[SyncFuture]])
+            new NebulaResultSetImpl(set.asInstanceOf[NebulaResultSet[ScalaFuture]])
           case str: String => str
         }
         .map(_.asInstanceOf[stmt.T])

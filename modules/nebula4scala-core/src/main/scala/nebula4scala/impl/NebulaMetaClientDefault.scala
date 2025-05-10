@@ -13,7 +13,7 @@ import nebula4scala.syntax._
 
 object NebulaMetaClientDefault {
 
-  def make(config: NebulaMetaConfig): NebulaMetaClient[SyncFuture] = {
+  def make(config: NebulaMetaConfig): NebulaMetaClient[ScalaFuture] = {
     val nebulaConfig = config.underlying
     val manger = new MetaManager(
       nebulaConfig.address.map(a => new HostAddress(a.host, a.port)).asJava,
@@ -27,30 +27,30 @@ object NebulaMetaClientDefault {
   }
 }
 
-final class NebulaMetaClientDefault(underlying: MetaManager) extends NebulaMetaClient[SyncFuture] {
+final class NebulaMetaClientDefault(underlying: MetaManager) extends NebulaMetaClient[ScalaFuture] {
 
-  override def close(): SyncFuture[Unit] = Future(underlying.close())
+  override def close(): ScalaFuture[Unit] = Future(underlying.close())
 
-  override def spaceId(spaceName: String): SyncFuture[Int] = Future(underlying.getSpaceId(spaceName))
+  override def spaceId(spaceName: String): ScalaFuture[Int] = Future(underlying.getSpaceId(spaceName))
 
-  override def space(spaceName: String): SyncFuture[SpaceItem] = Future(underlying.getSpace(spaceName))
+  override def space(spaceName: String): ScalaFuture[SpaceItem] = Future(underlying.getSpace(spaceName))
 
-  override def tagId(spaceName: String, tagName: String): SyncFuture[Int] =
+  override def tagId(spaceName: String, tagName: String): ScalaFuture[Int] =
     Future(underlying.getTagId(spaceName, tagName))
 
-  override def tag(spaceName: String, tagName: String): SyncFuture[TagItem] =
+  override def tag(spaceName: String, tagName: String): ScalaFuture[TagItem] =
     Future(underlying.getTag(spaceName, tagName))
 
-  override def edgeType(spaceName: String, edgeName: String): SyncFuture[Int] =
+  override def edgeType(spaceName: String, edgeName: String): ScalaFuture[Int] =
     Future(underlying.getEdgeType(spaceName, edgeName))
 
-  override def leader(spaceName: String, part: Int): SyncFuture[NebulaHostAddress] =
+  override def leader(spaceName: String, part: Int): ScalaFuture[NebulaHostAddress] =
     Future {
       val h = underlying.getLeader(spaceName, part)
       NebulaHostAddress(h.getHost, h.getPort)
     }
 
-  override def spaceParts(spaceName: String): SyncFuture[List[Int]] =
+  override def spaceParts(spaceName: String): ScalaFuture[List[Int]] =
     Future {
       underlying
         .getSpaceParts(spaceName)
@@ -61,7 +61,7 @@ final class NebulaMetaClientDefault(underlying: MetaManager) extends NebulaMetaC
         .toList
     }
 
-  override def partsAlloc(spaceName: String): SyncFuture[Map[Int, List[NebulaHostAddress]]] =
+  override def partsAlloc(spaceName: String): ScalaFuture[Map[Int, List[NebulaHostAddress]]] =
     Future {
       underlying
         .getPartsAlloc(spaceName)
@@ -73,6 +73,6 @@ final class NebulaMetaClientDefault(underlying: MetaManager) extends NebulaMetaC
         .toMap
     }
 
-  override def listHosts: SyncFuture[Set[NebulaHostAddress]] =
+  override def listHosts: ScalaFuture[Set[NebulaHostAddress]] =
     Future { underlying.listHosts().asScala.map(h => NebulaHostAddress(h.getHost, h.getPort)).toSet }
 }

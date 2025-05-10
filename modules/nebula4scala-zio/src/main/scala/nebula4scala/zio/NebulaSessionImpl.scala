@@ -8,14 +8,14 @@ import nebula4scala.api._
 import nebula4scala.data.input._
 import nebula4scala.syntax._
 
-final class NebulaSessionImpl(private val underlying: NebulaSession[SyncFuture]) extends NebulaSession[Task] {
+final class NebulaSessionImpl(private val underlying: NebulaSession[ScalaFuture]) extends NebulaSession[Task] {
 
   def execute(stmt: Stmt): Task[stmt.T] = {
     ZIO
       .blocking(ZIO.fromFuture(_ => underlying.execute(stmt)))
       .map {
         case set: NebulaResultSet[_] =>
-          new NebulaResultSetImpl(set.asInstanceOf[NebulaResultSet[SyncFuture]])
+          new NebulaResultSetImpl(set.asInstanceOf[NebulaResultSet[ScalaFuture]])
         case str: String => str
       }
       .map(_.asInstanceOf[stmt.T])

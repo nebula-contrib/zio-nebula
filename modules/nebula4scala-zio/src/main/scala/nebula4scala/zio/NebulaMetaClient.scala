@@ -10,7 +10,7 @@ import nebula4scala.syntax._
 
 object NebulaMetaClient {
 
-  private final class Impl(underlying: NebulaMetaClient[SyncFuture]) extends NebulaMetaClient[Task] {
+  private final class Impl(underlying: NebulaMetaClient[ScalaFuture]) extends NebulaMetaClient[Task] {
 
     override def close(): Task[Unit] = ZIO.fromFuture(_ => underlying.close())
 

@@ -11,7 +11,7 @@ import nebula4scala.syntax._
 
 object NebulaClient {
 
-  private final class Impl(underlying: NebulaClient[SyncFuture]) extends NebulaClient[Task] {
+  private final class Impl(underlying: NebulaClient[ScalaFuture]) extends NebulaClient[Task] {
 
     def init(poolConfig: NebulaPoolConfig): Task[Boolean] =
       ZIO.fromFuture(_ => underlying.init(poolConfig))

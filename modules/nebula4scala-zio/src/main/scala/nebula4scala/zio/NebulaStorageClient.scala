@@ -2,7 +2,6 @@ package nebula4scala.zio
 
 import zio._
 
-import nebula4scala._
 import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.data.input._
@@ -11,7 +10,7 @@ import nebula4scala.syntax._
 
 object NebulaStorageClient {
 
-  private final class Impl(underlying: NebulaStorageClient[SyncFuture]) extends NebulaStorageClient[Task] {
+  private final class Impl(underlying: NebulaStorageClient[ScalaFuture]) extends NebulaStorageClient[Task] {
 
     override def connect(): Task[Boolean] = ZIO.fromFuture(_ => underlying.connect())
 

@@ -6,18 +6,18 @@ import cats.syntax.all._
 import com.vesoft.nebula.client.graph.data.HostAddress
 
 import nebula4scala.api._
-import nebula4scala.data._
 import nebula4scala.data.input._
 import nebula4scala.syntax._
 
-final class NebulaSessionImpl[F[_]: Async](private val underlying: NebulaSession[SyncFuture]) extends NebulaSession[F] {
+final class NebulaSessionImpl[F[_]: Async](private val underlying: NebulaSession[ScalaFuture])
+    extends NebulaSession[F] {
 
   def execute(stmt: Stmt): F[stmt.T] =
     Async[F]
       .fromFuture(Async[F].blocking(underlying.execute(stmt)))
       .map {
         case set: NebulaResultSet[_] =>
-          new NebulaResultSetImpl(set.asInstanceOf[NebulaResultSet[SyncFuture]])
+          new NebulaResultSetImpl(set.asInstanceOf[NebulaResultSet[ScalaFuture]])
         case str: String => str
       }
       .map(_.asInstanceOf[stmt.T])

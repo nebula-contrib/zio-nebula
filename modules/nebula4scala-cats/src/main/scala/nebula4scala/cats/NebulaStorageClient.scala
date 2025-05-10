@@ -1,6 +1,6 @@
 package nebula4scala.cats
 
-import cats.effect.{ Async, Resource }
+import cats.effect._
 
 import nebula4scala.api._
 import nebula4scala.data._
@@ -11,7 +11,7 @@ import nebula4scala.syntax._
 object NebulaStorageClient {
 
   private final class Impl[F[_]: Async](
-    underlying: NebulaStorageClient[SyncFuture]
+    underlying: NebulaStorageClient[ScalaFuture]
   ) extends NebulaStorageClient[F] {
 
     override def connect(): F[Boolean] = Async[F].fromFuture(Async[F].delay(underlying.connect()))

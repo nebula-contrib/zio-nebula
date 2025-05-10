@@ -1,14 +1,10 @@
 package nebula4scala.zio
 
-import scala.util._
-
 import zio._
 import zio.test._
 
 import nebula4scala.api._
-import nebula4scala.data._
 import nebula4scala.data.input._
-import nebula4scala.zio._
 import nebula4scala.zio.syntax._
 
 object NebulaClientSpec extends NebulaSpec {

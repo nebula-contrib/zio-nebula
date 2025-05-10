@@ -13,7 +13,7 @@ import nebula4scala.syntax._
 object NebulaClient {
 
   private final class Impl[F[_]: Async](
-    underlying: NebulaClient[SyncFuture]
+    underlying: NebulaClient[ScalaFuture]
   ) extends NebulaClient[F] {
 
     override def init(poolConfig: NebulaPoolConfig): F[Boolean] =

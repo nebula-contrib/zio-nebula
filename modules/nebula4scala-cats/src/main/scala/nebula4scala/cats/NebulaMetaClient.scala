@@ -12,7 +12,7 @@ import nebula4scala.syntax._
 object NebulaMetaClient {
 
   private final class Impl[F[_]: Async](
-    underlying: NebulaMetaClient[SyncFuture]
+    underlying: NebulaMetaClient[ScalaFuture]
   ) extends NebulaMetaClient[F] {
 
     override def close(): F[Unit] = Async[F].fromFuture(Async[F].delay(underlying.close()))

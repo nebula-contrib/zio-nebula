@@ -6,14 +6,12 @@ import com.vesoft.nebula.Row
 import com.vesoft.nebula.graph.PlanDescription
 
 import _root_.zio._
-import nebula4scala._
 import nebula4scala.api._
-import nebula4scala.data._
 import nebula4scala.data.value._
 import nebula4scala.syntax._
 import nebula4scala.zio.NebulaResultSetImpl.NebulaRecordImpl
 
-final class NebulaResultSetImpl(underlying: NebulaResultSet[SyncFuture]) extends NebulaResultSet[Task] {
+final class NebulaResultSetImpl(underlying: NebulaResultSet[ScalaFuture]) extends NebulaResultSet[Task] {
 
   def isSucceededM: Task[Boolean] = ZIO.fromFuture(_ => underlying.isSucceededM)
 
@@ -49,7 +47,7 @@ final class NebulaResultSetImpl(underlying: NebulaResultSet[SyncFuture]) extends
 
 object NebulaResultSetImpl {
 
-  final class NebulaRecordImpl(private val underlying: NebulaRecord[SyncFuture]) extends NebulaRecord[Task] {
+  final class NebulaRecordImpl(private val underlying: NebulaRecord[ScalaFuture]) extends NebulaRecord[Task] {
     override def iteratorM: Task[Iterator[ValueWrapper]] = ZIO.fromFuture(_ => underlying.iteratorM)
 
     override def foreachM[U](f: ValueWrapper => U): Task[Unit] = ZIO.fromFuture(_ => underlying.foreachM(f))

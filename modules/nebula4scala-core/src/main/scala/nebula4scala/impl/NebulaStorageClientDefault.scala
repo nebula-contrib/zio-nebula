@@ -14,7 +14,7 @@ import nebula4scala.syntax._
 
 object NebulaStorageClientDefault {
 
-  def make(config: NebulaStorageConfig): NebulaStorageClient[SyncFuture] = {
+  def make(config: NebulaStorageConfig): NebulaStorageClient[ScalaFuture] = {
     val nebulaConfig = config.underlying
     new NebulaStorageClientDefault(
       new StorageClient(
@@ -29,15 +29,15 @@ object NebulaStorageClientDefault {
   }
 }
 
-final class NebulaStorageClientDefault(underlying: StorageClient) extends NebulaStorageClient[SyncFuture] {
+final class NebulaStorageClientDefault(underlying: StorageClient) extends NebulaStorageClient[ScalaFuture] {
 
   import Constant._
 
-  override def connect(): SyncFuture[Boolean] = Future.successful(underlying.connect())
+  override def connect(): ScalaFuture[Boolean] = Future.successful(underlying.connect())
 
-  override def close(): SyncFuture[Unit] = Future.successful(underlying.close())
+  override def close(): ScalaFuture[Unit] = Future.successful(underlying.close())
 
-  override def scan(scanInput: ScanInput): SyncFuture[scanInput.T] = Future.successful {
+  override def scan(scanInput: ScanInput): ScalaFuture[scanInput.T] = Future.successful {
     scanInput match {
       case ScanVertex(spaceName, part, tagName, returnCols, _limit, _between, _allowConfig) =>
         val limit   = _limit.getOrElse(DEFAULT_LIMIT)

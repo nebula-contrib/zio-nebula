@@ -5,11 +5,11 @@
 ![CI][Badge-CI] [![Nexus (Snapshots)][Badge-Snapshots]][Link-Snapshots] [![Sonatype Nexus (Releases)][Badge-Release]][Link-Release]
 
 
-[Badge-CI]: https://github.com/nebula-contrib/zio-nebula/actions/workflows/scala.yml/badge.svg
-[Badge-Snapshots]: https://img.shields.io/nexus/s/io.github.jxnu-liguobin/zio-nebula_3?server=https%3A%2F%2Foss.sonatype.org
-[Link-Snapshots]: https://oss.sonatype.org/content/repositories/snapshots/io/github/jxnu-liguobin/zio-nebula_3/
-[Link-Release]: https://index.scala-lang.org/nebula-contrib/zio-nebula/zio-nebula
-[Badge-Release]: https://index.scala-lang.org/nebula-contrib/zio-nebula/zio-nebula/latest-by-scala-version.svg?platform=jvm
+[Badge-CI]: https://github.com/nebula-contrib/nebula4scala/actions/workflows/scala.yml/badge.svg
+[Badge-Snapshots]: https://img.shields.io/nexus/s/io.github.jxnu-liguobin/nebula4scala-core_3?server=https%3A%2F%2Foss.sonatype.org
+[Link-Snapshots]: https://oss.sonatype.org/content/repositories/snapshots/io/github/jxnu-liguobin/nebula4scala-core_3/
+[Link-Release]: https://index.scala-lang.org/nebula-contrib/nebula4scala/nebula4scala-core
+[Badge-Release]: https://index.scala-lang.org/nebula-contrib/nebula4scala/nebula4scala-core/latest-by-scala-version.svg?platform=jvm
 
 nebula4scala is a Scala client for NebulaGraph, designed to provide a type-safe and functional interface for interacting with NebulaGraph databases. 
 
@@ -32,7 +32,7 @@ Choose the modules you need based on your project requirements.
 
 **For Scala Future Support**
 ```sbt
-// for scala application, synchronous wrapper by Future
+// for scala Future
 libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-core" % "<latest version>" 
 ```
 

@@ -8,14 +8,12 @@ import cats.syntax.all._
 import com.vesoft.nebula.Row
 import com.vesoft.nebula.graph.PlanDescription
 
-import _root_.cats._
 import nebula4scala.api._
 import nebula4scala.cats.NebulaResultSetImpl.NebulaRecordImpl
-import nebula4scala.data._
 import nebula4scala.data.value._
 import nebula4scala.syntax._
 
-final class NebulaResultSetImpl[F[_]: Async](underlying: NebulaResultSet[SyncFuture]) extends NebulaResultSet[F] {
+final class NebulaResultSetImpl[F[_]: Async](underlying: NebulaResultSet[ScalaFuture]) extends NebulaResultSet[F] {
 
   def isSucceededM: F[Boolean] = Async[F].fromFuture(Async[F].delay(underlying.isSucceededM))
 
@@ -50,7 +48,7 @@ final class NebulaResultSetImpl[F[_]: Async](underlying: NebulaResultSet[SyncFut
 
 object NebulaResultSetImpl {
 
-  final class NebulaRecordImpl[F[_]: Async](private val underlying: NebulaRecord[SyncFuture]) extends NebulaRecord[F] {
+  final class NebulaRecordImpl[F[_]: Async](private val underlying: NebulaRecord[ScalaFuture]) extends NebulaRecord[F] {
     override def iteratorM: F[Iterator[ValueWrapper]] = Async[F].fromFuture(Async[F].delay(underlying.iteratorM))
 
     override def foreachM[U](f: ValueWrapper => U): F[Unit] =
