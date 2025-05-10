@@ -3,7 +3,6 @@ package nebula4scala.example.sync
 import scala.concurrent.Future
 
 import nebula4scala.Configs
-import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.data.input._
 import nebula4scala.impl.NebulaClientDefault

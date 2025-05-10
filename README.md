@@ -11,43 +11,72 @@
 [Link-Release]: https://index.scala-lang.org/nebula-contrib/zio-nebula/zio-nebula
 [Badge-Release]: https://index.scala-lang.org/nebula-contrib/zio-nebula/zio-nebula/latest-by-scala-version.svg?platform=jvm
 
-Nebula client built on top of ZIO, Cats Effect, Fs2 and official [nebula java client](https://github.com/vesoft-inc/nebula-java/)
+nebula4scala is a Scala client for NebulaGraph, designed to provide a type-safe and functional interface for interacting with NebulaGraph databases. 
 
+It supports Scala Future, ZIO, and Cats-Effect, making it versatile for various functional programming paradigms.
 
-## Introduction
+## Features
 
-- Supports all clients: Session Pool、Pool、Storage、Meta
-- Support for configuring clients with typesafe config
-- Other optimizations suitable for Scala pure functional
-- Support Scala 3, Scala 2.13 and Scala 2.12
+- Support for Multiple Scala Versions: Compatible with Scala 2.12, Scala 2.13, and Scala 3.
+- Functional Programming Support: Integrates seamlessly with Scala Future, ZIO, and Cats-Effect.
+- Type-Safe Configuration: Easily configure clients using PureConfig for type-safe configuration management.
+- Comprehensive Client Support: Provides full support for all NebulaGraph clients, including Session Pool, Connection Pool, Storage, and Meta.
+- Type-Safe Configuration: Easily configure clients using [pureconfig](https://github.com/pureconfig/pureconfig) or [zio-config](https://github.com/zio/zio-config) for type-safe configuration management.
 
 ## Installation
 
-In order to use this library, you need to select one based on your application and add the following line in our `build.sbt` file:
-```scala
-// for zio application
-libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-zio" % <latest version>
-// for cats-effect application
-libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-cats" % <latest version>
+**Adding Dependencies**
+
+To use nebula4scala in your project, add the following dependencies to your `build.sbt` file. 
+Choose the modules you need based on your project requirements.
+
+**For Scala Future Support**
+```sbt
 // for scala application, synchronous wrapper by Future
-libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-core" % <latest version> 
+libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-core" % "<latest version>" 
 ```
 
-There are the version correspondence between nebula4scala and nebula-java:
+**For ZIO Support**
+```sbt
+libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-zio" % "<latest version>"
+```
+
+**For Cats-Effect Support**
+```sbt
+libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-cats" % "<latest version>"
+```
+
+## Version Correspondence
+
+Below is the version correspondence between cats, zio, nebula4scala, and nebula-java:
 
 | cats  |  zio  | nebula4scala | nebula-java |
 |:-----:|:-----:|:------------:|:-----------:|
 | 3.5.x | 2.1.x |    0.2.0     |    3.8.4    |
 
-### Example
 
-Usually, we use a session client, which can be conveniently used in ZIO applications like this: 
-[NebulaSessionClientExample](./examples/src/main/scala/nebula4scala/example/zio/NebulaSessionClientExample.scala)
+## Usage
+
+**Basic Example with Scala Future**
+
+Here is a basic example of how to use nebula4scala with Scala Future:
+[NebulaClientExample](./examples/src/main/scala/nebula4scala/example/sync/NebulaClientExample.scala)
+
+**Example with ZIO**
+
+Here is an example of how to use nebula4scala with ZIO:
+[NebulaClientExample](./examples/src/main/scala/nebula4scala/example/zio/NebulaClientExample.scala)
+
+**Example with Cats-Effect**
+
+Here is an example of how to use nebula4scala with Cats-Effect:
+[NebulaClientExample](./examples/src/main/scala/nebula4scala/example/cats/NebulaClientExample.scala)
 
 ## Configuration
 
-`NebulaSessionClient` Configuration:
-> For the entire structure, see `nebula4scala.data.NebulaSessionPoolConfig`.
+The `NebulaSessionClient` configuration is defined using a HOCON (Human-Optimized Config Object Notation) file. 
+Below is an example configuration for `NebulaSessionClient`:
+
 ```hocon
 graph {
   address = [
@@ -65,10 +94,12 @@ graph {
 }
 ```
 
+For the entire structure, see `nebula4scala.data.NebulaSessionPoolConfig`.
+
 Other configurations:
 
 - `NebulaClient` Configuration: `nebula4scala.data.NebulaPoolConfig`.
 - `NebulaMetaClient` Configuration: `nebula4scala.data.NebulaMetaConfig`.
 - `NebulaStorageClient` Configuration: `nebula4scala.data.NebulaStorageConfig`.
 
-Please see [examples](./examples/src/main/scala/nebula4scala/zio/example/) for more clients and configurations.
+For more detailed examples and additional configurations, please refer to the [examples](./examples/src/main/resources) directory in the repository.
