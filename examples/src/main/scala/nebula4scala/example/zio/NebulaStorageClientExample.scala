@@ -3,9 +3,7 @@ package nebula4scala.example.zio
 import zio._
 
 import nebula4scala.api._
-import nebula4scala.data._
 import nebula4scala.data.input._
-import nebula4scala.zio._
 import nebula4scala.zio.syntax._
 
 final class NebulaStorageClientExample(nebulaStorageClient: NebulaStorageClient[Task]) {

@@ -2,8 +2,6 @@ package nebula4scala.example.zio
 
 import zio._
 
-import _root_.zio._
-import nebula4scala._
 import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.data.input._
