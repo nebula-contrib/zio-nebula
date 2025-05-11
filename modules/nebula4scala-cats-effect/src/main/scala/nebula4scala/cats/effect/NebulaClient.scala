@@ -1,4 +1,4 @@
-package nebula4scala.cats
+package nebula4scala.cats.effect
 
 import cats.syntax.all._
 

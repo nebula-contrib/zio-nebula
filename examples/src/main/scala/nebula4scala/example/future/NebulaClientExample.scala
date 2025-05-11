@@ -1,4 +1,4 @@
-package nebula4scala.example.sync
+package nebula4scala.example.future
 
 import scala.concurrent.Future
 

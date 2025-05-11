@@ -1,10 +1,10 @@
-package nebula4scala.cats
+package nebula4scala.cats.effect
 
 import cats.effect._
 import cats.syntax.all._
 
 import nebula4scala.api._
-import nebula4scala.cats.syntax._
+import nebula4scala.cats.effect.syntax._
 import nebula4scala.data._
 import nebula4scala.data.input._
 import nebula4scala.impl.NebulaSessionClientDefault

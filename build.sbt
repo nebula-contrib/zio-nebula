@@ -80,10 +80,10 @@ lazy val `nebula4scala-core` = project
   .settings(ProjectSetting.value)
   .enablePlugins(ScalafmtPlugin)
 
-lazy val `nebula4scala-cats` = project
-  .in(file("modules/nebula4scala-cats"))
+lazy val `nebula4scala-cats-effect` = project
+  .in(file("modules/nebula4scala-cats-effect"))
   .settings(
-    name               := "nebula4scala-cats",
+    name               := "nebula4scala-cats-effect",
     crossScalaVersions := supportCrossVersionList,
     libraryDependencies ++= Seq(
       "org.typelevel" %% "cats-effect" % catsEffectVersion,
@@ -125,7 +125,7 @@ lazy val examples = project
   .settings(ProjectSetting.value)
   .settings(ProjectSetting.noPublish)
   .dependsOn(`nebula4scala-zio` % "compile->compile;test->test")
-  .dependsOn(`nebula4scala-cats` % "compile->compile;test->test")
+  .dependsOn(`nebula4scala-cats-effect` % "compile->compile;test->test")
   .enablePlugins(ScalafmtPlugin)
 
 lazy val `root` = project
@@ -140,7 +140,7 @@ lazy val `root` = project
   .aggregate(
     `nebula4scala-zio`,
     `nebula4scala-core`,
-    `nebula4scala-cats`,
+    `nebula4scala-cats-effect`,
     examples
   )
   .enablePlugins(ScalafmtPlugin)

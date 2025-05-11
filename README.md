@@ -50,9 +50,9 @@ libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-cats" % "<late
 
 Below is the version correspondence between cats, zio, nebula4scala, and nebula-java:
 
-| cats  |  zio  | nebula4scala | nebula-java |
-|:-----:|:-----:|:------------:|:-----------:|
-| 3.5.x | 2.1.x |    0.2.0     |    3.8.4    |
+| cats-effect |  zio  | nebula4scala | nebula-java |
+|:-----------:|:-----:|:------------:|:-----------:|
+|    3.5.x    | 2.1.x |    0.2.0     |    3.8.4    |
 
 
 ## Usage
@@ -60,7 +60,7 @@ Below is the version correspondence between cats, zio, nebula4scala, and nebula-
 **Basic Example with Scala Future**
 
 Here is a basic example of how to use nebula4scala with Scala Future:
-[NebulaClientExample](./examples/src/main/scala/nebula4scala/example/sync/NebulaClientExample.scala)
+[NebulaClientExample](./examples/src/main/scala/nebula4scala/example/future/NebulaClientExample.scala)
 
 **Example with ZIO**
 
@@ -70,7 +70,7 @@ Here is an example of how to use nebula4scala with ZIO:
 **Example with Cats-Effect**
 
 Here is an example of how to use nebula4scala with Cats-Effect:
-[NebulaClientExample](./examples/src/main/scala/nebula4scala/example/cats/NebulaClientExample.scala)
+[NebulaClientExample](./examples/src/main/scala/nebula4scala/example/cats/effect/NebulaClientExample.scala)
 
 ## Configuration
 

@@ -1,4 +1,4 @@
-package nebula4scala.cats
+package nebula4scala.cats.effect
 
 import scala.collection.compat.immutable.LazyList
 
@@ -8,8 +8,8 @@ import cats.syntax.all._
 import com.vesoft.nebula.Row
 import com.vesoft.nebula.graph.PlanDescription
 
+import NebulaResultSetImpl.NebulaRecordImpl
 import nebula4scala.api._
-import nebula4scala.cats.NebulaResultSetImpl.NebulaRecordImpl
 import nebula4scala.data.value._
 import nebula4scala.syntax._
 
