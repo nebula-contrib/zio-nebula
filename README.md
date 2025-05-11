@@ -1,4 +1,4 @@
-![](logo.svg)
+<img src="./logo.svg" width = "250" height = "150" alt="logo" align="right" />
 
 ---
 
