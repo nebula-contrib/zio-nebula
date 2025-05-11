@@ -20,7 +20,7 @@ object NebulaClient {
 
     def close(): Task[Unit] = implicitly[Effect[Task]].fromFuture(underlying.close())
 
-    def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean): Task[NebulaSession[Task]] =
+    def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean = false): Task[NebulaSession[Task]] =
       implicitly[Effect[Task]]
         .fromFuture(underlying.getSession(poolConfig, useSpace))
         .map(s => new NebulaSessionImpl(s))

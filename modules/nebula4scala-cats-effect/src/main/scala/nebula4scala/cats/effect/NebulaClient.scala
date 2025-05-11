@@ -23,7 +23,7 @@ object NebulaClient {
 
     def close(): F[Unit] = implicitly[Effect[F]].fromFuture(underlying.close())
 
-    def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean): F[NebulaSession[F]] =
+    def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean = false): F[NebulaSession[F]] =
       implicitly[Effect[F]]
         .fromFuture(
           underlying
