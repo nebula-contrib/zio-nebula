@@ -3,10 +3,10 @@ package nebula4scala.impl
 import scala.concurrent._
 import scala.jdk.CollectionConverters._
 
-import com.vesoft.nebula.client.graph.data.HostAddress
 import com.vesoft.nebula.client.graph.net.Session
 
 import nebula4scala.api.NebulaSession
+import nebula4scala.data.NebulaHostAddress
 import nebula4scala.data.input._
 import nebula4scala.syntax._
 
@@ -36,7 +36,12 @@ final class NebulaSessionDefault(private val underlying: Session) extends Nebula
 
   def release(): ScalaFuture[Unit] = Future(blocking(underlying.release()))
 
-  def graphHost: ScalaFuture[HostAddress] = Future(blocking(underlying.getGraphHost))
+  def graphHost: ScalaFuture[NebulaHostAddress] = Future {
+    blocking {
+      val addr = underlying.getGraphHost
+      NebulaHostAddress(addr.getHost, addr.getPort)
+    }
+  }
 
   def sessionID: ScalaFuture[Long] = Future(blocking(underlying.getSessionID))
 

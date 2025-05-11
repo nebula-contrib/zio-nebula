@@ -1,9 +1,7 @@
 package nebula4scala.api
 
-import com.vesoft.nebula.client.graph.data.HostAddress
-
+import nebula4scala.data.NebulaHostAddress
 import nebula4scala.data.input.Stmt
-import nebula4scala.syntax._
 
 trait NebulaSession[F[_]] {
 
@@ -15,7 +13,7 @@ trait NebulaSession[F[_]] {
 
   def release(): F[Unit]
 
-  def graphHost: F[HostAddress]
+  def graphHost: F[NebulaHostAddress]
 
   def sessionID: F[Long]
 

@@ -3,11 +3,10 @@ package nebula4scala.cats.effect
 import cats.effect.kernel.Async
 import cats.syntax.all._
 
-import com.vesoft.nebula.client.graph.data.HostAddress
-
 import nebula4scala.Effect
 import nebula4scala.api._
 import nebula4scala.cats.effect.syntax._
+import nebula4scala.data.NebulaHostAddress
 import nebula4scala.data.input._
 import nebula4scala.syntax._
 
@@ -25,7 +24,7 @@ final class NebulaSessionImpl[F[_]: Async](private val underlying: NebulaSession
 
   def release(): F[Unit] = implicitly[Effect[F]].fromEffect(Async[F].blocking(underlying.release()))
 
-  def graphHost: F[HostAddress] = implicitly[Effect[F]].fromEffect(Async[F].blocking(underlying.graphHost))
+  def graphHost: F[NebulaHostAddress] = implicitly[Effect[F]].fromEffect(Async[F].blocking(underlying.graphHost))
 
   def sessionID: F[Long] = implicitly[Effect[F]].fromEffect(Async[F].blocking(underlying.sessionID))
 

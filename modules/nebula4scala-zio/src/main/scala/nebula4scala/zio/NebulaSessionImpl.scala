@@ -2,10 +2,9 @@ package nebula4scala.zio
 
 import zio._
 
-import com.vesoft.nebula.client.graph.data.HostAddress
-
 import nebula4scala.Effect
 import nebula4scala.api._
+import nebula4scala.data.NebulaHostAddress
 import nebula4scala.data.input._
 import nebula4scala.syntax._
 import nebula4scala.zio.syntax._
@@ -24,7 +23,7 @@ final class NebulaSessionImpl(private val underlying: NebulaSession[ScalaFuture]
 
   def release(): Task[Unit] = ZIO.blocking(implicitly[Effect[Task]].fromFuture(underlying.release()))
 
-  def graphHost: Task[HostAddress] = ZIO.blocking(implicitly[Effect[Task]].fromFuture(underlying.graphHost))
+  def graphHost: Task[NebulaHostAddress] = ZIO.blocking(implicitly[Effect[Task]].fromFuture(underlying.graphHost))
 
   def sessionID: Task[Long] = ZIO.blocking(implicitly[Effect[Task]].fromFuture(underlying.sessionID))
 

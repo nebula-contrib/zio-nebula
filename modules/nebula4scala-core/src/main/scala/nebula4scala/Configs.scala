@@ -33,11 +33,11 @@ object Configs {
   private lazy val defaultStorageConfig = ConfigSource.default.at("storage")
   private lazy val defaultPoolConfig    = ConfigSource.default.at("pool")
 
-  def metaConfig(cfg: Option[ConfigSource] = None): NebulaConfig =
-    cfg.getOrElse(defaultMetaConfig).loadOrThrow[NebulaConfig]
+  def metaConfig(cfg: Option[ConfigSource] = None): NebulaMetaConfig =
+    NebulaMetaConfig(cfg.getOrElse(defaultMetaConfig).loadOrThrow[NebulaConfig])
 
-  def storageConfig(cfg: Option[ConfigSource] = None): NebulaConfig =
-    cfg.getOrElse(defaultStorageConfig).loadOrThrow[NebulaConfig]
+  def storageConfig(cfg: Option[ConfigSource] = None): NebulaStorageConfig =
+    NebulaStorageConfig(cfg.getOrElse(defaultStorageConfig).loadOrThrow[NebulaConfig])
 
   def sessionPoolConfig(cfg: Option[ConfigSource] = None): NebulaSessionPoolConfig =
     cfg.getOrElse(defaultGraphConfig).loadOrThrow[NebulaSessionPoolConfig]
