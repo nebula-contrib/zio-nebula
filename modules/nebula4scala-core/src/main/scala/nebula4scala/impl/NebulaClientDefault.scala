@@ -26,18 +26,7 @@ final class NebulaClientDefault(underlying: Pool) extends NebulaClient[ScalaFutu
 
   def close(): ScalaFuture[Unit] = Future(underlying.close())
 
-  def getSession(poolConfig: NebulaPoolConfig): ScalaFuture[NebulaSession[ScalaFuture]] =
-    Future(
-      new NebulaSessionDefault(
-        underlying.getSession(
-          poolConfig.auth.username,
-          poolConfig.auth.password,
-          poolConfig.reconnect
-        )
-      )
-    )
-
-  def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean): ScalaFuture[NebulaSession[ScalaFuture]] =
+  def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean = false): ScalaFuture[NebulaSession[ScalaFuture]] =
     Future {
       val session = new NebulaSessionDefault(
         underlying.getSession(

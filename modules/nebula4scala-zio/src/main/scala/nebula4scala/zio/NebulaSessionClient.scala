@@ -1,6 +1,7 @@
 package nebula4scala.zio
 
 import _root_.zio._
+import nebula4scala.Effect
 import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.data.input._
@@ -12,22 +13,20 @@ object NebulaSessionClient {
 
   private final class Impl(underlying: NebulaSessionClient[ScalaFuture]) extends NebulaSessionClient[Task] {
 
-    override def execute(stmt: Stmt): Task[stmt.T] =
-      ZIO
-        .fromFuture(_ => underlying.execute(stmt))
-        .flatMap { result =>
-          implicitly[ResultSetHandler[Task]].handle(result).asInstanceOf[Task[stmt.T]]
-        }
+    def execute(stmt: Stmt): Task[stmt.T] =
+      implicitly[Effect[Task]].fromFuture(underlying.execute(stmt)).flatMap { result =>
+        implicitly[ResultSetHandler[Task]].handle(result).asInstanceOf[Task[stmt.T]]
+      }
 
-    override def idleSessionNum: Task[Int] = ZIO.fromFuture(_ => underlying.idleSessionNum)
+    def idleSessionNum: Task[Int] = implicitly[Effect[Task]].fromFuture(underlying.idleSessionNum)
 
-    override def sessionNum: Task[Int] = ZIO.fromFuture(_ => underlying.sessionNum)
+    def sessionNum: Task[Int] = implicitly[Effect[Task]].fromFuture(underlying.sessionNum)
 
-    override def isActive: Task[Boolean] = ZIO.fromFuture(_ => underlying.isActive)
+    def isActive: Task[Boolean] = implicitly[Effect[Task]].fromFuture(underlying.isActive)
 
-    override def isClosed: Task[Boolean] = ZIO.fromFuture(_ => underlying.isClosed)
+    def isClosed: Task[Boolean] = implicitly[Effect[Task]].fromFuture(underlying.isClosed)
 
-    override def close(): Task[Unit] = ZIO.fromFuture(_ => underlying.close())
+    def close(): Task[Unit] = implicitly[Effect[Task]].fromFuture(underlying.close())
 
   }
 

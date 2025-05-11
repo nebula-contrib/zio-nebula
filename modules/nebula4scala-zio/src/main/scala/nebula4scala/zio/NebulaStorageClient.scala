@@ -2,23 +2,25 @@ package nebula4scala.zio
 
 import zio._
 
+import nebula4scala.Effect
 import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.data.input._
 import nebula4scala.impl.NebulaStorageClientDefault
 import nebula4scala.syntax._
+import nebula4scala.zio.syntax._
 
 object NebulaStorageClient {
 
   private final class Impl(underlying: NebulaStorageClient[ScalaFuture]) extends NebulaStorageClient[Task] {
 
-    override def connect(): Task[Boolean] = ZIO.fromFuture(_ => underlying.connect())
+    def connect(): Task[Boolean] =
+      implicitly[Effect[Task]].fromFuture(underlying.connect())
 
-    override def close(): Task[Unit] = ZIO.fromFuture(_ => underlying.close())
+    def close(): Task[Unit] = implicitly[Effect[Task]].fromFuture(underlying.close())
 
-    override def scan(scanInput: ScanInput): Task[scanInput.T] = {
-      ZIO.fromFuture(_ => underlying.scan(scanInput))
-    }
+    def scan(scanInput: ScanInput): Task[scanInput.T] =
+      implicitly[Effect[Task]].fromFuture(underlying.scan(scanInput))
 
   }
 

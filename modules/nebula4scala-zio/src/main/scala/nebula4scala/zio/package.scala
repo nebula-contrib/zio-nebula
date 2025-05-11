@@ -5,7 +5,7 @@ import _root_.zio.Task
 import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.data.input.Context
-import nebula4scala.syntax.{ ResultSetHandler, ScalaFuture }
+import nebula4scala.syntax._
 
 package zio {
 
@@ -18,6 +18,11 @@ package zio {
         case str: String                                  => ZIO.succeed(str)
         case other => ZIO.fail(new IllegalArgumentException(s"Unexpected result type: ${other.getClass}"))
       }
+    }
+
+    implicit val zioEffect: Effect[Task] = new Effect[Task] {
+      def fromFuture[A](future: => ScalaFuture[A]): Task[A]       = ZIO.fromFuture(_ => future)
+      def fromEffect[A](future: => Task[ScalaFuture[A]]): Task[A] = future.flatMap(f => ZIO.fromFuture(_ => f))
     }
 
     implicit val context: Context[Task] = new Context[Task] {}

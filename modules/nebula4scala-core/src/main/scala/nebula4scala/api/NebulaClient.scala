@@ -8,9 +8,7 @@ trait NebulaClient[F[_]] {
 
   def close(): F[Unit]
 
-  def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean): F[NebulaSession[F]]
-
-  def getSession(poolConfig: NebulaPoolConfig): F[NebulaSession[F]]
+  def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean = false): F[NebulaSession[F]]
 
   def activeConnNum: F[Int]
 

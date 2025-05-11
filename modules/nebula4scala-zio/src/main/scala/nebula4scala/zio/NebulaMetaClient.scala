@@ -3,47 +3,45 @@ package nebula4scala.zio
 import com.vesoft.nebula.meta._
 
 import _root_.zio._
+import nebula4scala.Effect
 import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.impl.NebulaMetaClientDefault
 import nebula4scala.syntax._
+import nebula4scala.zio.syntax._
 
 object NebulaMetaClient {
 
   private final class Impl(underlying: NebulaMetaClient[ScalaFuture]) extends NebulaMetaClient[Task] {
 
-    override def close(): Task[Unit] = ZIO.fromFuture(_ => underlying.close())
+    def close(): Task[Unit] = implicitly[Effect[Task]].fromFuture(underlying.close())
 
-    override def spaceId(spaceName: String): Task[Int] = ZIO.fromFuture(_ => underlying.spaceId(spaceName))
+    def spaceId(spaceName: String): Task[Int] =
+      implicitly[Effect[Task]].fromFuture(underlying.spaceId(spaceName))
 
-    override def space(spaceName: String): Task[SpaceItem] = ZIO.fromFuture(_ => underlying.space(spaceName))
+    def space(spaceName: String): Task[SpaceItem] =
+      implicitly[Effect[Task]].fromFuture(underlying.space(spaceName))
 
-    override def tagId(spaceName: String, tagName: String): Task[Int] =
-      ZIO.fromFuture(_ => underlying.tagId(spaceName, tagName))
+    def tagId(spaceName: String, tagName: String): Task[Int] =
+      implicitly[Effect[Task]].fromFuture(underlying.tagId(spaceName, tagName))
 
-    override def tag(spaceName: String, tagName: String): Task[TagItem] =
-      ZIO.fromFuture(_ => underlying.tag(spaceName, tagName))
+    def tag(spaceName: String, tagName: String): Task[TagItem] =
+      implicitly[Effect[Task]].fromFuture(underlying.tag(spaceName, tagName))
 
-    override def edgeType(spaceName: String, edgeName: String): Task[Int] =
-      ZIO.fromFuture(_ => underlying.edgeType(spaceName, edgeName))
+    def edgeType(spaceName: String, edgeName: String): Task[Int] =
+      implicitly[Effect[Task]].fromFuture(underlying.edgeType(spaceName, edgeName))
 
-    override def leader(spaceName: String, part: Int): Task[NebulaHostAddress] =
-      ZIO.fromFuture(_ => underlying.leader(spaceName, part))
+    def leader(spaceName: String, part: Int): Task[NebulaHostAddress] =
+      implicitly[Effect[Task]].fromFuture(underlying.leader(spaceName, part))
 
-    override def spaceParts(spaceName: String): Task[List[Int]] =
-      ZIO.fromFuture(_ =>
-        underlying
-          .spaceParts(spaceName)
-      )
+    def spaceParts(spaceName: String): Task[List[Int]] =
+      implicitly[Effect[Task]].fromFuture(underlying.spaceParts(spaceName))
 
-    override def partsAlloc(spaceName: String): Task[Map[Int, List[NebulaHostAddress]]] =
-      ZIO.fromFuture(_ =>
-        underlying
-          .partsAlloc(spaceName)
-      )
+    def partsAlloc(spaceName: String): Task[Map[Int, List[NebulaHostAddress]]] =
+      implicitly[Effect[Task]].fromFuture(underlying.partsAlloc(spaceName))
 
-    override def listHosts: Task[Set[NebulaHostAddress]] =
-      ZIO.fromFuture(_ => underlying.listHosts)
+    def listHosts: Task[Set[NebulaHostAddress]] =
+      implicitly[Effect[Task]].fromFuture(underlying.listHosts)
   }
 
   val layer: ZLayer[NebulaMetaConfig & Scope, Throwable, NebulaMetaClient[Task]] =

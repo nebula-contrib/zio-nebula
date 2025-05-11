@@ -2,6 +2,7 @@ package nebula4scala.cats.effect
 
 import _root_.cats.Monad
 import _root_.cats.effect.Async
+import nebula4scala.Effect
 import nebula4scala.api.NebulaResultSet
 import nebula4scala.data.input.Context
 import nebula4scala.syntax._
@@ -18,5 +19,10 @@ object syntax {
       case other =>
         Async[F].raiseError(new IllegalArgumentException(s"Unexpected result type: ${other.getClass}"))
     }
+  }
+
+  implicit def catsEffect[F[_]: Async]: Effect[F] = new Effect[F] {
+    def fromFuture[A](future: => ScalaFuture[A]): F[A]    = Async[F].fromFuture(Async[F].pure(future))
+    def fromEffect[A](future: => F[ScalaFuture[A]]): F[A] = Async[F].fromFuture(future)
   }
 }

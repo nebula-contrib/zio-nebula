@@ -2,7 +2,9 @@ package nebula4scala.cats.effect
 
 import cats.effect._
 
+import nebula4scala.Effect
 import nebula4scala.api._
+import nebula4scala.cats.effect.syntax._
 import nebula4scala.data._
 import nebula4scala.data.input._
 import nebula4scala.impl.NebulaStorageClientDefault
@@ -14,13 +16,12 @@ object NebulaStorageClient {
     underlying: NebulaStorageClient[ScalaFuture]
   ) extends NebulaStorageClient[F] {
 
-    override def connect(): F[Boolean] = Async[F].fromFuture(Async[F].delay(underlying.connect()))
+    def connect(): F[Boolean] = implicitly[Effect[F]].fromFuture(underlying.connect())
 
-    override def close(): F[Unit] = Async[F].fromFuture(Async[F].delay(underlying.close()))
+    def close(): F[Unit] = implicitly[Effect[F]].fromFuture(underlying.close())
 
-    override def scan(scanInput: ScanInput): F[scanInput.T] = {
-      Async[F].fromFuture(Async[F].delay(underlying.scan(scanInput)))
-    }
+    def scan(scanInput: ScanInput): F[scanInput.T] =
+      implicitly[Effect[F]].fromFuture(underlying.scan(scanInput))
 
   }
 

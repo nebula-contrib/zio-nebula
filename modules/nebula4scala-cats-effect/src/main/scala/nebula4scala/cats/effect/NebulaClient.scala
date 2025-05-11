@@ -5,7 +5,9 @@ import cats.syntax.all._
 import com.vesoft.nebula.client.graph.{ NebulaPoolConfig => _ }
 
 import _root_.cats.effect._
+import nebula4scala.Effect
 import nebula4scala.api._
+import nebula4scala.cats.effect.syntax._
 import nebula4scala.data._
 import nebula4scala.impl._
 import nebula4scala.syntax._
@@ -16,41 +18,27 @@ object NebulaClient {
     underlying: NebulaClient[ScalaFuture]
   ) extends NebulaClient[F] {
 
-    override def init(poolConfig: NebulaPoolConfig): F[Boolean] =
-      Async[F].fromFuture(Async[F].delay(underlying.init(poolConfig)))
+    def init(poolConfig: NebulaPoolConfig): F[Boolean] =
+      implicitly[Effect[F]].fromFuture(underlying.init(poolConfig))
 
-    override def close(): F[Unit] = Async[F].fromFuture(Async[F].delay(underlying.close()))
+    def close(): F[Unit] = implicitly[Effect[F]].fromFuture(underlying.close())
 
-    override def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean): F[NebulaSession[F]] =
-      Async[F]
+    def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean): F[NebulaSession[F]] =
+      implicitly[Effect[F]]
         .fromFuture(
-          Async[F].delay(
-            underlying
-              .getSession(
-                poolConfig,
-                useSpace
-              )
-          )
+          underlying
+            .getSession(
+              poolConfig,
+              useSpace
+            )
         )
         .map(s => new NebulaSessionImpl(s))
 
-    override def getSession(poolConfig: NebulaPoolConfig): F[NebulaSession[F]] =
-      Async[F]
-        .fromFuture(
-          Async[F].delay(
-            underlying
-              .getSession(
-                poolConfig
-              )
-          )
-        )
-        .map(s => new NebulaSessionImpl(s))
+    def activeConnNum: F[Int] = implicitly[Effect[F]].fromFuture(underlying.activeConnNum)
 
-    override def activeConnNum: F[Int] = Async[F].fromFuture(Async[F].delay(underlying.activeConnNum))
+    def idleConnNum: F[Int] = implicitly[Effect[F]].fromFuture(underlying.idleConnNum)
 
-    override def idleConnNum: F[Int] = Async[F].fromFuture(Async[F].delay(underlying.idleConnNum))
-
-    override def waitersNum: F[Int] = Async[F].fromFuture(Async[F].delay(underlying.waitersNum))
+    def waitersNum: F[Int] = implicitly[Effect[F]].fromFuture(underlying.waitersNum)
   }
 
   def resource[F[_]: Async]: Resource[F, NebulaClient[F]] =
