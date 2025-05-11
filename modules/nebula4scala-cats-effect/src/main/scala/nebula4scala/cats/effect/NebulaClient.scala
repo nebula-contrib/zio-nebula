@@ -2,8 +2,6 @@ package nebula4scala.cats.effect
 
 import cats.syntax.all._
 
-import com.vesoft.nebula.client.graph.{ NebulaPoolConfig => _ }
-
 import _root_.cats.effect._
 import nebula4scala.Effect
 import nebula4scala.api._

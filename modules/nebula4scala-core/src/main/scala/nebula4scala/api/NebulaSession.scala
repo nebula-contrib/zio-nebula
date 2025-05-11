@@ -7,8 +7,6 @@ import nebula4scala.syntax._
 
 trait NebulaSession[F[_]] {
 
-  type Resultset = NebulaResultSet[ScalaFuture]
-
   def execute(stmt: Stmt): F[stmt.T]
 
   def ping(): F[Boolean]

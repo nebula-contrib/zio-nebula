@@ -5,8 +5,6 @@ import scala.collection.compat.immutable.LazyList
 import scala.collection.convert._
 
 import com.vesoft.nebula.Row
-import com.vesoft.nebula.client.graph.data
-import com.vesoft.nebula.client.graph.data.ResultSet
 import com.vesoft.nebula.client.graph.data.ResultSet.Record
 import com.vesoft.nebula.graph.PlanDescription
 
