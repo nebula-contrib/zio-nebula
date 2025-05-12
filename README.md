@@ -21,6 +21,7 @@ It supports Scala Future, ZIO, and Cats-Effect, making it versatile for various 
 - Functional Programming Support: Integrates seamlessly with Scala Future, ZIO, and Cats-Effect.
 - Comprehensive Client Support: Provides full support for all NebulaGraph clients, including Session Pool, Connection Pool, Storage, and Meta.
 - Type-Safe Configuration: Easily configure clients using [pureconfig](https://github.com/pureconfig/pureconfig) or [zio-config](https://github.com/zio/zio-config) for type-safe configuration management.
+- Tagless Support: Provides tagless final style, making it easier to switch between different effect types or implementations without modifying the core logic.
 
 ## Installation
 
