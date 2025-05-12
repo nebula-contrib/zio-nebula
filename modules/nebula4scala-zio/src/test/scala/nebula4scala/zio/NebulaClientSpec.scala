@@ -40,7 +40,7 @@ object NebulaClientSpec extends NebulaSpec {
         config(
           NebulaHostAddress(container.graphdHostList.head, container.graphdPortList.head),
           NebulaHostAddress(container.metadHostList.head, container.metadPortList.head),
-          NebulaHostAddress(container.storagedHostList.head, container.storagedPortList.head)
+          NebulaHostAddress(container.metadHostList.head, container.metadPortList.head)
         )
       )
     )

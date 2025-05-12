@@ -87,9 +87,9 @@ trait NebulaSpec extends ZIOSpecDefault {
               container.metadHostList.head,
               container.metadPortList.head
             ),
-            NebulaHostAddress(
-              container.storagedHostList.head,
-              container.storagedPortList.head
+            NebulaHostAddress( // storage address == meta address
+              container.metadHostList.head,
+              container.metadPortList.head
             )
           )
         )

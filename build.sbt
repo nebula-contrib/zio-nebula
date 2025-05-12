@@ -1,3 +1,4 @@
+import ProjectSetting._
 import sbt._
 import sbt.Keys._
 import xerial.sbt.Sonatype.sonatypeCentralHost
@@ -18,8 +19,6 @@ val silencerVersion             = "1.4.2"
 val testcontainersNebulaVersion = "0.2.0"
 
 val supportCrossVersionList = Seq(scala3_Version, scala2_13Version, scala2_12Version)
-
-import ProjectSetting._
 
 inThisBuild(
   List(

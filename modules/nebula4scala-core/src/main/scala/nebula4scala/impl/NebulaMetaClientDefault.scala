@@ -14,14 +14,13 @@ import nebula4scala.syntax._
 object NebulaMetaClientDefault {
 
   def make(config: NebulaClientConfig): NebulaMetaClient[ScalaFuture] = {
-    val nebulaConfig = config.meta
     val manger = new MetaManager(
-      nebulaConfig.address.map(a => new HostAddress(a.host, a.port)).asJava,
-      nebulaConfig.timeoutMills,
-      nebulaConfig.connectionRetry,
-      nebulaConfig.executionRetry,
-      nebulaConfig.enableSSL,
-      nebulaConfig.casSigned.orElse(nebulaConfig.selfSigned).map(_.toJava).orNull
+      config.meta.address.map(a => new HostAddress(a.host, a.port)).asJava,
+      config.meta.timeoutMills,
+      config.meta.connectionRetry,
+      config.meta.executionRetry,
+      config.meta.enableSSL,
+      config.meta.casSigned.orElse(config.meta.selfSigned).map(_.toJava).orNull
     )
     new NebulaMetaClientDefault(manger)
   }

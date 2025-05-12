@@ -20,16 +20,6 @@ final case class CommonServiceConfig(
   selfSigned: Option[SSLParam] = None
 )
 
-final case class NebulaStorageConfig(
-  address: List[NebulaHostAddress],
-  timeoutMills: Int,
-  executionRetry: Int,
-  connectionRetry: Int,
-  enableSSL: Boolean = false,
-  casSigned: Option[SSLParam] = None,
-  selfSigned: Option[SSLParam] = None
-)
-
 final case class NebulaPoolConfig(
   minConnsSize: Int = 0,
   maxConnsSize: Int = 10,
