@@ -95,11 +95,12 @@ nebula {
 }
 ```
 
-For the entire structure, see `nebula4scala.data.NebulaSessionPoolConfig`.
+For the entire structure, see `nebula4scala.data.NebulaClientConfig`.
 
 Other configurations:
 
-- `NebulaClient` Configuration: `nebula4scala.data.NebulaPoolConfig`.
+- `NebulaSessionClient` Configuration: `nebula4scala.data.NebulaClientConfig#graph`.
+- `NebulaClient` Configuration: `nebula4scala.data.NebulaClientConfig#pool`.
 - `NebulaMetaClient` Configuration: `nebula4scala.data.NebulaMetaConfig`.
 - `NebulaStorageClient` Configuration: `nebula4scala.data.NebulaStorageConfig`.
 
