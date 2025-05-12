@@ -12,7 +12,7 @@ object NebulaSessionClientExample extends IOApp {
 
   override def run(args: List[String]): IO[ExitCode] = {
     for {
-      _ <- NebulaSessionClient.resource[IO](Configs.sessionPoolConfig()).use { client =>
+      _ <- NebulaSessionClient.resource[IO](Configs.config()).use { client =>
         for {
           resM1 <- client.execute(Stmt.str[IO]("""
                                                 |INSERT VERTEX person(name, age) VALUES 

@@ -13,30 +13,32 @@ import nebula4scala.data.input.Stmt
 import nebula4scala.syntax._
 
 object NebulaClientDefault {
-  def make: NebulaClient[ScalaFuture] = new NebulaClientDefault(new Pool)
+  def make(config: NebulaClientConfig): NebulaClient[ScalaFuture] = new NebulaClientDefault(config, new Pool)
 
 }
 
-final class NebulaClientDefault(underlying: Pool) extends NebulaClient[ScalaFuture] {
+final class NebulaClientDefault(config: NebulaClientConfig, underlying: Pool) extends NebulaClient[ScalaFuture] {
 
-  def init(poolConfig: NebulaPoolConfig): ScalaFuture[Boolean] =
+  def init(): ScalaFuture[Boolean] =
     Future(
-      blocking(underlying.init(poolConfig.address.map(d => new HostAddress(d.host, d.port)).asJava, poolConfig.toJava))
+      blocking(
+        underlying.init(config.graph.address.map(d => new HostAddress(d.host, d.port)).asJava, config.graph.pool.toJava)
+      )
     )
 
   def close(): ScalaFuture[Unit] = Future(underlying.close())
 
-  def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean = false): ScalaFuture[NebulaSession[ScalaFuture]] =
+  def getSession(useSpace: Boolean = false): ScalaFuture[NebulaSession[ScalaFuture]] =
     Future {
       val session = new NebulaSessionDefault(
         underlying.getSession(
-          poolConfig.auth.username,
-          poolConfig.auth.password,
-          poolConfig.reconnect
+          config.graph.auth.username,
+          config.graph.auth.password,
+          config.graph.reconnect
         )
       )
-      if (useSpace && poolConfig.spaceName.nonEmpty) {
-        session.execute(Stmt.str[ScalaFuture](s"USE `${poolConfig.spaceName.orNull}`"))
+      if (useSpace && config.graph.spaceName.nonEmpty) {
+        session.execute(Stmt.str[ScalaFuture](s"USE `${config.graph.spaceName}`"))
       }
       session
     }

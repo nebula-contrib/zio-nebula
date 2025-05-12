@@ -14,16 +14,15 @@ import nebula4scala.syntax._
 
 object NebulaStorageClientDefault {
 
-  def make(config: NebulaStorageConfig): NebulaStorageClient[ScalaFuture] = {
-    val nebulaConfig = config.underlying
+  def make(config: NebulaClientConfig): NebulaStorageClient[ScalaFuture] = {
     new NebulaStorageClientDefault(
       new StorageClient(
-        nebulaConfig.address.map(a => new HostAddress(a.host, a.port)).asJava,
-        nebulaConfig.timeoutMills,
-        nebulaConfig.connectionRetry,
-        nebulaConfig.executionRetry,
-        nebulaConfig.enableSSL,
-        nebulaConfig.casSigned.orElse(nebulaConfig.selfSigned).map(_.toJava).orNull
+        config.storage.address.map(a => new HostAddress(a.host, a.port)).asJava,
+        config.storage.timeoutMills,
+        config.storage.connectionRetry,
+        config.storage.executionRetry,
+        config.storage.enableSSL,
+        config.storage.casSigned.orElse(config.storage.selfSigned).map(_.toJava).orNull
       )
     )
   }

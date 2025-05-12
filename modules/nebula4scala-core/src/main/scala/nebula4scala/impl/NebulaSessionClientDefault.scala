@@ -14,24 +14,24 @@ import nebula4scala.syntax._
 
 object NebulaSessionClientDefault {
 
-  def make(sessionPoolConfig: NebulaSessionPoolConfig): NebulaSessionClient[ScalaFuture] = {
+  def make(config: NebulaClientConfig): NebulaSessionClient[ScalaFuture] = {
     try {
       val sessionPool = new SessionPool(
         new SessionPoolConfig(
-          sessionPoolConfig.address.map(d => new HostAddress(d.host, d.port)).asJava,
-          sessionPoolConfig.spaceName,
-          sessionPoolConfig.auth.username,
-          sessionPoolConfig.auth.password
-        ).setMaxSessionSize(sessionPoolConfig.maxSessionSize)
-          .setMinSessionSize(sessionPoolConfig.minSessionSize)
-          .setRetryTimes(sessionPoolConfig.retryTimes)
-          .setWaitTime(sessionPoolConfig.waitTimeMills)
-          .setIntervalTime(sessionPoolConfig.intervalTimeMills)
-          .setTimeout(sessionPoolConfig.timeoutMills)
-          .setCleanTime(sessionPoolConfig.cleanTimeSeconds)
-          .setReconnect(sessionPoolConfig.reconnect)
-          .setHealthCheckTime(sessionPoolConfig.healthCheckTimeSeconds)
-          .setUseHttp2(sessionPoolConfig.useHttp2)
+          config.graph.address.map(d => new HostAddress(d.host, d.port)).asJava,
+          config.graph.spaceName,
+          config.graph.auth.username,
+          config.graph.auth.password
+        ).setMaxSessionSize(config.graph.maxSessionSize)
+          .setMinSessionSize(config.graph.minSessionSize)
+          .setRetryTimes(config.graph.retryTimes)
+          .setWaitTime(config.graph.waitTimeMills)
+          .setIntervalTime(config.graph.intervalTimeMills)
+          .setTimeout(config.graph.timeoutMills)
+          .setCleanTime(config.graph.cleanTimeSeconds)
+          .setReconnect(config.graph.reconnect)
+          .setHealthCheckTime(config.graph.healthCheckTimeSeconds)
+          .setUseHttp2(config.graph.useHttp2)
       )
       new NebulaSessionClientDefault(sessionPool)
     } catch {

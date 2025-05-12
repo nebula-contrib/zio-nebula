@@ -28,29 +28,30 @@ package zio {
     implicit val context: Context[Task] = new Context[Task] {}
 
     type SessionClient = NebulaSessionClient[Task]
-    type Client        = NebulaClient[Task] & NebulaPoolConfig
+    type Client        = NebulaClient[Task] & NebulaClientConfig
     type Storage       = NebulaStorageClient[Task]
     type Meta          = NebulaMetaClient[Task]
 
+    // default
     lazy val SessionClientEnv: ZLayer[Scope, Throwable, SessionClient] = ZLayer.makeSome[Scope, SessionClient](
       NebulaSessionClient.layer,
-      Configs.sessionConfigLayer
+      Configs.configLayer
     )
 
     lazy val ClientEnv: ZLayer[Scope, Throwable, Client] =
       ZLayer.makeSome[Scope, Client](
         NebulaClient.layer,
-        Configs.poolConfigLayer
+        Configs.configLayer
       )
 
     lazy val StorageEnv: ZLayer[Scope, Throwable, Storage] = ZLayer.makeSome[Scope, Storage](
       NebulaStorageClient.layer,
-      Configs.storageConfigLayer
+      Configs.configLayer
     )
 
     lazy val MetaEnv: ZLayer[Scope, Throwable, Meta] = ZLayer.makeSome[Scope, Meta](
       NebulaMetaClient.layer,
-      Configs.metaConfigLayer
+      Configs.configLayer
     )
   }
 }

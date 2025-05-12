@@ -37,8 +37,8 @@ object NebulaSessionClient {
     }
   }
 
-  def resource[F[_]: Async](sessionPoolConfig: NebulaSessionPoolConfig): Resource[F, NebulaSessionClient[F]] =
+  def resource[F[_]: Async](config: NebulaClientConfig): Resource[F, NebulaSessionClient[F]] =
     Resource.make(
-      Async[F].blocking(new Impl(NebulaSessionClientDefault.make(sessionPoolConfig)))
+      Async[F].blocking(new Impl(NebulaSessionClientDefault.make(config)))
     )(client => client.close())
 }

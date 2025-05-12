@@ -16,17 +16,16 @@ object NebulaClient {
     underlying: NebulaClient[ScalaFuture]
   ) extends NebulaClient[F] {
 
-    def init(poolConfig: NebulaPoolConfig): F[Boolean] =
-      implicitly[Effect[F]].fromFuture(underlying.init(poolConfig))
+    def init(): F[Boolean] =
+      implicitly[Effect[F]].fromFuture(underlying.init())
 
     def close(): F[Unit] = implicitly[Effect[F]].fromFuture(underlying.close())
 
-    def getSession(poolConfig: NebulaPoolConfig, useSpace: Boolean = false): F[NebulaSession[F]] =
+    def getSession(useSpace: Boolean = false): F[NebulaSession[F]] =
       implicitly[Effect[F]]
         .fromFuture(
           underlying
             .getSession(
-              poolConfig,
               useSpace
             )
         )
@@ -39,8 +38,8 @@ object NebulaClient {
     def waitersNum: F[Int] = implicitly[Effect[F]].fromFuture(underlying.waitersNum)
   }
 
-  def resource[F[_]: Async]: Resource[F, NebulaClient[F]] =
+  def resource[F[_]: Async](config: NebulaClientConfig): Resource[F, NebulaClient[F]] =
     Resource.make(
-      Async[F].blocking(new Impl(NebulaClientDefault.make))
+      Async[F].blocking(new Impl(NebulaClientDefault.make(config)))
     )(client => client.close())
 }

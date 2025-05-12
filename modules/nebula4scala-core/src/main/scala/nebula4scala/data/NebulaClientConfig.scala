@@ -4,7 +4,13 @@ import com.vesoft.nebula.client.graph.{ NebulaPoolConfig => PoolConfig }
 
 import nebula4scala.data.meta.SSLParam
 
-final case class NebulaConfig(
+final case class NebulaClientConfig(
+  graph: NebulaSessionPoolConfig,
+  meta: CommonServiceConfig,
+  storage: CommonServiceConfig
+)
+
+final case class CommonServiceConfig(
   address: List[NebulaHostAddress],
   timeoutMills: Int,
   executionRetry: Int,
@@ -14,18 +20,17 @@ final case class NebulaConfig(
   selfSigned: Option[SSLParam] = None
 )
 
-final case class NebulaMetaConfig(
-  underlying: NebulaConfig
-)
-
 final case class NebulaStorageConfig(
-  underlying: NebulaConfig
+  address: List[NebulaHostAddress],
+  timeoutMills: Int,
+  executionRetry: Int,
+  connectionRetry: Int,
+  enableSSL: Boolean = false,
+  casSigned: Option[SSLParam] = None,
+  selfSigned: Option[SSLParam] = None
 )
 
 final case class NebulaPoolConfig(
-  address: List[NebulaHostAddress],
-  auth: NebulaAuth,
-  spaceName: Option[String],
   minConnsSize: Int = 0,
   maxConnsSize: Int = 10,
   timeoutMills: Int = 0,
@@ -34,8 +39,8 @@ final case class NebulaPoolConfig(
   waitTimeMills: Int = 0,
   minClusterHealthRate: Double = 1d,
   enableSsl: Boolean = false,
-  sslParam: Option[SSLParam],
-  reconnect: Boolean = false
+  sslParam: Option[SSLParam] = None,
+  useHttp2: Boolean = false
 ) {
 
   def toJava: PoolConfig = {
@@ -49,6 +54,7 @@ final case class NebulaPoolConfig(
     poolConfig.setMaxConnSize(maxConnsSize)
     poolConfig.setMinClusterHealthRate(minClusterHealthRate)
     poolConfig.setMinConnSize(minConnsSize)
+    poolConfig.setUseHttp2(useHttp2)
     poolConfig
   }
 }
@@ -66,5 +72,8 @@ final case class NebulaSessionPoolConfig(
   healthCheckTimeSeconds: Int = 600,
   cleanTimeSeconds: Int = 3600,
   reconnect: Boolean = false,
-  useHttp2: Boolean = false
+  useHttp2: Boolean = false,
+  pool: NebulaPoolConfig = NebulaPoolConfig()
 )
+final case class NebulaHostAddress(host: String, port: Int)
+final case class NebulaAuth(username: String, password: String)

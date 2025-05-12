@@ -24,10 +24,10 @@ object NebulaStorageClient {
 
   }
 
-  val layer: ZLayer[NebulaStorageConfig & Scope, Throwable, NebulaStorageClient[Task]] =
+  val layer: ZLayer[NebulaClientConfig & Scope, Throwable, NebulaStorageClient[Task]] =
     ZLayer.fromZIO {
       for {
-        config <- ZIO.service[NebulaStorageConfig]
+        config <- ZIO.service[NebulaClientConfig]
         manger <- ZIO.acquireRelease(
           ZIO.attemptBlocking(
             new Impl(NebulaStorageClientDefault.make(config))

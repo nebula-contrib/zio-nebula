@@ -11,10 +11,10 @@ object NebulaClientExample extends IOApp {
 
   override def run(args: List[String]): IO[ExitCode] =
     NebulaClient
-      .resource[IO]
+      .resource[IO](Configs.config())
       .use { client =>
         client
-          .getSession(Configs.poolConfig(), false)
+          .getSession(false)
           .flatMap(
             _.execute(
               Stmt.str[IO](

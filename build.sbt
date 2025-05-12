@@ -11,7 +11,6 @@ val nebulaClientVersion    = "3.8.4"
 val catsVersion            = "2.9.0"
 val catsEffectVersion      = "3.5.7"
 val fs2Version             = "3.11.0"
-val pureconfigVersion      = "0.17.8"
 val scalaCollectionVersion = "2.9.0"
 
 val logbackVersion              = "1.4.11"
@@ -20,23 +19,7 @@ val testcontainersNebulaVersion = "0.2.0"
 
 val supportCrossVersionList = Seq(scala3_Version, scala2_13Version, scala2_12Version)
 
-def isScala3(scalaVersion: String): Boolean = {
-  CrossVersion.partialVersion(scalaVersion) match {
-    case Some((3, _)) => true
-    case _            => false
-  }
-}
-
-val conditionalDependencies = Def.setting {
-  if (isScala3(scalaVersion.value)) {
-    Seq(
-      "com.github.pureconfig" %% "pureconfig-generic-scala3" % pureconfigVersion
-    )
-  } else
-    Seq(
-      "com.github.pureconfig" %% "pureconfig-generic" % pureconfigVersion
-    )
-}
+import ProjectSetting._
 
 inThisBuild(
   List(

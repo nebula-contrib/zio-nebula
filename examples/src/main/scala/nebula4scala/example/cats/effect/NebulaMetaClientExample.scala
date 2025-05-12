@@ -10,7 +10,7 @@ object NebulaMetaClientExample extends IOApp {
 
   override def run(args: List[String]): IO[ExitCode] =
     NebulaMetaClient
-      .resource[IO](Configs.metaConfig())
+      .resource[IO](Configs.config())
       .use { client => client.space("test").flatMap(item => Console[IO].print(item.toString)) }
       .as(ExitCode.Success)
 }

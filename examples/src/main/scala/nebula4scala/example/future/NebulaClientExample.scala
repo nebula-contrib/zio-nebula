@@ -12,8 +12,9 @@ object NebulaClientExample {
 
   def main(args: Array[String]): Unit = {
     for {
-      session <- NebulaClientDefault.make
-        .getSession(Configs.poolConfig(), false)
+      session <- NebulaClientDefault
+        .make(Configs.config())
+        .getSession(false)
       res <- session.execute(
         Stmt.str(
           """

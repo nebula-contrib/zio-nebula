@@ -3,27 +3,25 @@ package nebula4scala.example.zio
 import zio._
 
 import nebula4scala.api._
-import nebula4scala.data._
 import nebula4scala.data.input._
 import nebula4scala.zio.syntax._
 
-final class NebulaClientExample(poolConfig: NebulaPoolConfig, nebulaClient: NebulaClient[Task]) {
+final class NebulaClientExample(nebulaClient: NebulaClient[Task]) {
 
-  def execute(stmt: String): ZIO[Scope & NebulaPoolConfig, Throwable, NebulaResultSet[Task]] =
-    nebulaClient.getSession(poolConfig, false).flatMap(_.execute(Stmt.str[Task](stmt)))
+  def execute(stmt: String): ZIO[Scope, Throwable, NebulaResultSet[Task]] =
+    nebulaClient.getSession(false).flatMap(_.execute(Stmt.str[Task](stmt)))
 }
 
 object NebulaClientExample {
-  lazy val layer = ZLayer.fromFunction((cfg, client) => new NebulaClientExample(cfg, client))
+  lazy val layer = ZLayer.fromFunction((client: NebulaClient[Task]) => new NebulaClientExample(client))
 }
 
 object NebulaClientMain extends ZIOAppDefault {
 
   override def run =
     (for {
-      poolConfig <- ZIO.service[NebulaPoolConfig]
-      status     <- ZIO.serviceWithZIO[NebulaClient[Task]](_.init(poolConfig))
-      _          <- ZIO.logInfo(status.toString)
+      status <- ZIO.serviceWithZIO[NebulaClient[Task]](_.init())
+      _      <- ZIO.logInfo(status.toString)
       res <- ZIO
         .serviceWithZIO[NebulaClientExample](
           _.execute("""

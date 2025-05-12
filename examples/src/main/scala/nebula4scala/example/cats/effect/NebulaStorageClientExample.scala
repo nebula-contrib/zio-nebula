@@ -11,7 +11,7 @@ object NebulaStorageClientExample extends IOApp {
 
   override def run(args: List[String]): IO[ExitCode] =
     NebulaStorageClient
-      .resource[IO](Configs.storageConfig())
+      .resource[IO](Configs.config())
       .use { client =>
         for {
           status <- client.connect()

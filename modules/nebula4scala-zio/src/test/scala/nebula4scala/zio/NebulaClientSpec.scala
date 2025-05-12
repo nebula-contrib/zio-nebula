@@ -4,6 +4,7 @@ import zio._
 import zio.test._
 
 import nebula4scala.api._
+import nebula4scala.data.NebulaHostAddress
 import nebula4scala.data.input._
 import nebula4scala.zio.syntax._
 
@@ -31,11 +32,18 @@ object NebulaClientSpec extends NebulaSpec {
       |MATCH (p:person) RETURN p LIMIT 4;
       |""".stripMargin
 
-  lazy val session = {
+  lazy val session: ZLayer[Scope, Throwable, SessionClient] = {
     // Java initializes the session in the constructor.
-    ZioNebulaEnvironment
-      .defaultSession(container.graphdHostList.head, container.graphdPortList.head)
-
+    ZLayer.makeSome[Scope, SessionClient](
+      NebulaSessionClient.layer,
+      ZLayer.succeed(
+        config(
+          NebulaHostAddress(container.graphdHostList.head, container.graphdPortList.head),
+          NebulaHostAddress(container.metadHostList.head, container.metadPortList.head),
+          NebulaHostAddress(container.storagedHostList.head, container.storagedPortList.head)
+        )
+      )
+    )
   }
 
   def specLayered: Spec[Nebula, Throwable] =

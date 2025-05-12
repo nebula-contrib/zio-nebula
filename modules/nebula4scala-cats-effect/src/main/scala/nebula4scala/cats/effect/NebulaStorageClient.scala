@@ -25,7 +25,7 @@ object NebulaStorageClient {
 
   }
 
-  def resource[F[_]: Async](config: NebulaStorageConfig): Resource[F, NebulaStorageClient[F]] = {
+  def resource[F[_]: Async](config: NebulaClientConfig): Resource[F, NebulaStorageClient[F]] = {
     Resource.make(
       Async[F].blocking(
         new Impl(NebulaStorageClientDefault.make(config))

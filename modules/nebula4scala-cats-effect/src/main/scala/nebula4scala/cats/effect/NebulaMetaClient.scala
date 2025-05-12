@@ -52,7 +52,7 @@ object NebulaMetaClient {
       implicitly[Effect[F]].fromFuture(underlying.listHosts)
   }
 
-  def resource[F[_]: Async](config: NebulaMetaConfig): Resource[F, NebulaMetaClient[F]] =
+  def resource[F[_]: Async](config: NebulaClientConfig): Resource[F, NebulaMetaClient[F]] =
     Resource.make(
       Async[F].blocking(new Impl(NebulaMetaClientDefault.make(config)))
     )(client => client.close())

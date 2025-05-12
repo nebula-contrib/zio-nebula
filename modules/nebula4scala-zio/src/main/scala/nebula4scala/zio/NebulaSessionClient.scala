@@ -30,11 +30,11 @@ object NebulaSessionClient {
 
   }
 
-  val layer: ZLayer[Scope & NebulaSessionPoolConfig, Throwable, NebulaSessionClient[Task]] = ZLayer.fromZIO {
+  val layer: ZLayer[Scope & NebulaClientConfig, Throwable, NebulaSessionClient[Task]] = ZLayer.fromZIO {
     for {
-      nebulaConfig <- ZIO.service[NebulaSessionPoolConfig]
+      config <- ZIO.service[NebulaClientConfig]
       sessionPool <- ZIO.acquireRelease(
-        ZIO.attemptBlocking(new Impl(NebulaSessionClientDefault.make(nebulaConfig)))
+        ZIO.attemptBlocking(new Impl(NebulaSessionClientDefault.make(config)))
       )(release => release.close().onError(e => ZIO.logErrorCause(e)).ignoreLogged)
     } yield sessionPool
   }

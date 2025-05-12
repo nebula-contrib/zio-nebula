@@ -44,10 +44,10 @@ object NebulaMetaClient {
       implicitly[Effect[Task]].fromFuture(underlying.listHosts)
   }
 
-  val layer: ZLayer[NebulaMetaConfig & Scope, Throwable, NebulaMetaClient[Task]] =
+  val layer: ZLayer[NebulaClientConfig & Scope, Throwable, NebulaMetaClient[Task]] =
     ZLayer.fromZIO {
       for {
-        config <- ZIO.service[NebulaMetaConfig]
+        config <- ZIO.service[NebulaClientConfig]
         manger <- ZIO.acquireRelease(
           ZIO.attemptBlocking(
             new Impl(NebulaMetaClientDefault.make(config))

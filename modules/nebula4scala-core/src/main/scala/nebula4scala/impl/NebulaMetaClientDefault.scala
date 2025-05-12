@@ -13,8 +13,8 @@ import nebula4scala.syntax._
 
 object NebulaMetaClientDefault {
 
-  def make(config: NebulaMetaConfig): NebulaMetaClient[ScalaFuture] = {
-    val nebulaConfig = config.underlying
+  def make(config: NebulaClientConfig): NebulaMetaClient[ScalaFuture] = {
+    val nebulaConfig = config.meta
     val manger = new MetaManager(
       nebulaConfig.address.map(a => new HostAddress(a.host, a.port)).asJava,
       nebulaConfig.timeoutMills,

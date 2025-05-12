@@ -78,19 +78,21 @@ The `NebulaSessionClient` configuration is defined using a HOCON (Human-Optimize
 Below is an example configuration for `NebulaSessionClient`:
 
 ```hocon
-graph {
-  address = [
-    {
-      host = "127.0.0.1",
-      port = 9669
+nebula {
+  graph {
+    address = [
+      {
+        host = "127.0.0.1",
+        port = 9669
+      }
+    ]
+    auth = {
+      username = "root"
+      password = "nebula"
     }
-  ]
-  auth = {
-    username = "root"
-    password = "nebula"
+    spaceName = "test"
+    reconnect = true
   }
-  spaceName = "test"
-  reconnect = true
 }
 ```
 
