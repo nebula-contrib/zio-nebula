@@ -43,7 +43,7 @@ libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-zio" % "<lates
 
 **For Cats-Effect Support**
 ```sbt
-libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-cats" % "<latest version>"
+libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-cats-effect" % "<latest version>"
 ```
 
 ## Version Correspondence
