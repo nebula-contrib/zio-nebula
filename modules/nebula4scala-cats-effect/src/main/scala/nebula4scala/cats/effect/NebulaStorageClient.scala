@@ -1,5 +1,7 @@
 package nebula4scala.cats.effect
 
+import scala.util.Try
+
 import cats.effect._
 
 import nebula4scala.Effect
@@ -13,15 +15,15 @@ import nebula4scala.syntax._
 object NebulaStorageClient {
 
   private final class Impl[F[_]: Async](
-    underlying: NebulaStorageClient[ScalaFuture]
+    underlying: NebulaStorageClient[Try]
   ) extends NebulaStorageClient[F] {
 
-    def connect(): F[Boolean] = implicitly[Effect[F]].fromFuture(underlying.connect())
+    def connect(): F[Boolean] = implicitly[Effect[F]].fromTry(underlying.connect())
 
-    def close(): F[Unit] = implicitly[Effect[F]].fromFuture(underlying.close())
+    def close(): F[Unit] = implicitly[Effect[F]].fromTry(underlying.close())
 
     def scan(scanInput: ScanInput): F[scanInput.T] =
-      implicitly[Effect[F]].fromFuture(underlying.scan(scanInput))
+      implicitly[Effect[F]].fromTry(underlying.scan(scanInput))
 
   }
 

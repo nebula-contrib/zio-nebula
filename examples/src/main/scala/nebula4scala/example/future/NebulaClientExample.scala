@@ -4,7 +4,7 @@ import scala.concurrent.Future
 
 import nebula4scala.Configs
 import nebula4scala.data.input._
-import nebula4scala.impl.NebulaClientDefault
+import nebula4scala.impl.future.NebulaClientFuture
 import nebula4scala.syntax._
 
 object NebulaClientExample {
@@ -12,7 +12,7 @@ object NebulaClientExample {
 
   def main(args: Array[String]): Unit = {
     for {
-      session <- NebulaClientDefault
+      session <- NebulaClientFuture
         .make(Configs.config())
         .getSession(false)
       res <- session.execute(

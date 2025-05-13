@@ -1,7 +1,7 @@
 package nebula4scala.impl
 
 import scala.collection.JavaConverters._
-import scala.concurrent.{ blocking, Future }
+import scala.util.Try
 
 import com.vesoft.nebula.client.graph.{ NebulaPoolConfig => _ }
 import com.vesoft.nebula.client.graph.data.HostAddress
@@ -13,23 +13,20 @@ import nebula4scala.data.input.Stmt
 import nebula4scala.syntax._
 
 object NebulaClientDefault {
-  def make(config: NebulaClientConfig): NebulaClient[ScalaFuture] = new NebulaClientDefault(config, new Pool)
-
+  def make(config: NebulaClientConfig): NebulaClient[Try] = new NebulaClientDefault(config, new Pool)
 }
 
-final class NebulaClientDefault(config: NebulaClientConfig, underlying: Pool) extends NebulaClient[ScalaFuture] {
+final class NebulaClientDefault(config: NebulaClientConfig, underlying: Pool) extends NebulaClient[Try] {
 
-  def init(): ScalaFuture[Boolean] =
-    Future(
-      blocking(
-        underlying.init(config.graph.address.map(d => new HostAddress(d.host, d.port)).asJava, config.graph.pool.toJava)
-      )
+  def init(): Try[Boolean] =
+    Try(
+      underlying.init(config.graph.address.map(d => new HostAddress(d.host, d.port)).asJava, config.graph.pool.toJava)
     )
 
-  def close(): ScalaFuture[Unit] = Future(underlying.close())
+  def close(): Try[Unit] = Try(underlying.close())
 
-  def getSession(useSpace: Boolean = false): ScalaFuture[NebulaSession[ScalaFuture]] =
-    Future {
+  def getSession(useSpace: Boolean = false): Try[NebulaSession[Try]] =
+    Try {
       val session = new NebulaSessionDefault(
         underlying.getSession(
           config.graph.auth.username,
@@ -38,15 +35,15 @@ final class NebulaClientDefault(config: NebulaClientConfig, underlying: Pool) ex
         )
       )
       if (useSpace && config.graph.spaceName.nonEmpty) {
-        session.execute(Stmt.str[ScalaFuture](s"USE `${config.graph.spaceName}`"))
+        session.execute(Stmt.str[Try](s"USE `${config.graph.spaceName}`"))
       }
       session
     }
 
-  def activeConnNum: ScalaFuture[Int] = Future(underlying.getActiveConnNum)
+  def activeConnNum: Try[Int] = Try(underlying.getActiveConnNum)
 
-  def idleConnNum: ScalaFuture[Int] = Future(underlying.getIdleConnNum)
+  def idleConnNum: Try[Int] = Try(underlying.getIdleConnNum)
 
-  def waitersNum: ScalaFuture[Int] = Future(underlying.getWaitersNum)
+  def waitersNum: Try[Int] = Try(underlying.getWaitersNum)
 
 }

@@ -1,5 +1,7 @@
 package nebula4scala.zio
 
+import scala.util.Try
+
 import com.vesoft.nebula.meta._
 
 import _root_.zio._
@@ -12,36 +14,36 @@ import nebula4scala.zio.syntax._
 
 object NebulaMetaClient {
 
-  private final class Impl(underlying: NebulaMetaClient[ScalaFuture]) extends NebulaMetaClient[Task] {
+  private final class Impl(underlying: NebulaMetaClient[Try]) extends NebulaMetaClient[Task] {
 
-    def close(): Task[Unit] = implicitly[Effect[Task]].fromFuture(underlying.close())
+    def close(): Task[Unit] = implicitly[Effect[Task]].fromTry(underlying.close())
 
     def spaceId(spaceName: String): Task[Int] =
-      implicitly[Effect[Task]].fromFuture(underlying.spaceId(spaceName))
+      implicitly[Effect[Task]].fromTry(underlying.spaceId(spaceName))
 
     def space(spaceName: String): Task[SpaceItem] =
-      implicitly[Effect[Task]].fromFuture(underlying.space(spaceName))
+      implicitly[Effect[Task]].fromTry(underlying.space(spaceName))
 
     def tagId(spaceName: String, tagName: String): Task[Int] =
-      implicitly[Effect[Task]].fromFuture(underlying.tagId(spaceName, tagName))
+      implicitly[Effect[Task]].fromTry(underlying.tagId(spaceName, tagName))
 
     def tag(spaceName: String, tagName: String): Task[TagItem] =
-      implicitly[Effect[Task]].fromFuture(underlying.tag(spaceName, tagName))
+      implicitly[Effect[Task]].fromTry(underlying.tag(spaceName, tagName))
 
     def edgeType(spaceName: String, edgeName: String): Task[Int] =
-      implicitly[Effect[Task]].fromFuture(underlying.edgeType(spaceName, edgeName))
+      implicitly[Effect[Task]].fromTry(underlying.edgeType(spaceName, edgeName))
 
     def leader(spaceName: String, part: Int): Task[NebulaHostAddress] =
-      implicitly[Effect[Task]].fromFuture(underlying.leader(spaceName, part))
+      implicitly[Effect[Task]].fromTry(underlying.leader(spaceName, part))
 
     def spaceParts(spaceName: String): Task[List[Int]] =
-      implicitly[Effect[Task]].fromFuture(underlying.spaceParts(spaceName))
+      implicitly[Effect[Task]].fromTry(underlying.spaceParts(spaceName))
 
     def partsAlloc(spaceName: String): Task[Map[Int, List[NebulaHostAddress]]] =
-      implicitly[Effect[Task]].fromFuture(underlying.partsAlloc(spaceName))
+      implicitly[Effect[Task]].fromTry(underlying.partsAlloc(spaceName))
 
     def listHosts: Task[Set[NebulaHostAddress]] =
-      implicitly[Effect[Task]].fromFuture(underlying.listHosts)
+      implicitly[Effect[Task]].fromTry(underlying.listHosts)
   }
 
   val layer: ZLayer[NebulaClientConfig & Scope, Throwable, NebulaMetaClient[Task]] =

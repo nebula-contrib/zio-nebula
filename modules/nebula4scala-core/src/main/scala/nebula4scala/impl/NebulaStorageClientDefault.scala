@@ -1,7 +1,7 @@
 package nebula4scala.impl
 
-import scala.concurrent.Future
 import scala.jdk.CollectionConverters._
+import scala.util.Try
 
 import com.vesoft.nebula.client.graph.data.HostAddress
 import com.vesoft.nebula.client.storage.StorageClient
@@ -14,7 +14,7 @@ import nebula4scala.syntax._
 
 object NebulaStorageClientDefault {
 
-  def make(config: NebulaClientConfig): NebulaStorageClient[ScalaFuture] = {
+  def make(config: NebulaClientConfig): NebulaStorageClient[Try] = {
     new NebulaStorageClientDefault(
       new StorageClient(
         config.storage.address.map(a => new HostAddress(a.host, a.port)).asJava,
@@ -28,15 +28,15 @@ object NebulaStorageClientDefault {
   }
 }
 
-final class NebulaStorageClientDefault(underlying: StorageClient) extends NebulaStorageClient[ScalaFuture] {
+final class NebulaStorageClientDefault(underlying: StorageClient) extends NebulaStorageClient[Try] {
 
   import Constant._
 
-  override def connect(): ScalaFuture[Boolean] = Future.successful(underlying.connect())
+  override def connect(): Try[Boolean] = Try(underlying.connect())
 
-  override def close(): ScalaFuture[Unit] = Future.successful(underlying.close())
+  override def close(): Try[Unit] = Try(underlying.close())
 
-  override def scan(scanInput: ScanInput): ScalaFuture[scanInput.T] = Future.successful {
+  override def scan(scanInput: ScanInput): Try[scanInput.T] = Try {
     scanInput match {
       case ScanVertex(spaceName, part, tagName, returnCols, _limit, _between, _allowConfig) =>
         val limit   = _limit.getOrElse(DEFAULT_LIMIT)

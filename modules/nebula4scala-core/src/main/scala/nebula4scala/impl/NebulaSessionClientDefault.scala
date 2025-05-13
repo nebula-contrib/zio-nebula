@@ -10,11 +10,12 @@ import com.vesoft.nebula.client.graph.data.HostAddress
 import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.data.input._
+import nebula4scala.impl.future.syntax._
 import nebula4scala.syntax._
 
 object NebulaSessionClientDefault {
 
-  def make(config: NebulaClientConfig): NebulaSessionClient[ScalaFuture] = {
+  def make(config: NebulaClientConfig): NebulaSessionClient[Try] = {
     try {
       val sessionPool = new SessionPool(
         new SessionPoolConfig(
@@ -43,10 +44,10 @@ object NebulaSessionClientDefault {
   }
 }
 
-final class NebulaSessionClientDefault(underlying: SessionPool) extends NebulaSessionClient[ScalaFuture] {
+final class NebulaSessionClientDefault(underlying: SessionPool) extends NebulaSessionClient[Try] {
 
-  override def execute(stmt: Stmt): ScalaFuture[stmt.T] = {
-    val f = Future(stmt match {
+  override def execute(stmt: Stmt): Try[stmt.T] = {
+    val f = Try(stmt match {
       case StringStmt(_stmt) =>
         new NebulaResultSetDefault(underlying.execute(_stmt)).asInstanceOf[stmt.T]
       case StringStmtWithMap(_stmt, parameterMap) =>
@@ -60,22 +61,22 @@ final class NebulaSessionClientDefault(underlying: SessionPool) extends NebulaSe
           .executeJsonWithParameter(jsonStmt, parameterMap.asJava)
           .asInstanceOf[stmt.T]
     })
-    f.onComplete {
-      case e @ Failure(exception) =>
+    f match {
+      case Failure(exception) =>
         exception.printStackTrace()
-      case s @ Success(value) => s
+        throw exception
+      case Success(value) => f
     }
-    f
   }
 
-  override def idleSessionNum: ScalaFuture[Int] = Future(underlying.getIdleSessionNums)
+  override def idleSessionNum: Try[Int] = Try(underlying.getIdleSessionNums)
 
-  override def sessionNum: ScalaFuture[Int] = Future(underlying.getSessionNums)
+  override def sessionNum: Try[Int] = Try(underlying.getSessionNums)
 
-  override def isActive: ScalaFuture[Boolean] = Future(underlying.isActive)
+  override def isActive: Try[Boolean] = Try(underlying.isActive)
 
-  override def isClosed: ScalaFuture[Boolean] = Future(underlying.isClosed)
+  override def isClosed: Try[Boolean] = Try(underlying.isClosed())
 
-  override def close(): ScalaFuture[Unit] = Future(underlying.close())
+  override def close(): Try[Unit] = Try(underlying.close())
 
 }
