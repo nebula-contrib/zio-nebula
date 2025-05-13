@@ -1,7 +1,10 @@
 package nebula4scala.cats.effect
 
-import _root_.cats.effect._
+import scala.util.Try
+
 import cats.syntax.all._
+
+import _root_.cats.effect._
 import nebula4scala.Effect
 import nebula4scala.api._
 import nebula4scala.cats.effect.syntax._
@@ -9,8 +12,6 @@ import nebula4scala.data._
 import nebula4scala.impl.NebulaClientDefault
 import nebula4scala.impl.future._
 import nebula4scala.syntax._
-
-import scala.util.Try
 
 object NebulaClient {
 
