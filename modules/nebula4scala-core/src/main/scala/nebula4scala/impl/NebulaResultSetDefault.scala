@@ -13,7 +13,6 @@ import nebula4scala.api._
 import nebula4scala.data.value._
 import nebula4scala.data.value.ValueWrapper._
 import nebula4scala.impl.NebulaResultSetDefault.NebulaRecordImpl
-import nebula4scala.syntax._
 
 final class NebulaResultSetDefault(underlying: ResultSet) extends NebulaResultSet[Try] {
 

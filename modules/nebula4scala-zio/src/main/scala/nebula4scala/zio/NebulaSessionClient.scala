@@ -8,7 +8,6 @@ import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.data.input._
 import nebula4scala.impl.NebulaSessionClientDefault
-import nebula4scala.impl.future._
 import nebula4scala.syntax._
 import nebula4scala.zio.syntax._
 

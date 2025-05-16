@@ -9,7 +9,6 @@ import com.vesoft.nebula.meta._
 
 import nebula4scala.api.NebulaMetaClient
 import nebula4scala.data._
-import nebula4scala.syntax._
 
 object NebulaMetaClientDefault {
 

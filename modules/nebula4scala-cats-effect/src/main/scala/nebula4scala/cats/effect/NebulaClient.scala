@@ -10,8 +10,6 @@ import nebula4scala.api._
 import nebula4scala.cats.effect.syntax._
 import nebula4scala.data._
 import nebula4scala.impl.NebulaClientDefault
-import nebula4scala.impl.future._
-import nebula4scala.syntax._
 
 object NebulaClient {
 

@@ -10,7 +10,6 @@ import nebula4scala._
 import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.data.input._
-import nebula4scala.syntax._
 
 object NebulaStorageClientDefault {
 

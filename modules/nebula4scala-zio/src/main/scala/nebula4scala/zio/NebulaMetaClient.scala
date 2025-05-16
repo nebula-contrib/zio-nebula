@@ -9,7 +9,6 @@ import nebula4scala.Effect
 import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.impl.NebulaMetaClientDefault
-import nebula4scala.syntax._
 import nebula4scala.zio.syntax._
 
 object NebulaMetaClient {

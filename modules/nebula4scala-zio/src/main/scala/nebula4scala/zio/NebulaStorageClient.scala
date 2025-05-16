@@ -9,7 +9,6 @@ import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.data.input._
 import nebula4scala.impl.NebulaStorageClientDefault
-import nebula4scala.syntax._
 import nebula4scala.zio.syntax._
 
 object NebulaStorageClient {

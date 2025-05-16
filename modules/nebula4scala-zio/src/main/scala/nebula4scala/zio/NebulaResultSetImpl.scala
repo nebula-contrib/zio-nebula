@@ -10,7 +10,6 @@ import _root_.zio._
 import nebula4scala.Effect
 import nebula4scala.api._
 import nebula4scala.data.value._
-import nebula4scala.syntax._
 import nebula4scala.zio.NebulaResultSetImpl.NebulaRecordImpl
 import nebula4scala.zio.syntax._
 

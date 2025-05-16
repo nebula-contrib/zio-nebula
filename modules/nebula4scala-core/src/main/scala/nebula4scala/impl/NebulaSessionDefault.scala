@@ -9,7 +9,6 @@ import com.vesoft.nebula.client.graph.net.Session
 import nebula4scala.api.NebulaSession
 import nebula4scala.data.NebulaHostAddress
 import nebula4scala.data.input._
-import nebula4scala.syntax._
 
 final class NebulaSessionDefault(private val underlying: Session) extends NebulaSession[Try] {
 

@@ -7,7 +7,7 @@ import com.vesoft.nebula.client.graph.{ NebulaPoolConfig => _ }
 import com.vesoft.nebula.client.graph.data.HostAddress
 import com.vesoft.nebula.client.graph.net.{ NebulaPool => Pool }
 
-import nebula4scala.api.{ NebulaClient, NebulaSession }
+import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.data.input.Stmt
 import nebula4scala.syntax._

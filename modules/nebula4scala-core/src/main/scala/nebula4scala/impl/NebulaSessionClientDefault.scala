@@ -1,6 +1,5 @@
 package nebula4scala.impl
 
-import scala.concurrent._
 import scala.jdk.CollectionConverters._
 import scala.util._
 
@@ -10,8 +9,6 @@ import com.vesoft.nebula.client.graph.data.HostAddress
 import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.data.input._
-import nebula4scala.impl.future.syntax._
-import nebula4scala.syntax._
 
 object NebulaSessionClientDefault {
 
@@ -65,7 +62,7 @@ final class NebulaSessionClientDefault(underlying: SessionPool) extends NebulaSe
       case Failure(exception) =>
         exception.printStackTrace()
         throw exception
-      case Success(value) => f
+      case Success(_) => f
     }
   }
 
