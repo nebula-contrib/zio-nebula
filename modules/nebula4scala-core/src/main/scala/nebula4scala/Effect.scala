@@ -1,8 +1,8 @@
 package nebula4scala
 
-import nebula4scala.syntax._
+import scala.util.Try
 
 trait Effect[F[_]] {
-  def fromFuture[A](future: => ScalaFuture[A]): F[A]
-  def fromEffect[A](future: => F[ScalaFuture[A]]): F[A]
+  def fromTry[A](tryM: => Try[A]): F[A]
+  def fromBlocking[A](tryMM: => F[() => Try[A]]): F[A]
 }

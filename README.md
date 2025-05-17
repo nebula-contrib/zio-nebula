@@ -18,7 +18,7 @@ It supports Scala Future, ZIO, and Cats-Effect, making it versatile for various 
 ## Features
 
 - Support for Multiple Scala Versions: Compatible with Scala 2.12, Scala 2.13, and Scala 3.
-- Functional Programming Support: Integrates seamlessly with Scala Future, ZIO, and Cats-Effect.
+- Functional Programming Support: Integrates seamlessly with Scala `Try`, `Future`, [ZIO](https://github.com/zio/zio), and [Cats-Effect](https://github.com/typelevel/cats-effect).
 - Comprehensive Client Support: Provides full support for all NebulaGraph clients, including Session Pool, Connection Pool, Storage, and Meta.
 - Type-Safe Configuration: Easily configure clients using [pureconfig](https://github.com/pureconfig/pureconfig) or [zio-config](https://github.com/zio/zio-config) for type-safe configuration management.
 - Tagless Support: Provides tagless final style, making it easier to switch between different effect types or implementations without modifying the core logic.
@@ -30,9 +30,9 @@ It supports Scala Future, ZIO, and Cats-Effect, making it versatile for various 
 To use nebula4scala in your project, add the following dependencies to your `build.sbt` file. 
 Choose the modules you need based on your project requirements.
 
-**For Scala Future Support**
+**For Scala Try and Future Support**
 ```sbt
-// for scala Future
+// for `scala.concurrent.Future` and `scala.util.Try`
 libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-core" % "<latest version>" 
 ```
 
@@ -43,7 +43,7 @@ libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-zio" % "<lates
 
 **For Cats-Effect Support**
 ```sbt
-libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-cats" % "<latest version>"
+libraryDependencies += "io.github.jxnu-liguobin" %% "nebula4scala-cats-effect" % "<latest version>"
 ```
 
 ## Version Correspondence
@@ -57,20 +57,26 @@ Below is the version correspondence between cats, zio, nebula4scala, and nebula-
 
 ## Usage
 
-**Basic Example with Scala Future**
+**Basic Example with Scala Try and Future**
 
-Here is a basic example of how to use nebula4scala with Scala Future:
-[NebulaClientExample](./examples/src/main/scala/nebula4scala/example/future/NebulaClientExample.scala)
+Here is a basic example of how to use nebula4scala with Scala Try and Future:
+
+- Future: [NebulaClientExample](./examples/src/main/scala/nebula4scala/example/future/NebulaClientExample.scala)
+- Try: [NebulaClientExample](./examples/src/main/scala/nebula4scala/example/default_try/NebulaClientExample.scala)
 
 **Example with ZIO**
 
 Here is an example of how to use nebula4scala with ZIO:
+
 [NebulaClientExample](./examples/src/main/scala/nebula4scala/example/zio/NebulaClientExample.scala)
 
 **Example with Cats-Effect**
 
 Here is an example of how to use nebula4scala with Cats-Effect:
+
 [NebulaClientExample](./examples/src/main/scala/nebula4scala/example/cats/effect/NebulaClientExample.scala)
+
+> Note that these are not NebulaSessionClient, if you need a NebulaSessionClient, please see other examples.
 
 ## Configuration
 

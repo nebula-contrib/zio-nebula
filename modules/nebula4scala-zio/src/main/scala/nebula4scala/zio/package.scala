@@ -1,5 +1,7 @@
 package nebula4scala
 
+import scala.util.Try
+
 import _root_.zio._
 import _root_.zio.Task
 import nebula4scala.api._
@@ -14,15 +16,15 @@ package zio {
     implicit val taskHandler: ResultSetHandler[Task] = new ResultSetHandler[Task] {
 
       def handle(result: Any): Task[Any] = result match {
-        case set: NebulaResultSet[ScalaFuture] @unchecked => ZIO.succeed(new NebulaResultSetImpl(set))
-        case str: String                                  => ZIO.succeed(str)
+        case set: NebulaResultSet[Try] @unchecked => ZIO.succeed(new NebulaResultSetImpl(set))
+        case str: String                          => ZIO.succeed(str)
         case other => ZIO.fail(new IllegalArgumentException(s"Unexpected result type: ${other.getClass}"))
       }
     }
 
     implicit val zioEffect: Effect[Task] = new Effect[Task] {
-      def fromFuture[A](future: => ScalaFuture[A]): Task[A]       = ZIO.fromFuture(_ => future)
-      def fromEffect[A](future: => Task[ScalaFuture[A]]): Task[A] = future.flatMap(f => ZIO.fromFuture(_ => f))
+      def fromTry[A](tryM: => Try[A]): Task[A]                   = ZIO.fromTry(tryM)
+      def fromBlocking[A](tryMM: => Task[() => Try[A]]): Task[A] = ZIO.blocking(tryMM.flatMap(f => ZIO.fromTry(f())))
     }
 
     implicit val context: Context[Task] = new Context[Task] {}
