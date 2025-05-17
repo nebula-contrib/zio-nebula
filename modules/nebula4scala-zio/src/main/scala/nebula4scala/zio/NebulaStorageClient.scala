@@ -1,5 +1,7 @@
 package nebula4scala.zio
 
+import scala.util.Try
+
 import zio._
 
 import nebula4scala.Effect
@@ -7,20 +9,19 @@ import nebula4scala.api._
 import nebula4scala.data._
 import nebula4scala.data.input._
 import nebula4scala.impl.NebulaStorageClientDefault
-import nebula4scala.syntax._
 import nebula4scala.zio.syntax._
 
 object NebulaStorageClient {
 
-  private final class Impl(underlying: NebulaStorageClient[ScalaFuture]) extends NebulaStorageClient[Task] {
+  private final class Impl(underlying: NebulaStorageClient[Try]) extends NebulaStorageClient[Task] {
 
     def connect(): Task[Boolean] =
-      implicitly[Effect[Task]].fromFuture(underlying.connect())
+      implicitly[Effect[Task]].fromTry(underlying.connect())
 
-    def close(): Task[Unit] = implicitly[Effect[Task]].fromFuture(underlying.close())
+    def close(): Task[Unit] = implicitly[Effect[Task]].fromTry(underlying.close())
 
     def scan(scanInput: ScanInput): Task[scanInput.T] =
-      implicitly[Effect[Task]].fromFuture(underlying.scan(scanInput))
+      implicitly[Effect[Task]].fromTry(underlying.scan(scanInput))
 
   }
 

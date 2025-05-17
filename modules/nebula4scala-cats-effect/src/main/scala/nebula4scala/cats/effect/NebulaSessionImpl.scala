@@ -1,5 +1,7 @@
 package nebula4scala.cats.effect
 
+import scala.util.Try
+
 import cats.effect.kernel.Async
 import cats.syntax.all._
 
@@ -10,24 +12,23 @@ import nebula4scala.data.NebulaHostAddress
 import nebula4scala.data.input._
 import nebula4scala.syntax._
 
-final class NebulaSessionImpl[F[_]: Async](private val underlying: NebulaSession[ScalaFuture])
-    extends NebulaSession[F] {
+final class NebulaSessionImpl[F[_]: Async](private val underlying: NebulaSession[Try]) extends NebulaSession[F] {
 
   def execute(stmt: Stmt): F[stmt.T] =
     implicitly[Effect[F]]
-      .fromEffect(Async[F].blocking(underlying.execute(stmt)))
+      .fromBlocking(Async[F].delay(() => underlying.execute(stmt)))
       .flatMap(result => implicitly[ResultSetHandler[F]].handle(result).asInstanceOf[F[stmt.T]])
 
-  def ping(): F[Boolean] = implicitly[Effect[F]].fromEffect(Async[F].blocking(underlying.ping()))
+  def ping(): F[Boolean] = implicitly[Effect[F]].fromBlocking(Async[F].delay(() => underlying.ping()))
 
-  def pingSession(): F[Boolean] = implicitly[Effect[F]].fromEffect(Async[F].blocking(underlying.pingSession()))
+  def pingSession(): F[Boolean] = implicitly[Effect[F]].fromBlocking(Async[F].delay(() => underlying.pingSession()))
 
-  def release(): F[Unit] = implicitly[Effect[F]].fromEffect(Async[F].blocking(underlying.release()))
+  def release(): F[Unit] = implicitly[Effect[F]].fromBlocking(Async[F].delay(() => underlying.release()))
 
-  def graphHost: F[NebulaHostAddress] = implicitly[Effect[F]].fromEffect(Async[F].blocking(underlying.graphHost))
+  def graphHost: F[NebulaHostAddress] = implicitly[Effect[F]].fromBlocking(Async[F].delay(() => underlying.graphHost))
 
-  def sessionID: F[Long] = implicitly[Effect[F]].fromEffect(Async[F].blocking(underlying.sessionID))
+  def sessionID: F[Long] = implicitly[Effect[F]].fromBlocking(Async[F].delay(() => underlying.sessionID))
 
-  def close(): F[Unit] = implicitly[Effect[F]].fromEffect(Async[F].blocking(underlying.close()))
+  def close(): F[Unit] = implicitly[Effect[F]].fromBlocking(Async[F].delay(() => underlying.close()))
 
 }
