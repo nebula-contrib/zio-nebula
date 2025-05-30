@@ -27,7 +27,7 @@ inThisBuild(
     licenses         := List("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
     organization     := "io.github.jxnu-liguobin",
     organizationName := "梦境迷离",
-    developers := List(
+    developers       := List(
       Developer(
         id = "jxnu-liguobin",
         name = "梦境迷离",

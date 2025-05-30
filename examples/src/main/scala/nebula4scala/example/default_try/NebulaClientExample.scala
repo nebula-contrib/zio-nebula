@@ -16,7 +16,7 @@ object NebulaClientExample {
 
     sessionM match {
       case Failure(exception) => exception.printStackTrace()
-      case Success(session) =>
+      case Success(session)   =>
         val res = session.execute(
           Stmt.str[Try](
             """
