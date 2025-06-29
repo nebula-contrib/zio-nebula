@@ -62,7 +62,7 @@ trait NebulaSpec extends ZIOSpecDefault {
         _       <- ZIO.serviceWithZIO[NebulaClient[Task]](_.init())
         client  <- ZIO.service[NebulaClient[Task]]
         session <- client.getSession(false)
-        res <- session.execute(Stmt.str[Task]("""
+        res     <- session.execute(Stmt.str[Task]("""
                                                   |CREATE SPACE IF NOT EXISTS test(vid_type=fixed_string(20));
                                                   |USE test;
                                                   |CREATE TAG IF NOT EXISTS person(name string, age int);
