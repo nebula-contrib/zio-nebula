@@ -61,8 +61,8 @@ object NebulaClientSpec extends NebulaSpec {
       suite("nebula storage client")(
         test("query") {
           for {
-            status <- ZIO.serviceWithZIO[NebulaStorageClient[Task]](_.connect())
-            _      <- ZIO.logInfo(s"connect status: ${status.toString}")
+            status     <- ZIO.serviceWithZIO[NebulaStorageClient[Task]](_.connect())
+            _          <- ZIO.logInfo(s"connect status: ${status.toString}")
             scanResult <- ZIO.serviceWithZIO[NebulaStorageClient[Task]](
               _.scan(ScanEdge("test", None, "like", None))
             )
