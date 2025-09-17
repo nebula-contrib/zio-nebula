@@ -28,7 +28,7 @@ object NebulaSessionClientMain extends ZIOAppDefault {
             |'Jerry':('Jerry', 13),
             |'John':('John', 11);""".stripMargin)
       )
-    _ <- ZIO.logInfo(resultset1.toString)
+    _          <- ZIO.logInfo(resultset1.toString)
     resultset2 <- ZIO
       .serviceWithZIO[NebulaSessionClientExample](
         _.execute("""
@@ -39,7 +39,7 @@ object NebulaSessionClientMain extends ZIOAppDefault {
             |'Tom'->'Jerry':(68.3),
             |'Bob'->'John':(97.2);""".stripMargin)
       )
-    _ <- ZIO.logInfo(resultset2.toString)
+    _          <- ZIO.logInfo(resultset2.toString)
     resultset3 <- ZIO
       .serviceWithZIO[NebulaSessionClientExample](
         _.execute("""

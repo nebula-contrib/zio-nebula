@@ -20,8 +20,8 @@ object NebulaSessionClientExample extends IOApp {
                                                 |'Lily':('Lily', 9),'Tom':('Tom', 10),
                                                 |'Jerry':('Jerry', 13),
                                                 |'John':('John', 11);""".stripMargin))
-          res1 <- resM1.errorMessageM
-          _    <- Console[IO].print(res1)
+          res1  <- resM1.errorMessageM
+          _     <- Console[IO].print(res1)
           resM2 <- client.execute(Stmt.str[IO]("""
                                                  |INSERT EDGE like(likeness) VALUES
                                                  |'Bob'->'Lily':(80.0),
@@ -29,8 +29,8 @@ object NebulaSessionClientExample extends IOApp {
                                                  |'Lily'->'Jerry':(84.0),
                                                  |'Tom'->'Jerry':(68.3),
                                                  |'Bob'->'John':(97.2);""".stripMargin))
-          res2 <- resM2.errorMessageM
-          _    <- Console[IO].print(res2)
+          res2  <- resM2.errorMessageM
+          _     <- Console[IO].print(res2)
           resM3 <- client.execute(Stmt.str[IO]("""
                                                  |USE test;
                                                  |MATCH (p:person) RETURN p LIMIT 4;

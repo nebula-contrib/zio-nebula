@@ -24,7 +24,7 @@ object NebulaStorageClientMain extends ZIOAppDefault {
   override def run = (for {
     connect <- ZIO
       .serviceWithZIO[NebulaStorageClientExample](_.connect())
-    _ <- ZIO.logInfo(s"connect status: ${connect.toString}")
+    _    <- ZIO.logInfo(s"connect status: ${connect.toString}")
     scan <- ZIO
       .serviceWithZIO[NebulaStorageClientExample](
         _.scan(ScanEdge("test", None, "like", None))
