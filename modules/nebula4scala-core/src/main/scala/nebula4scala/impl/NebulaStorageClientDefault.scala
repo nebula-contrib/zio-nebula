@@ -38,8 +38,8 @@ final class NebulaStorageClientDefault(underlying: StorageClient) extends Nebula
   override def scan(scanInput: ScanInput): Try[scanInput.T] = Try {
     scanInput match {
       case ScanVertex(spaceName, part, tagName, returnCols, _limit, _between, _allowConfig) =>
-        val limit   = _limit.getOrElse(DEFAULT_LIMIT)
-        val between = _between.getOrElse(Between(DEFAULT_START_TIME, DEFAULT_END_TIME))
+        val limit       = _limit.getOrElse(DEFAULT_LIMIT)
+        val between     = _between.getOrElse(Between(DEFAULT_START_TIME, DEFAULT_END_TIME))
         val allowConfig =
           _allowConfig.getOrElse(AllowConfig(DEFAULT_ALLOW_PART_SUCCESS, DEFAULT_ALLOW_READ_FOLLOWER))
         ((part, returnCols) match {
@@ -91,8 +91,8 @@ final class NebulaStorageClientDefault(underlying: StorageClient) extends Nebula
         }).asInstanceOf[scanInput.T]
 
       case ScanEdge(spaceName, part, edgeName, returnCols, _limit, _between, _allowConfig) =>
-        val limit   = _limit.getOrElse(DEFAULT_LIMIT)
-        val between = _between.getOrElse(Between(DEFAULT_START_TIME, DEFAULT_END_TIME))
+        val limit       = _limit.getOrElse(DEFAULT_LIMIT)
+        val between     = _between.getOrElse(Between(DEFAULT_START_TIME, DEFAULT_END_TIME))
         val allowConfig =
           _allowConfig.getOrElse(AllowConfig(DEFAULT_ALLOW_PART_SUCCESS, DEFAULT_ALLOW_READ_FOLLOWER))
         ((part, returnCols) match {

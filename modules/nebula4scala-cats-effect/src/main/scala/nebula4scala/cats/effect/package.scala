@@ -19,7 +19,7 @@ object syntax {
     def handle(result: Any): F[Any] = result match {
       case set: NebulaResultSet[Try] @unchecked => Async[F].delay(new NebulaResultSetImpl(set))
       case str: String                          => Async[F].delay(str)
-      case other =>
+      case other                                =>
         Async[F].raiseError(new IllegalArgumentException(s"Unexpected result type: ${other.getClass}"))
     }
   }

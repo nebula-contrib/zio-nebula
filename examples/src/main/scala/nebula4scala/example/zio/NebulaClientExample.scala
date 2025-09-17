@@ -22,7 +22,7 @@ object NebulaClientMain extends ZIOAppDefault {
     (for {
       status <- ZIO.serviceWithZIO[NebulaClient[Task]](_.init())
       _      <- ZIO.logInfo(status.toString)
-      res <- ZIO
+      res    <- ZIO
         .serviceWithZIO[NebulaClientExample](
           _.execute("""
               |CREATE SPACE IF NOT EXISTS test(vid_type=fixed_string(20));
