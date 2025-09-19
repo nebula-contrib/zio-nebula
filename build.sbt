@@ -23,7 +23,7 @@ val supportCrossVersionList = Seq(scala3_Version, scala2_13Version, scala2_12Ver
 inThisBuild(
   List(
     scalaVersion     := supportCrossVersionList(1),
-    homepage         := Some(url("https://github.com/nebula-contrib/zio-nebula")),
+    homepage         := Some(url("https://github.com/nebula-contrib/nebula4sclaa")),
     licenses         := List("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
     organization     := "io.github.jxnu-liguobin",
     organizationName := "梦境迷离",
