@@ -17,13 +17,13 @@ final class NebulaSessionDefault(private val underlying: Session) extends Nebula
       stmt match {
         case StringStmt(_stmt) =>
           new NebulaResultSetDefault(underlying.execute(_stmt)).asInstanceOf[stmt.T]
-        case StringStmtWithMap(_stmt, parameterMap) =>
+        case StringStmtWithArgs(_stmt, parameterMap) =>
           new NebulaResultSetDefault(underlying.executeWithParameter(_stmt, parameterMap.asJava)).asInstanceOf[stmt.T]
         case JsonStmt(jsonStmt) =>
           underlying
             .executeJson(jsonStmt)
             .asInstanceOf[stmt.T]
-        case JsonStmtWithMap(jsonStmt, parameterMap) =>
+        case JsonStmtWithArgs(jsonStmt, parameterMap) =>
           underlying
             .executeJsonWithParameter(jsonStmt, parameterMap.asJava)
             .asInstanceOf[stmt.T]

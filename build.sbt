@@ -23,7 +23,7 @@ val supportCrossVersionList = Seq(scala3_Version, scala2_13Version, scala2_12Ver
 inThisBuild(
   List(
     scalaVersion     := supportCrossVersionList(1),
-    homepage         := Some(url("https://github.com/nebula-contrib/nebula4sclaa")),
+    homepage         := Some(url("https://github.com/nebula-contrib/nebula4scala")),
     licenses         := List("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0")),
     organization     := "io.github.jxnu-liguobin",
     organizationName := "梦境迷离",
@@ -110,7 +110,7 @@ lazy val examples = project
   .dependsOn(`nebula4scala-cats-effect` % "compile->compile;test->test")
   .enablePlugins(ScalafmtPlugin)
 
-lazy val `root` = project
+lazy val `nebula4scala` = project
   .in(file("."))
   .settings(
     crossScalaVersions := Nil,

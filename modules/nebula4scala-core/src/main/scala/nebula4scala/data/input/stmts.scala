@@ -24,22 +24,22 @@ object Stmt {
 
   def str[F[_]: Context](stmt: String): StringStmt[F] = StringStmt[F](stmt)
 
-  def strMap[F[_]: Context](stmt: String, parameterMap: Map[String, AnyRef]): StringStmtWithMap[F] =
-    StringStmtWithMap[F](stmt, parameterMap)
+  def str[F[_]: Context](stmt: String, parameterMap: Map[String, AnyRef]): StringStmtWithArgs[F] =
+    StringStmtWithArgs[F](stmt, parameterMap)
 
   def json(stmt: String): JsonStmt = JsonStmt(stmt)
 
-  def jsonMap(stmt: String, parameterMap: Map[String, AnyRef]): JsonStmtWithMap = JsonStmtWithMap(stmt, parameterMap)
+  def json(stmt: String, parameterMap: Map[String, AnyRef]): JsonStmtWithArgs = JsonStmtWithArgs(stmt, parameterMap)
 }
 
 final case class StringStmt[F[_]: Context](stmt: String) extends BaseStmt[F]
 
-final case class StringStmtWithMap[F[_]: Context](stmt: String, parameterMap: Map[String, AnyRef]) extends BaseStmt[F]
+final case class StringStmtWithArgs[F[_]: Context](stmt: String, parameterMap: Map[String, AnyRef]) extends BaseStmt[F]
 
 final case class JsonStmt(jsonStmt: String) extends Stmt {
   override type T = String
 }
 
-final case class JsonStmtWithMap(jsonStmt: String, parameterMap: Map[String, AnyRef]) extends Stmt {
+final case class JsonStmtWithArgs(jsonStmt: String, parameterMap: Map[String, AnyRef]) extends Stmt {
   override type T = String
 }
