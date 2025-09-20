@@ -16,7 +16,7 @@ val scalaCollectionVersion = "2.13.0"
 
 val logbackVersion              = "1.4.11"
 val silencerVersion             = "1.4.2"
-val testcontainersNebulaVersion = "0.2.0"
+val testcontainersNebulaVersion = "0.2.1"
 
 val supportCrossVersionList = Seq(scala3_Version, scala2_13Version, scala2_12Version)
 
