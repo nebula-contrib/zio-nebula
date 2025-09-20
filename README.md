@@ -5,7 +5,7 @@
 ![CI][Badge-CI] ![Nexus (Snapshots)][Badge-Snapshots] [![Sonatype Nexus (Releases)][Badge-Releases]][Link-Releases]
 
 [Badge-CI]: https://github.com/nebula-contrib/nebula4scala/actions/workflows/scala.yml/badge.svg
-[Badge-Snapshots]: https://img.shields.io/nexus/s/io.github.jxnu-liguobin/nebula4scala_3?server=https%3A%2F%2Foss.sonatype.org
+[Badge-Snapshots]: https://img.shields.io/nexus/s/io.github.jxnu-liguobin/nebula4scala-core_3?server=https%3A%2F%2Foss.sonatype.org
 [Badge-Releases]: https://img.shields.io/nexus/r/io.github.jxnu-liguobin/nebula4scala-core_3.svg?server=https%3A%2F%2Foss.sonatype.org
 [Link-Releases]: https://oss.sonatype.org/content/repositories/releases/io/github/jxnu-liguobin/nebula4scala-core_3/
 
