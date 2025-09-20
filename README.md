@@ -2,12 +2,11 @@
 
 ---
 
-![CI][Badge-CI] ![Nexus (Snapshots)][Badge-Snapshots] [![Sonatype Nexus (Releases)][Badge-Releases]][Link-Releases]
+![CI][Badge-CI] [![nebula4scala-core Scala version support][Badge-Releases]][Link-Releases]
 
 [Badge-CI]: https://github.com/nebula-contrib/nebula4scala/actions/workflows/scala.yml/badge.svg
-[Badge-Snapshots]: https://img.shields.io/nexus/s/io.github.jxnu-liguobin/nebula4scala-core_3?server=https%3A%2F%2Foss.sonatype.org
-[Badge-Releases]: https://img.shields.io/nexus/r/io.github.jxnu-liguobin/nebula4scala-core_3.svg?server=https%3A%2F%2Foss.sonatype.org
-[Link-Releases]: https://oss.sonatype.org/content/repositories/releases/io/github/jxnu-liguobin/nebula4scala-core_3/
+[Badge-Releases]: https://index.scala-lang.org/nebula-contrib/nebula4scala/nebula4scala-core/latest-by-scala-version.svg?platform=jvm
+[Link-Releases]: https://index.scala-lang.org/nebula-contrib/nebula4scala/nebula4scala-core
 
 nebula4scala is a Scala client for NebulaGraph, designed to provide a type-safe and functional interface for interacting with NebulaGraph databases. 
 
