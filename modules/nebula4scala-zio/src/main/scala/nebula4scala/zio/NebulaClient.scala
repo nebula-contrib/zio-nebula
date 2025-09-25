@@ -38,7 +38,7 @@ object NebulaClient {
     ZLayer.fromZIO(
       for {
         config <- ZIO.service[NebulaClientConfig]
-        cb <- ZIO.acquireRelease(ZIO.attempt(new Impl(new NebulaClientDefault(config, new Pool))))(p =>
+        cb     <- ZIO.acquireRelease(ZIO.attempt(new Impl(new NebulaClientDefault(config, new Pool))))(p =>
           p.close().onError(e => ZIO.logErrorCause(e)).ignoreLogged
         )
       } yield cb
